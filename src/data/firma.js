@@ -1,6 +1,6 @@
 /**
  * Firmaets oplysninger. Alt med `pladsholder: true` eller markeret i kommentaren skal bekræftes af kunden.
- * `kladde: true` markerer pladsholdere med gult, sætter noindex på alle sider og viser stil-knapperne (A, B, C). Slås fra ved launch.
+ * `kladde: true` viser kladde-bjælken (stilarter og "Vis pladsholdere") og sætter noindex på alle sider. Slås fra ved launch.
  * `stil` er den stilart, siden bygges i: 'A' (blå), 'B' (grøn) eller 'C' (egen). Se src/styles/tokens.css.
  */
 export const firma = {

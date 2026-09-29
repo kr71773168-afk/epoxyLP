@@ -19,13 +19,15 @@ const OVERSKRIFTER = {
 const RADIO = ['rum', 'overflade', 'stand'];
 
 /**
- * Prisberegneren som en lille app: ét spørgsmål ad gangen og prisen til sidst.
+ * Prisberegneren som en lille app: ét spørgsmål ad gangen, så navn, telefon og mail, og til sidst prisen.
+ * Prisen vises først, når kontaktoplysningerne er sendt (lead-form.js kalder visPris()).
  * Browserens tilbage-knap går ét spørgsmål tilbage i stedet for at forlade siden.
  */
 export function startQuiz() {
   const quiz = document.getElementById('beregner');
   const form = document.getElementById('quiz-form');
   const resultat = document.getElementById('resultat');
+  const kontaktTrin = document.getElementById('kontakt-trin');
   const tilbageKnap = document.getElementById('quiz-tilbage');
   const $ = (s, rod = quiz) => rod.querySelector(s);
   const $$ = (s, rod = quiz) => Array.from(rod.querySelectorAll(s));
@@ -35,7 +37,8 @@ export function startQuiz() {
   const ekstra = { by: null, iZone: null };
   const besvaret = new Set();
   const lyttere = new Set();
-  let nr = 0; // aktivt trin. TRIN.length er resultatet
+  let nr = 0; // aktivt trin. TRIN.length er slutningen: kontaktoplysninger og derefter prisen
+  let kontaktGivet = false; // prisen vises først, når kontaktoplysningerne er sendt
   let hIndex = 0; // hvor mange trin vi selv har lagt i browserens historik
   let startet = false;
   let faerdigTracket = false;
@@ -214,7 +217,7 @@ export function startQuiz() {
     const i = TRIN.findIndex((t) => !besvaret.has(t));
     return i === -1 ? TRIN.length : i;
   };
-  // Næste er det første ubesvarede trin efter det aktuelle. Retter man et svar fra resultatet, kommer man direkte tilbage.
+  // Næste er det første ubesvarede trin efter det aktuelle. Retter man et svar fra oversigten, kommer man direkte tilbage.
   const naesteNr = (fra) => {
     for (let i = fra + 1; i < TRIN.length; i++) if (!besvaret.has(TRIN[i])) return i;
     return TRIN.length;
@@ -272,14 +275,17 @@ export function startQuiz() {
     clearTimeout(autoTimer);
     nr = maal;
     skiftTid = performance.now();
-    const erResultat = nr >= TRIN.length;
+    const erSlut = nr >= TRIN.length;
+    const visPrisen = erSlut && kontaktGivet;
     for (const el of $$('.spg', form)) el.hidden = el.dataset.trin !== TRIN[nr];
-    form.hidden = erResultat;
-    resultat.hidden = !erResultat;
-    tilbageKnap.hidden = nr === 0;
-    $('#quiz-trin').textContent = erResultat ? 'Din pris' : `Trin ${nr + 1} af ${TRIN.length}`;
-    $('#quiz-bar-fyld').style.width = `${((nr + 1) / (TRIN.length + 1)) * 100}%`;
-    if (erResultat) visResultat();
+    form.hidden = erSlut;
+    kontaktTrin.hidden = !erSlut || kontaktGivet;
+    resultat.hidden = !visPrisen;
+    tilbageKnap.hidden = nr === 0 || visPrisen;
+    $('#quiz-trin').textContent = visPrisen ? 'Din pris' : erSlut ? 'Sidste trin' : `Trin ${nr + 1} af ${TRIN.length}`;
+    $('#quiz-bar-fyld').style.width = `${(visPrisen ? 1 : (nr + 1) / (TRIN.length + 2)) * 100}%`;
+    if (visPrisen) visResultat();
+    else if (erSlut) visKontakt();
     else forbered(TRIN[nr]);
     if (historik === 'push') {
       hIndex += 1;
@@ -287,7 +293,7 @@ export function startQuiz() {
     } else if (historik === 'replace') {
       history.replaceState({ quiz: nr, i: hIndex }, '');
     }
-    if (fokus) fokuser(erResultat ? $('#res-titel') : $(`.spg[data-trin="${TRIN[nr]}"] .spg-titel`));
+    if (fokus) fokuser(visPrisen ? $('#res-titel') : erSlut ? $('#kontakt-titel') : $(`.spg[data-trin="${TRIN[nr]}"] .spg-titel`));
     lyttere.forEach((fn) => fn());
   }
 
@@ -329,6 +335,19 @@ export function startQuiz() {
     naeste();
   });
 
+  /* ---------- sidste trin: kontaktoplysninger ---------- */
+  function visKontakt() {
+    // Svarene kan rettes, før oplysningerne sendes
+    $('#res-svar').innerHTML = TRIN
+      .map((t, i) => `<button type="button" data-ret="${i}" aria-label="${esc(resume(t))}. Ret svaret">${esc(resume(t))}<span aria-hidden="true">Ret</span></button>`)
+      .join('');
+    if (!faerdigTracket) {
+      faerdigTracket = true;
+      const r = beregnPris(svar, cfg);
+      track('CalculatorComplete', { value: r.klar ? r.midt : 0, currency: 'DKK', overflade: svar.overflade, areal: svar.areal });
+    }
+  }
+
   /* ---------- resultatet ---------- */
   function visResultat() {
     const r = beregnPris(svar, cfg);
@@ -348,10 +367,6 @@ export function startQuiz() {
     note.textContent = noter.join(' ');
     note.hidden = !noter.length;
 
-    $('#res-svar').innerHTML = TRIN
-      .map((t, i) => `<button type="button" data-ret="${i}" aria-label="${esc(resume(t))}. Ret svaret">${esc(resume(t))}<span aria-hidden="true">Ret</span></button>`)
-      .join('');
-
     const dele = [];
     if (r.klar) {
       dele.push([`${cfg.overflader[svar.overflade].navn}, ${svar.areal} m², inkl. opstart`, r.grupper.system]);
@@ -360,11 +375,6 @@ export function startQuiz() {
     }
     $('#res-dele').innerHTML = dele.map(([navn, v]) => `<div><dt>${esc(navn)}</dt><dd>ca. ${spaend(v)}</dd></div>`).join('');
     $('#res-tid').textContent = [cfg.tid.arbejdsdage, cfg.tid.gaaPaa, cfg.tid.koerPaa].join(' · ');
-
-    if (!faerdigTracket) {
-      faerdigTracket = true;
-      track('CalculatorComplete', { value: r.klar ? r.midt : 0, currency: 'DKK', overflade: svar.overflade, areal: svar.areal });
-    }
   }
   $('#res-svar').addEventListener('click', (e) => {
     const b = e.target.closest('[data-ret]');
@@ -404,8 +414,17 @@ export function startQuiz() {
         faerdig: TRIN.every((t) => besvaret.has(t)),
       };
     },
-    /** Til bundbaren: prisen, når resultatet er vist. */
-    status: () => ({ erResultat: nr >= TRIN.length, prisTekst: nr >= TRIN.length ? prisTekst : '' }),
+    /** Kaldes, når kontaktoplysningerne er sendt. Så vises prisen. */
+    visPris() {
+      kontaktGivet = true;
+      vis(TRIN.length, { historik: 'replace' });
+    },
+    /** Til bundbaren: om man er nået til sidste trin, og prisen, når den er vist. */
+    status: () => ({
+      erSlut: nr >= TRIN.length,
+      prisVist: nr >= TRIN.length && kontaktGivet,
+      prisTekst: nr >= TRIN.length && kontaktGivet ? prisTekst : '',
+    }),
     lyt(fn) {
       lyttere.add(fn);
       return () => lyttere.delete(fn);

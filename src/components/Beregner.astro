@@ -45,7 +45,7 @@ const forvalgt = [cfg.rum[rum]?.navn, cfg.overflader[overflade]?.navn].filter(Bo
 const antal = ['Seks', 'Fem', 'Fire'][forvalgt.length];
 const undertekst = forvalgt.length
   ? `${forvalgt.join(' og ')} er valgt. ${antal} korte spørgsmål, så kommer prisen.`
-  : 'Seks korte spørgsmål. Prisen kommer med det samme.';
+  : 'Seks korte spørgsmål, så får du prisen med det samme.';
 ---
 <section class="quiz" id="beregner" aria-label="Prisberegner" data-rum={rum} data-overflade={overflade}>
   <div class="quiz-top">
@@ -125,82 +125,67 @@ const undertekst = forvalgt.length
       <div class="spg-fod"><button type="submit" class="knap knap-accent">Se min pris <span aria-hidden="true">→</span></button></div>
     </div>
   </form>
-  <p class="quiz-note"><Ikon navn="laas" class="quiz-note-ikon" />Du skal ikke give os dit nummer for at se prisen.</p>
+  <p class="quiz-note"><Ikon navn="laas" class="quiz-note-ikon" />Gratis og uforpligtende. Det tager et minut.</p>
+
+  <!-- Sidste trin: prisen vises først, når navn, telefon og mail er sendt -->
+  <div class="kontakt-trin" id="kontakt-trin" hidden>
+    <h2 class="spg-titel" id="kontakt-titel" tabindex="-1">Din pris er klar</h2>
+    <p class="spg-hjaelp">Skriv, hvem vi skal sende den til. Så ser du prisen med det samme.</p>
+    <div class="res-svar" id="res-svar" aria-label="Dine svar. Tryk for at rette."></div>
+    <form class="lead-form" id="lead-form" novalidate>
+      <div class="felt">
+        <label for="lf-navn">Navn</label>
+        <input type="text" id="lf-navn" name="navn" autocomplete="name" required aria-describedby="lf-navn-fejl">
+        <p class="felt-fejl" id="lf-navn-fejl"></p>
+      </div>
+      <div class="felt-raekke">
+        <div class="felt">
+          <label for="lf-telefon">Telefon</label>
+          <input type="tel" id="lf-telefon" name="telefon" autocomplete="tel" inputmode="tel" required aria-describedby="lf-telefon-fejl">
+          <p class="felt-fejl" id="lf-telefon-fejl"></p>
+        </div>
+        <div class="felt">
+          <label for="lf-mail">Mail</label>
+          <input type="email" id="lf-mail" name="mail" autocomplete="email" required aria-describedby="lf-mail-fejl">
+          <p class="felt-fejl" id="lf-mail-fejl"></p>
+        </div>
+      </div>
+      <fieldset class="felt">
+        <legend>Hvornår skal gulvet laves? <span class="valgfrit">Valgfrit</span></legend>
+        <div class="chips">
+          <label class="chip" for="lf-hv-hurtigst"><input type="radio" name="hvornaar" id="lf-hv-hurtigst" value="hurtigst">Hurtigst muligt</label>
+          <label class="chip" for="lf-hv-1-3"><input type="radio" name="hvornaar" id="lf-hv-1-3" value="1-3-mdr">Inden for 1-3 måneder</label>
+          <label class="chip" for="lf-hv-senere"><input type="radio" name="hvornaar" id="lf-hv-senere" value="senere">Senere</label>
+          <label class="chip" for="lf-hv-undersoeger"><input type="radio" name="hvornaar" id="lf-hv-undersoeger" value="undersoeger">Jeg undersøger bare</label>
+        </div>
+      </fieldset>
+      <div class="honning" aria-hidden="true">
+        <label for="lf-firma">Firma</label>
+        <input type="text" id="lf-firma" name="firma" tabindex="-1" autocomplete="off">
+      </div>
+      <button type="submit" class="knap knap-accent knap-stor knap-fuld" id="lf-send">Se min pris <span aria-hidden="true">→</span></button>
+      <p class="form-fejl" id="lf-fejl" role="alert" hidden></p>
+      <p class="lead-note">Uforpligtende. Vi bruger kun dine oplysninger til at kontakte dig om dit gulv. <a href={link('privatliv')}>Privatlivspolitik</a></p>
+    </form>
+  </div>
 
   <div class="resultat" id="resultat" hidden>
     <h2 class="res-titel" id="res-titel" tabindex="-1">Din vejledende pris</h2>
     <p class="res-pris" id="res-pris"></p>
     <p class="res-meta" id="res-meta"></p>
     <p class="res-note" id="res-note" hidden></p>
-    <div class="res-svar" id="res-svar" aria-label="Dine svar. Tryk for at rette."></div>
     <dl class="res-dele" id="res-dele"></dl>
     <p class="res-tid" id="res-tid"></p>
 
-    <div class="lead" id="lead">
-      <form class="lead-form" id="lead-form" novalidate>
-        <h3 class="lead-titel" id="lead-titel" tabindex="-1">Få en fast pris</h3>
-        <p class="lead-intro">Vi kommer gratis ud, måler op og tjekker fugten i betonen. Bagefter får du en fast pris på skrift.</p>
-        <div class="felt">
-          <label for="lf-navn">Navn</label>
-          <input type="text" id="lf-navn" name="navn" autocomplete="name" required aria-describedby="lf-navn-fejl">
-          <p class="felt-fejl" id="lf-navn-fejl"></p>
-        </div>
-        <div class="felt-raekke">
-          <div class="felt">
-            <label for="lf-telefon">Telefon</label>
-            <input type="tel" id="lf-telefon" name="telefon" autocomplete="tel" inputmode="tel" required aria-describedby="lf-telefon-fejl">
-            <p class="felt-fejl" id="lf-telefon-fejl"></p>
-          </div>
-          <div class="felt">
-            <label for="lf-mail">Mail</label>
-            <input type="email" id="lf-mail" name="mail" autocomplete="email" required aria-describedby="lf-mail-fejl">
-            <p class="felt-fejl" id="lf-mail-fejl"></p>
-          </div>
-        </div>
-        <fieldset class="felt">
-          <legend>Hvornår skal gulvet laves?</legend>
-          <div class="chips">
-            <label class="chip" for="lf-hv-hurtigst"><input type="radio" name="hvornaar" id="lf-hv-hurtigst" value="hurtigst">Hurtigst muligt</label>
-            <label class="chip" for="lf-hv-1-3"><input type="radio" name="hvornaar" id="lf-hv-1-3" value="1-3-mdr">Inden for 1-3 måneder</label>
-            <label class="chip" for="lf-hv-senere"><input type="radio" name="hvornaar" id="lf-hv-senere" value="senere">Senere</label>
-            <label class="chip" for="lf-hv-undersoeger"><input type="radio" name="hvornaar" id="lf-hv-undersoeger" value="undersoeger">Jeg undersøger bare</label>
-          </div>
-        </fieldset>
-        <div class="felt">
-          <label for="lf-besked">Andet, vi skal vide? <span class="valgfrit">Valgfrit</span></label>
-          <textarea id="lf-besked" name="besked" rows="3" placeholder="Fx adgang, afløb i gulvet eller om der ligger fliser"></textarea>
-        </div>
-        <div class="honning" aria-hidden="true">
-          <label for="lf-firma">Firma</label>
-          <input type="text" id="lf-firma" name="firma" tabindex="-1" autocomplete="off">
-        </div>
-        <button type="submit" class="knap knap-accent knap-stor knap-fuld" id="lf-send">Send og få en fast pris <span aria-hidden="true">→</span></button>
-        <p class="form-fejl" id="lf-fejl" role="alert" hidden></p>
-        <p class="lead-note">Vi bruger kun dine oplysninger til at kontakte dig om dit gulv. <a href={link('privatliv')}>Privatlivspolitik</a></p>
-      </form>
-
-      <div class="kun-mail" id="kun-mail">
-        <button type="button" class="tekstknap" id="km-aabn" aria-expanded="false" aria-controls="km-form">Ikke klar endnu? Få beregningen på mail</button>
-        <form class="km-form" id="km-form" novalidate hidden>
-          <div class="felt">
-            <label for="km-mail">Mail</label>
-            <input type="email" id="km-mail" name="mail" autocomplete="email" required aria-describedby="km-mail-fejl">
-            <p class="felt-fejl" id="km-mail-fejl"></p>
-          </div>
-          <button type="submit" class="knap knap-lys" id="km-send">Send beregningen</button>
-          <p class="km-tak" id="km-tak" role="status" hidden></p>
-        </form>
-      </div>
-
-      <div class="tak" id="tak" hidden>
-        <h3 class="tak-titel" id="tak-titel" tabindex="-1"></h3>
-        <dl class="tak-resume" id="tak-resume"></dl>
-        <p>Send gerne 2-3 billeder af gulvet til <a href={`mailto:${firma.mail}`}><span data-pladsholder>{firma.mail}</span></a>. Så kan vi give en mere præcis pris allerede i telefonen.</p>
-        <details class="demo-data" id="demo-data" hidden>
-          <summary>Demo: intet er sendt. Se de data, der ville blive sendt</summary>
-          <pre id="demo-data-pre"></pre>
-        </details>
-      </div>
+    <div class="tak" id="tak">
+      <h3 class="tak-titel" id="tak-titel"></h3>
+      <p class="tak-intro">Vi kommer gratis ud, måler op og tjekker fugten i betonen. Bagefter får du en fast pris på skrift.</p>
+      <dl class="tak-resume" id="tak-resume"></dl>
+      <p>Send gerne 2-3 billeder af gulvet til <a href={`mailto:${firma.mail}`}><span data-pladsholder>{firma.mail}</span></a>. Så kan vi give en mere præcis pris allerede i telefonen.</p>
+      <details class="demo-data" id="demo-data" hidden>
+        <summary>Demo: intet er sendt. Se de data, der ville blive sendt</summary>
+        <pre id="demo-data-pre"></pre>
+      </details>
     </div>
   </div>
 </section>

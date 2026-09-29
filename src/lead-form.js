@@ -13,14 +13,6 @@ const HVORNAAR = {
 };
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
-const fmt = (n) => Math.round(n).toLocaleString('da-DK');
-
-function prisTekst(pris) {
-  if (!pris || pris.individuel) return 'Efter besigtigelse';
-  if (pris.lav === undefined) return null;
-  const moms = pris.inklMoms ? 'inkl. moms' : 'ekskl. moms';
-  return pris.lav === pris.hoej ? `${fmt(pris.lav)} kr ${moms}` : `${fmt(pris.lav)}–${fmt(pris.hoej)} kr ${moms}`;
-}
 
 export async function sendData(payload) {
   if (DEMO) {
@@ -88,7 +80,7 @@ export function startLead({ beregner, samtykke }) {
       telefon: normaliserTelefon(form.elements.telefon.value),
       mail: form.elements.mail.value.trim(),
       hvornaar: form.elements.hvornaar.value || null,
-      besked: form.elements.besked.value.trim() || null,
+      besked: null,
     }, eventId);
 
     const knapTekst = send.innerHTML;
@@ -98,6 +90,7 @@ export function startLead({ beregner, samtykke }) {
       await sendData(data);
       track('Lead', { value: data.pris.midt ?? 0, currency: 'DKK' }, eventId);
       visTak(data);
+      beregner.visPris();
     } catch {
       formFejl.textContent = `Det gik ikke at sende. Prøv igen om lidt, eller ring på ${telefonTekst}.`;
       formFejl.hidden = false;
@@ -106,9 +99,8 @@ export function startLead({ beregner, samtykke }) {
     }
   });
 
+  /** Tak-teksten under prisen. Prisen selv vises af beregneren (visPris). */
   function visTak(data) {
-    form.hidden = true;
-    document.getElementById('kun-mail').hidden = true;
     const fornavn = data.kontakt.navn.split(/\s+/)[0];
     const titel = document.getElementById('tak-titel');
     titel.innerHTML = `Tak, ${esc(fornavn)}. Vi ringer dig op <span data-pladsholder>inden for 24 timer på hverdage</span>.`;
@@ -118,52 +110,13 @@ export function startLead({ beregner, samtykke }) {
       ['Stand', t.stand],
       ['Tilvalg', t.tilvalg],
       ['Sted', t.postnummer],
-      ['Vejledende pris', prisTekst(data.pris)],
       ['Hvornår', HVORNAAR[data.kontakt.hvornaar]],
     ].filter(([, v]) => v);
     document.getElementById('tak-resume').innerHTML = raekker
       .map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
-    document.getElementById('tak').hidden = false;
     if (DEMO) {
       document.getElementById('demo-data').hidden = false;
       document.getElementById('demo-data-pre').textContent = JSON.stringify(data, null, 2);
     }
-    titel.focus();
   }
-
-  /* ---------- kun beregningen på mail ---------- */
-  const kmAabn = document.getElementById('km-aabn');
-  const kmForm = document.getElementById('km-form');
-  const kmMail = kmForm.elements.mail;
-  const kmFejl = document.getElementById('km-mail-fejl');
-  const kmTak = document.getElementById('km-tak');
-  kmAabn.addEventListener('click', () => {
-    const aabn = kmForm.hidden;
-    kmForm.hidden = !aabn;
-    kmAabn.setAttribute('aria-expanded', String(aabn));
-    if (aabn) kmMail.focus();
-  });
-  kmForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (!gyldigMail(kmMail.value)) {
-      kmMail.setAttribute('aria-invalid', 'true');
-      kmFejl.textContent = 'Tjek mailadressen. Den ser ikke rigtig ud.';
-      kmMail.focus();
-      return;
-    }
-    kmMail.setAttribute('aria-invalid', 'false');
-    kmFejl.textContent = '';
-    const knap = document.getElementById('km-send');
-    knap.disabled = true;
-    try {
-      await sendData(payload('kun-mail', { mail: kmMail.value.trim() }, nytEventId()));
-      track('CalculationEmail', { value: beregner.data().pris.midt ?? 0, currency: 'DKK' });
-      kmTak.textContent = DEMO ? 'Demo: intet er sendt. Ellers ville beregningen være på vej til din mail nu.' : 'Sendt. Beregningen er i din indbakke om lidt.';
-      kmTak.hidden = false;
-    } catch {
-      kmTak.textContent = 'Det gik ikke at sende. Prøv igen om lidt.';
-      kmTak.hidden = false;
-      knap.disabled = false;
-    }
-  });
 }

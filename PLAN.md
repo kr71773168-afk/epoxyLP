@@ -1,6 +1,6 @@
 # Silkeborg Epoxy · landingpage med prisberegner
 
-**Status:** Opgaven er udvidet fra landingpage til komplet hjemmeside. Udkast v0.7 er bygget (29.09.2026) i Astro med 28 sider: forside, prisside, 7 ydelser, 8 bysider, 5 guides med en Viden-side, referencer, om os og kontakt. Designet følger nu ejerens referencer, vestbjergepoxygulve.dk (direkte konkurrent i Silkeborg) og viborg-design.dk, i tre stilarter (A · Blå, B · Grøn, C · Egen), som kan skiftes i kladden. C er standard. Videoen fra et job er levende baggrund i toppen. Ingen af referencerne har en prisberegner, så beregneren står i toppen af alle salgssider. Lighthouse på mobil: 98-100 i hastighed og 100 i tilgængelighed og best practices i alle tre stilarter, SEO 100 uden kladde-noindex. Afsnit 6 beskriver stilarterne. De tidligere retninger ("Fugefri" og "enkel og troværdig") er erstattet. Se [README.md](README.md) for opsætning, pladsholdere og tjekliste før launch.
+**Status:** Opgaven er udvidet fra landingpage til komplet hjemmeside. Udkast v0.8 er bygget (29.09.2026) i Astro med 28 sider: forside, prisside, 7 ydelser, 8 bysider, 5 guides med en Viden-side, referencer, om os og kontakt. Designet følger nu ejerens referencer, vestbjergepoxygulve.dk (direkte konkurrent i Silkeborg) og viborg-design.dk, i tre stilarter (A · Blå, B · Grøn, C · Egen), som kan skiftes i kladden. C er standard. Videoen fra et job er levende baggrund i toppen. Ingen af referencerne har en prisberegner, så beregneren står i toppen af alle salgssider. Prisen vises først, når navn, telefon og mail er sendt (kundens valg, v0.8). Lighthouse på mobil: 98-100 i hastighed og 100 i tilgængelighed og best practices i alle tre stilarter, SEO 100 uden kladde-noindex. Afsnit 6 beskriver stilarterne. De tidligere retninger ("Fugefri" og "enkel og troværdig") er erstattet. Se [README.md](README.md) for opsætning, pladsholdere og tjekliste før launch.
 **Priser i dette dokument** er markedsniveau eller pladsholdere. De skal erstattes af kundens egne tal før noget går live.
 **Visuel version med skitser** (hero-refleksion, beregner, snit, gummiskraber): https://claude.ai/artifact/EtPejGYeD86SAgKEQwpe81
 
@@ -9,7 +9,7 @@
 ## Kort fortalt
 
 - **Vinklen:** Ingen af de lokale konkurrenter viser en pris. Alle kører "ring for pris" eller "få et tilbud". Silkeborg Epoxy bliver dem, der viser prisen på dit gulv på 60 sekunder. Det er hele siden.
-- **Funnel:** Meta-annonce → side der matcher annoncen → 5-6 korte spørgsmål → prisinterval vises med det samme (ingen kontaktmur) → "Få fast pris" med gratis besigtigelse → tak + SMS/mail med beregningen.
+- **Funnel:** Meta-annonce → side der matcher annoncen → 5-6 korte spørgsmål → navn, telefon og mail → prisinterval vises med det samme → firmaet ringer og aftaler gratis besigtigelse → fast pris på skrift.
 - **Beregneren:** Prisen starter som et bredt interval og bliver smallere for hvert svar. Når alle svar er givet, er den ±5 %. Epoxy er selvnivellerende, og det er prisen også. Det får folk til at svare på alt.
 - **Design ("Fugefri"):** Siden bygges som et epoxygulv. Én sammenhængende flade uden kasser, helt plan, med ét blankt lag på toppen. Bred og let typografi i stedet for fed. Datablad-sprog (mm, RAL, lag). Signalgul er eneste accent.
 - **Teknik:** Statisk side (Vite + vanilla JS) på Netlify/Cloudflare. En lille serverfunktion tager imod leads og sender til Meta CAPI og Zapier/Make. Alle priser ligger i én config-fil, og beregningen testes mod rigtige tilbud, kunden allerede har givet.
@@ -76,18 +76,17 @@ KPI'er vi måler fra dag 1 (mål sættes efter de første 2 ugers data, ikke fø
 1. **Meta-annonce** pr. segment: garage, bolig, erhverv.
 2. **Landingpage.** Overskrift og første valg matcher annoncen via URL-parameter (`?gulv=garage`).
 3. **Beregner.** 5-6 spørgsmål, ét ad gangen, ca. 60 sekunder.
-4. **Prisinterval** vises med det samme, sammen med hvad der er inkluderet.
-5. **"Få fast pris"** (gratis besigtigelse): navn, telefon, mail, hvornår.
-6. **Tak-skærm** + automatisk SMS/mail med beregningen. Firmaet ringer op inden for 24 timer på hverdage.
+4. **"Din pris er klar":** navn, telefon, mail og (valgfrit) hvornår. Svarene kan rettes her, før der sendes.
+5. **Prisinterval** vises, så snart oplysningerne er sendt, sammen med hvad der er inkluderet og en tak: firmaet ringer op inden for 24 timer på hverdage og aftaler gratis besigtigelse.
 
-Sekundær konvertering: **"Send beregningen til min mail"** (kun mailfelt). Til dem, der ikke er klar endnu. Giver retargeting og en mail-opfølgning. Med i v1, det er én formular og én Zap mere.
+### Pris efter kontaktoplysninger (kundens valg, v0.8)
 
-### Pris uden kontaktmur (min anbefaling)
+Første udkast viste prisen uden kontaktmur. Kunden har valgt, at prisen først vises, når navn, telefon og mail er sendt. Det giver flere leads pr. besøgende, fordi alle, der vil se prisen, bliver et lead.
 
-- Konkurrenterne gemmer prisen. At vise den er vores differentiering.
-- Kold Meta-trafik stoler ikke på "indtast telefonnummer for at se prisen". Det giver frafald og falske numre.
-- Dem, der sender formularen *efter* at have set prisen, har accepteret prisniveauet. Færre spildte besigtigelser og højere lukkerate.
-- Minus: færre leads i alt. Bliver pris pr. kvalificeret lead for høj, A/B-tester vi en variant med kontaktmur. Men vi starter uden.
+- Plus: hvert gennemført forløb er et lead med telefonnummer. Meta får et `Lead`-event for alle, der vil se prisen.
+- Minus: nogle falder fra ved formularen, og nogle skriver et falsk nummer. Følg frafaldet på sidste trin (`CalculatorComplete` minus `Lead`) og andelen af numre, der ikke kan ringes op.
+- Kan A/B-testes senere mod en variant uden kontaktmur, hvis pris pr. kvalificeret lead bliver for høj.
+- "Send beregningen til min mail" (kun mail) er fjernet fra beregneren, fordi prisen nu kræver telefonnummer. Funktionen tager stadig imod typen `kun-mail`.
 
 ### Message match via URL
 
@@ -342,7 +341,7 @@ Formular → `/api/lead` →
 | `PageView` | Ved load (efter samtykke) | Standard | |
 | `CalculatorStart` | Første svar | Custom | rumtype |
 | `CalculatorStep` | Hvert trin | Custom | trin nr. (frafaldsanalyse) |
-| `CalculatorComplete` | Pris vist med alle svar | Custom | value = midtpris, DKK, overflade, m² |
+| `CalculatorComplete` | Alle spørgsmål besvaret, formularen "Din pris er klar" vises | Custom | value = midtpris, DKK, overflade, m² |
 | `Lead` | Formular modtaget (2xx fra `/api/lead`) | Standard + CAPI | value = midtpris, event_id |
 | `Contact` | Tryk på telefonnummer | Standard | |
 
@@ -402,7 +401,7 @@ Formular → `/api/lead` →
 
 | Beslutning | Anbefaling | Hvorfor |
 |---|---|---|
-| Pris med eller uden kontaktmur | **Uden.** A/B-test senere | Tillid, lead-kvalitet, differentiering |
+| Pris med eller uden kontaktmur | **Med** (kundens valg, v0.8). A/B-test uden senere | Flere leads. Hvert gennemført forløb giver navn, telefon og mail |
 | Webflow eller selvstændig side | **Selvstændig** fra repo'et, deploy på Netlify/Cloudflare | Fuld kontrol over design og animation, serverfunktion til CAPI, hurtig. Beregneren kan stadig embeddes i Webflow senere |
 | Prislinjer i resultatet | **3 grupper**, ikke hver post | Undgår forhandling post for post |
 | Billedupload i formularen | **Ikke i v1.** Tak-skærmen beder om billeder via SMS/mail | Mindre friktion, simplere |

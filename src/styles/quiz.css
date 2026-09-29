@@ -24,7 +24,7 @@
 
 .spg-titel { font-size: var(--t-spg); font-weight: max(600, var(--h-vaegt)); text-transform: none; letter-spacing: min(var(--h-spacing), -.01em); margin-bottom: 1rem; }
 :root[data-stil="B"] .spg-titel { font-weight: 500; letter-spacing: 0; }
-.spg-titel:focus, .res-titel:focus, .lead-titel:focus, .tak-titel:focus { outline: none; }
+.spg-titel:focus, .res-titel:focus, .lead-titel:focus { outline: none; }
 .spg-hjaelp { color: var(--ink-2); margin: -.5rem 0 1.1rem; }
 .spg-hint { color: var(--fejl); font-size: .93rem; margin: .8rem 0 0; }
 .spg-hint:empty { display: none; }
@@ -140,8 +140,10 @@
 .res-dele dd { margin: 0; text-align: right; white-space: nowrap; font-weight: var(--tekst-fed); }
 .res-tid { font-size: .9rem; color: var(--ink-2); margin-bottom: 1.5rem; }
 
-/* ---------- lead ---------- */
-.lead { margin: 0 calc(var(--quiz-pad, 1.25rem) * -1) calc(var(--quiz-pad, 1.25rem) * -1); padding: 1.4rem var(--quiz-pad, 1.25rem) var(--quiz-pad, 1.25rem); background: var(--flade-2); border-radius: 0 0 var(--r-kort) var(--r-kort); }
+/* ---------- sidste trin: navn, telefon og mail før prisen ---------- */
+.kontakt-trin .res-svar { margin: -.35rem 0 1.25rem; }
+
+/* ---------- formularer (beregneren og kontaktsiden) ---------- */
 .lead-titel { font-size: 1.45rem; text-transform: none; letter-spacing: min(var(--h-spacing), -.01em); margin-bottom: .45rem; }
 :root[data-stil="B"] .lead-titel { font-weight: 500; }
 .lead-intro { color: var(--ink-2); margin-bottom: 1.25rem; }
@@ -172,9 +174,14 @@
 .honning { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .form-fejl { color: var(--fejl); margin: .8rem 0 0; }
 .lead-note { font-size: .85rem; color: var(--ink-2); margin: .85rem 0 0; }
-.kun-mail { margin-top: 1.3rem; padding-top: 1rem; border-top: 1px solid var(--linje-2); }
-.km-form { margin-top: .9rem; }
-.km-tak { margin: .65rem 0 0; font-size: .93rem; }
+/* Tak under prisen: en tonet flade i bunden af kortet */
+.resultat .tak {
+  margin: 1.25rem calc(var(--quiz-pad, 1.25rem) * -1) calc(var(--quiz-pad, 1.25rem) * -1);
+  padding: 1.35rem var(--quiz-pad, 1.25rem) var(--quiz-pad, 1.25rem);
+  background: var(--flade-2); border-radius: 0 0 var(--r-kort) var(--r-kort);
+}
+.resultat .tak p:last-of-type { margin-bottom: 0; }
+.tak-intro { color: var(--ink-2); }
 .tak-titel { font-size: 1.4rem; text-transform: none; letter-spacing: min(var(--h-spacing), -.01em); margin-bottom: 1rem; }
 .tak-resume { margin: 0 0 1.1rem; font-size: .95rem; }
 .tak-resume div { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: .75rem; padding: .45rem 0; border-bottom: 1px solid var(--linje-2); }

@@ -1,23 +1,20 @@
 /**
  * Knap i bunden på mobil, når beregneren er rullet ud af syne.
- * Før prisen: "Se hvad dit gulv koster". Efter: prisen og et link til formularen.
+ * Før sidste trin: "Se hvad dit gulv koster". På sidste trin: "Din pris er klar". Når prisen er vist, forsvinder den.
  */
 export function startBundbar(beregner) {
   const bar = document.getElementById('bundbar');
-  const knap = document.getElementById('bundbar-knap');
   const tekst = document.getElementById('bundbar-tekst');
   const quiz = document.getElementById('beregner');
-  const tak = document.getElementById('tak');
   const slut = document.querySelector('.slut');
   const smal = window.matchMedia('(max-width: 900px)');
   let quizSynlig = true;
   let slutSynlig = false;
 
   function opdater() {
-    const { prisTekst } = beregner.status();
-    tekst.textContent = prisTekst ? `Din pris: ${prisTekst}` : 'Se hvad dit gulv koster';
-    knap.setAttribute('href', prisTekst ? '#lead' : '#beregner');
-    bar.hidden = !smal.matches || quizSynlig || slutSynlig || !tak.hidden;
+    const { erSlut, prisVist } = beregner.status();
+    tekst.textContent = erSlut ? 'Din pris er klar' : 'Se hvad dit gulv koster';
+    bar.hidden = !smal.matches || quizSynlig || slutSynlig || prisVist;
   }
 
   if ('IntersectionObserver' in window) {

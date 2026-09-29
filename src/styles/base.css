@@ -97,9 +97,14 @@ a:hover { text-decoration-color: currentColor; }
 }
 .stilvaelger button[aria-pressed="true"] { background: #1A1A1A; border-color: #1A1A1A; color: #fff; }
 html:not(.kladde) [data-kun-kladde] { display: none !important; }
-.kladde [data-pladsholder] {
-  background-image: linear-gradient(transparent 62%, rgba(255, 216, 77, .75) 62%);
+.vis-pladsholdere [data-pladsholder] {
+  background: rgba(255, 216, 77, .28); border-radius: 3px;
+  outline: 1.5px dashed #E0A800; outline-offset: 1px;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
-.kladde .moerk [data-pladsholder], .kladde .hero-moerk [data-pladsholder] { background-image: linear-gradient(transparent 62%, rgba(255, 216, 77, .45) 62%); }
+.kladde-knap {
+  border: 1px solid rgba(0, 0, 0, .35); background: rgba(255, 255, 255, .55); color: #1A1A1A; border-radius: 999px;
+  padding: .22rem .7rem; font-size: .78rem; font-weight: 600; cursor: pointer; margin-left: auto;
+}
+.kladde-knap[aria-pressed="true"] { background: #1A1A1A; border-color: #1A1A1A; color: #fff; }
 @media (max-width: 640px) { .kladde-tekst-lang { display: none; } }

@@ -65,6 +65,8 @@ const virksomhed = {
         s = s.toUpperCase();
         if (!/^[ABC]$/.test(s)) s = standard;
         document.documentElement.setAttribute('data-stil', s);
+        // Pladsholderne markeres kun, når man har slået det til i bjælken
+        try { if (localStorage.getItem('se-pladsholdere') === '1') document.documentElement.classList.add('vis-pladsholdere'); } catch (e) {}
         // Hent stilens skrift med det samme, så teksten ikke hopper, når den kommer
         (skrifter[s] || []).forEach(function (f) {
           var l = document.createElement('link');
@@ -99,7 +101,8 @@ const virksomhed = {
     <a class="spring" href="#indhold">Spring til indholdet</a>
     {firma.kladde && (
       <div class="kladde-bjaelke">
-        <p>Kladde<span class="kladde-tekst-lang"> · pladsholdere er markeret med gult · priser, tekster og AI-billeder er ikke kundens endnu</span></p>
+        <p>Kladde<span class="kladde-tekst-lang"> · priser, tekster og billeder er ikke endelige</span></p>
+        <button type="button" class="kladde-knap" data-pladsholder-knap aria-pressed="false">Vis pladsholdere</button>
         <div class="stilvaelger" role="group" aria-label="Vælg stilart">
           <span class="stilvaelger-titel">Stil:</span>
           <button type="button" data-stil-knap="A" aria-pressed="false">A · Blå</button>

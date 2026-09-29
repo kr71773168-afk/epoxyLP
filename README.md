@@ -1,8 +1,8 @@
 # Silkeborg Epoxy · hjemmeside med prisberegner
 
-Udkast v0.7: komplet hjemmeside i [Astro](https://astro.build) med 28 statiske sider, heraf 5 guides under Viden. Prisberegneren stiller ét spørgsmål ad gangen og ligger på forsiden, prissiden, alle ydelser, alle bysider og alle guides. Leads går gennem en Netlify-funktion til Zapier/Make og Meta CAPI. Baggrund og research står i [PLAN.md](PLAN.md).
+Udkast v0.8: komplet hjemmeside i [Astro](https://astro.build) med 28 statiske sider, heraf 5 guides under Viden. Prisberegneren stiller ét spørgsmål ad gangen og ligger på forsiden, prissiden, alle ydelser, alle bysider og alle guides. Prisen vises først, når den besøgende har skrevet navn, telefon og mail (kundens valg, v0.8). Leads går gennem en Netlify-funktion til Zapier/Make og Meta CAPI. Baggrund og research står i [PLAN.md](PLAN.md).
 
-**Alle priser er pladsholdere.** Siden kører i "kladde"-tilstand: tekster og tal, der skal bekræftes af kunden, er markeret med gult, og alle sider har `noindex`.
+**Alle priser er pladsholdere.** Siden kører i "kladde"-tilstand: der er en gul bjælke øverst, og alle sider har `noindex`. Tekster og tal, der skal bekræftes af kunden, er markeret i koden. Tryk "Vis pladsholdere" i bjælken for at se dem på siden (stiplet gul ramme). Valget huskes.
 
 **Billederne er pladsholdere.** I beregneren er ni billeder AI-genererede (Canva) og fire stillbilleder fra kundens egen video. Fotoene på siderne er stillbilleder fra videoen. De skal skiftes til kundens egne billeder af færdige gulve før launch.
 
@@ -106,7 +106,7 @@ Det, der holder siden hurtig: CSS ligger direkte i HTML'en, kun den valgte stila
 ## URL-parametre
 
 - `?gulv=garage` / `kaelder` / `bolig` / `erhverv`: skifter overskriften på forsiden, vælger rummet og starter beregneren ved størrelsen. Brug én pr. annoncesæt.
-- `?kladde=0`: skjuler de gule pladsholder-markeringer, fx til skærmbilleder.
+- `?kladde=0`: skjuler kladde-bjælken, fx til skærmbilleder.
 - `?stil=A` / `B` / `C`: viser siden i en anden stilart (kun i kladden). Valget huskes, så man kan klikke rundt på sitet.
 
 ## Deploy på Netlify
@@ -129,7 +129,7 @@ Formular → `/api/lead` (`netlify/functions/lead.mjs`) →
 2. Webhook til Zapier/Make med alle svar, prisinterval, lead-score (`HOT` / `NORMAL` / `UDEN FOR ZONE`), UTM'er, fbclid/fbc/fbp og event_id. Fejler webhooken, får formularen en fejl, så leadet ikke forsvinder i stilhed.
 3. `Lead` til Meta CAPI med hashet mail, telefon, navn, postnummer og by. Samme `event_id` som pixel-eventet, så Meta kun tæller det én gang. Sendes kun, når den besøgende har sagt ja til cookies. Den regel justeres, når privatlivspolitikken er på plads.
 
-Typer: `fast-pris` fra beregneren, `kun-mail` fra "Få beregningen på mail" og `kontakt` fra kontaktsiden.
+Typer: `fast-pris` fra beregneren (sendes, før prisen vises) og `kontakt` fra kontaktsiden. Funktionen tager også imod `kun-mail` (kun mailadresse), som ikke bruges på siden lige nu.
 
 ## Events
 
@@ -151,7 +151,7 @@ Browserens tilbage-knap går ét spørgsmål tilbage i beregneren, så folk i Fa
 - [ ] Zone (kommuner) og bysidernes afstande bekræftet
 - [ ] Privatlivspolitik gennemgået
 - [ ] Domæne i `astro.config.mjs` og `public/robots.txt`
-- [ ] `kladde: false` i `src/data/firma.js` (fjerner noindex og de gule markeringer)
+- [ ] `kladde: false` i `src/data/firma.js` (fjerner noindex og kladde-bjælken)
 - [ ] Miljøvariabler sat på Netlify, test-lead hele vejen igennem til Zapier/Make og Meta Test Events
 - [ ] Test i Facebook- og Instagram-browseren på iOS og Android
 

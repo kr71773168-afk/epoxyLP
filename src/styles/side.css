@@ -147,7 +147,8 @@
 
 .hero-tekst { grid-area: tekst; padding-top: clamp(0rem, 1.5vw, 1rem); }
 .hero-rating { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .65rem; margin-bottom: 1.1rem; font-size: .92rem; font-weight: var(--tekst-fed); color: var(--ink-2); }
-.hero-rating-pl { font-size: .78em; font-weight: 500; padding: .05em .45em; border: 1px dashed currentColor; border-radius: 4px; }
+.hero-rating-pl { display: none; font-size: .78em; font-weight: 500; padding: .05em .45em; border: 1px dashed currentColor; border-radius: 4px; }
+.vis-pladsholdere .hero-rating-pl { display: inline; }
 .hero-over { font-size: .98rem; font-weight: var(--tekst-fed); color: var(--ink-2); margin-bottom: .8rem; }
 .hero h1 { font-size: var(--t-h1); max-width: 15ch; margin-bottom: 1.15rem; }
 .hero-sub { font-size: clamp(1.04rem, 1rem + .3vw, 1.18rem); color: var(--ink-2); max-width: 40ch; margin-bottom: 1.4rem; }
@@ -448,7 +449,7 @@
 @media (max-width: 860px) { .ref-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .ref-grid { grid-template-columns: minmax(0, 1fr); } }
 .kladde-note { display: none; }
-.kladde .kladde-note { display: block; max-width: 46rem; margin: 1.25rem 0 0; padding: .6rem .85rem; border-radius: var(--r-lille); background: var(--kladde); color: #1A1A1A; font-size: .9rem; }
+.vis-pladsholdere .kladde-note { display: block; max-width: 46rem; margin: 1.25rem 0 0; padding: .6rem .85rem; border-radius: var(--r-lille); background: var(--kladde); color: #1A1A1A; font-size: .9rem; }
 .anmeldelser p { color: var(--ink-2); }
 
 /* ---------- område og bysider ---------- */
