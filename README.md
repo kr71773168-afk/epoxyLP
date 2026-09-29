@@ -1,10 +1,12 @@
 # Silkeborg Epoxy · hjemmeside med prisberegner
 
-Udkast v0.5: komplet hjemmeside i [Astro](https://astro.build) med 28 statiske sider, heraf 5 guides under Viden. Prisberegneren stiller ét spørgsmål ad gangen og ligger på forsiden, prissiden, alle ydelser, alle bysider og alle guides. Leads går gennem en Netlify-funktion til Zapier/Make og Meta CAPI. Baggrund og research står i [PLAN.md](PLAN.md).
+Udkast v0.6: komplet hjemmeside i [Astro](https://astro.build) med 28 statiske sider, heraf 5 guides under Viden. Prisberegneren stiller ét spørgsmål ad gangen og ligger på forsiden, prissiden, alle ydelser, alle bysider og alle guides. Leads går gennem en Netlify-funktion til Zapier/Make og Meta CAPI. Baggrund og research står i [PLAN.md](PLAN.md).
 
 **Alle priser er pladsholdere.** Siden kører i "kladde"-tilstand: tekster og tal, der skal bekræftes af kunden, er markeret med gult, og alle sider har `noindex`.
 
-**Billederne er pladsholdere.** I beregneren er ni billeder AI-genererede (Canva) og fire stillbilleder fra kundens egen video. Fotoene på siderne er stillbilleder fra videoen og renderede gulve (`gulv-*.jpg`, se [Gulvbilleder](#gulvbilleder)). Farveprøverne på gulvtypesiderne er også renderede. Det hele skal skiftes til kundens egne billeder og farvekort før launch.
+**Billederne er pladsholdere.** I beregneren er ni billeder AI-genererede (Canva) og fire stillbilleder fra kundens egen video. Fotoene på siderne er stillbilleder fra videoen. De skal skiftes til kundens egne billeder af færdige gulve før launch.
+
+**Designretning (aftalt i v0.3):** lyst og enkelt, beregneren øverst på alle salgssider, rigtige fotos, få sektioner og ingen kasser. Ingen mørke sektioner midt på siden, ingen mono-/nummer-labels og ingen gulve tegnet med kode. Den eneste mørke flade er afslutningen med et foto fra et job.
 
 ## Kom i gang
 
@@ -42,12 +44,11 @@ En ny ydelse eller by er en ny post i data-filen. Siden, menuen, footeren og sit
 | Byer, afstande og lokale tekster | `src/data/byer.js` |
 | Generelle spørgsmål | `src/data/faq.js` |
 | Guides (tekster, tabel, billede) | `src/data/viden.js` |
-| Farveprøver på gulvtypesiderne | `farver` i `src/data/ydelser.js` + billeder i `src/media/farver/` |
 | "Derfor vælger folk os" på forsiden | `loefter` øverst i `src/pages/index.astro` |
 | Referencer | `src/data/referencer.js` (pladsholdere) |
 | Domæne | `astro.config.mjs` (`site`) og `public/robots.txt` |
 | Billeder i beregneren | `src/media/valg/`, fx `rum-garage.webp`. Samme navn, 4:3 |
-| Fotos på siderne | `src/media/foto/`. Læg en ny fil med samme navn, så laver Astro selv de mindre størrelser. Hvilket foto en side bruger, står i data-filerne (`billede`) |
+| Fotos på siderne | `src/media/foto/`. Læg en ny fil med samme navn, så laver Astro selv de mindre størrelser. Referencernes fotos står i `src/data/referencer.js` |
 | Videoen | `src/media/arbejde.mp4`, `arbejde.webm` og stillbilledet `arbejde.jpg`, se herunder |
 | Farver, typografi, afstande | `src/styles/tokens.css` |
 
@@ -64,18 +65,6 @@ ffmpeg -i nyt-klip.mov -frames:v 1 -vf "scale=1280:-2" -q:v 5 src/media/arbejde.
 ```
 
 Stillbilledet skal være første billede i klippet, så der ikke er et hop, når videoen starter.
-
-### Gulvbilleder
-
-Nærbillederne af færdige gulve (`src/media/foto/gulv-*.jpg`) og farveprøverne (`src/media/farver/`) er renderet med `scripts/gulvbilleder/`: et gulv i perspektiv med klar toplak, spejlinger af rummet og dybdeskarphed. Farverne og kameraet står i `scener.json`. Samme scene giver altid samme billede.
-
-```sh
-npm i -D playwright && npx playwright install chromium   # én gang
-node scripts/gulvbilleder/render.mjs                        # alle (ca. 15 min)
-node scripts/gulvbilleder/render.mjs flakes-graa            # kun én
-```
-
-Brug det til at lave farveprøver med kundens egne farver, indtil der er rigtige fotos. Så er der ikke brug for det mere.
 
 ## SEO
 
@@ -94,7 +83,7 @@ Lighthouse (29.09.2026, produktionsbyg, mobil med simuleret 4G):
 | Side | Hastighed | Tilgængelighed | Best practices | SEO |
 |---|---|---|---|---|
 | Forside | 99 | 100 | 100 | 100 |
-| Garagegulv | 98 | 100 | 100 | 100 |
+| Garagegulv | 99 | 100 | 100 | 100 |
 | Pris | 99 | 100 | 100 | 100 |
 | Guide | 98 | 100 | 100 | 100 |
 | Epoxygulv Aarhus | 99 | 100 | 100 | 100 |
@@ -143,7 +132,7 @@ Browserens tilbage-knap går ét spørgsmål tilbage i beregneren, så folk i Fa
 - [ ] Ejerens navn, historie og foto på Om os
 - [ ] Kundens egne fotos i stedet for AI-billederne i `src/media/valg/` og videostillbillederne i `src/media/foto/`
 - [ ] Rigtige referencer i `src/data/referencer.js` og anmeldelser fra Trustpilot eller Google
-- [ ] Kundens farvekort: farver og blandinger i `src/data/ydelser.js` (`farver`) og prøver i `src/media/farver/`
+- [ ] Kundens farvekort og fotos af færdige gulve pr. overflade, så gulvtypesiderne kan vise dem
 - [ ] Guiderne læst igennem af ejeren, især levetid, garanti og gulvvarme i `src/data/viden.js`
 - [ ] Zone (kommuner) og bysidernes afstande bekræftet
 - [ ] Privatlivspolitik gennemgået

@@ -14,7 +14,6 @@ export const guides = [
     h1: 'Epoxy eller gulvmaling på garagegulvet?',
     kort: 'Maling er billigst i dag. Epoxy holder i mange år. Her er forskellen.',
     intro: 'Begge dele gør betongulvet pænere og nemmere at feje. Men der er stor forskel på, hvor længe de holder, når der kører en bil ind og ud hver dag.',
-    billede: 'gulv-flakes-2',
     rum: 'garage',
     afsnit: [
       {
@@ -66,7 +65,6 @@ export const guides = [
     h1: 'Hvor længe holder et epoxygulv?',
     kort: 'Det afgør levetiden, og sådan får du gulvet til at holde længst.',
     intro: 'Et epoxygulv, der er lagt rigtigt, holder i mange år i en garage, kælder eller bolig. Hvor længe afhænger mest af forarbejdet, opbygningen og hvor hårdt gulvet bliver brugt.',
-    billede: 'gulv-metallic',
     afsnit: [
       {
         titel: 'Så længe holder det',
@@ -115,7 +113,6 @@ export const guides = [
     h1: 'Kan man få epoxygulv med gulvvarme?',
     kort: 'Ja. Men gulvvarmen skal styres, mens gulvet bliver lagt.',
     intro: 'Ja. Et epoxygulv er tyndt og ligger direkte på betonen, så varmen kommer godt igennem. Det kræver bare, at gulvvarmen bliver styret rigtigt, mens gulvet bliver lagt og hærder.',
-    billede: 'gulv-bolig',
     rum: 'bolig',
     afsnit: [
       {
@@ -153,7 +150,6 @@ export const guides = [
     h1: 'Sådan gør du rent på et epoxygulv',
     kort: 'Vand, et mildt gulvvaskemiddel og en blød moppe. Og det, du skal holde dig fra.',
     intro: 'Et epoxygulv er tæt og glat, så snavset bliver ovenpå i stedet for at trænge ned. Det meste klarer du med en kost og en moppe.',
-    billede: 'gulv-ensfarvet',
     afsnit: [
       {
         titel: 'Til hverdag',
@@ -193,7 +189,6 @@ export const guides = [
     h1: 'Kan man lægge epoxy på fliser?',
     kort: 'Ofte ja, så du slipper for at hugge fliserne op. Men de skal sidde fast.',
     intro: 'Ja, ofte. Sidder fliserne godt fast, kan vi lægge epoxy direkte ovenpå, så du slipper for at hugge dem op. Det sparer tid, støv og penge.',
-    billede: 'haelder',
     rum: 'bolig',
     afsnit: [
       {

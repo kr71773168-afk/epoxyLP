@@ -1,6 +1,6 @@
 ---
-import YdelsesKort from '../components/YdelsesKort.astro';
-import { privat } from '../data/ydelser.js';
+import YdelsesListe from '../components/YdelsesListe.astro';
+import { erhverv, privat } from '../data/ydelser.js';
 import Side from '../layouts/Side.astro';
 import { link } from '../lib/link.js';
 ---
@@ -11,6 +11,6 @@ import { link } from '../lib/link.js';
     <p><a class="knap knap-stor" href={link('pris')}>Beregn pris <span aria-hidden="true">→</span></a> <a class="pil-link" href={link()}>Til forsiden</a></p>
   </section>
   <section class="sektion">
-    <div class="kolonne"><YdelsesKort ydelser={privat} /></div>
+    <div class="kolonne"><YdelsesListe ydelser={[...privat, ...erhverv]} /></div>
   </section>
 </Side>

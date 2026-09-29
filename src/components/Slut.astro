@@ -7,15 +7,17 @@ interface Props {
   titel?: string;
   tekst?: string;
   harBeregner?: boolean;
+  foto?: string;
 }
 const {
   titel = 'Se hvad dit gulv koster',
   tekst = 'Det tager et minut, og du skal ikke give os dit nummer for at se prisen.',
   harBeregner = false,
+  foto = 'hal',
 } = Astro.props;
 ---
 <section class="slut" aria-labelledby="slut-titel">
-  <Foto navn="hal" alt="" class="slut-billede" sizes="100vw" />
+  <Foto navn={foto} alt="" class="slut-billede" sizes="100vw" />
   <div class="kolonne slut-indre">
     <h2 id="slut-titel">{titel}</h2>
     <p>{tekst}</p>

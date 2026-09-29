@@ -1,16 +1,12 @@
 /**
  * Ydelserne. Hver bliver en side via src/pages/[ydelse].astro.
  * `rum` vælger rummet på forhånd i beregneren, `overflade` vælger overfladen.
- * `billede` er et foto i src/media/foto, `kortBillede` et lille billede i src/media/valg.
- * Fotoene er stillbilleder fra kundens video og renderede gulve (gulv-*.jpg). Alle er pladsholdere,
- * indtil der er billeder af kundens færdige gulve.
- * `farver` vises som farveprøver på gulvtypesiderne: `hex` er en flad farve, `billede` en fil i src/media/farver.
+ * Beregneren står øverst på hver side med rummet eller overfladen valgt på forhånd.
  * `guides` er slugs fra src/data/viden.js.
  */
 export const ydelser = [
   {
     slug: 'garagegulv',
-    prisTitel: 'Se prisen på dit garagegulv',
     fordeleTitel: 'Det får du med et epoxygulv i garagen',
     gruppe: 'privat',
     navn: 'Garagegulv',
@@ -19,8 +15,6 @@ export const ydelser = [
     beskrivelse: 'Nyt garagegulv i epoxy, der tåler bil, olie og vejsalt. Se prisen på dit garagegulv på et minut. Silkeborg og 60 km omkring.',
     h1: 'Garagegulv i epoxy',
     intro: 'Et epoxygulv gør garagen til et rum, du har lyst til at være i. Det tåler bilen, olien og vejsaltet, og snavset fejer du bare af.',
-    billede: 'gulv-flakes',
-    kortBillede: 'rum-garage',
     rum: 'garage',
     fordele: [
       { titel: 'Tåler bil og dæk', tekst: 'Vi bygger gulvet op i lag med primer, epoxy og toplak, så varme dæk ikke trækker belægningen af.' },
@@ -48,7 +42,6 @@ export const ydelser = [
   },
   {
     slug: 'kaeldergulv',
-    prisTitel: 'Se prisen på dit kældergulv',
     fordeleTitel: 'Det får du med et epoxygulv i kælderen',
     gruppe: 'privat',
     navn: 'Kældergulv',
@@ -57,8 +50,6 @@ export const ydelser = [
     beskrivelse: 'Epoxygulv i kælderen: lysere, støvfrit og nemt at holde rent. Vi måler fugt i betonen først. Se prisen på dit kældergulv på et minut.',
     h1: 'Kældergulv i epoxy',
     intro: 'Et epoxygulv gør kælderen lysere og stopper betonstøvet. Rummet bliver til at bruge, uanset om det er vaskerum, fyrrum eller hobbyrum.',
-    billede: 'hal-lys',
-    kortBillede: 'rum-kaelder',
     rum: 'kaelder',
     fordele: [
       { titel: 'Vi måler fugt først', tekst: 'Kældre kan være fugtige. Vi måler betonen ved besigtigelsen og siger det, hvis der skal en fugtspærre på.' },
@@ -86,7 +77,6 @@ export const ydelser = [
   },
   {
     slug: 'gulv-i-boligen',
-    prisTitel: 'Se prisen på dit nye gulv',
     fordeleTitel: 'Derfor vælger folk et fugefrit gulv',
     gruppe: 'privat',
     navn: 'Gulv i boligen',
@@ -95,8 +85,6 @@ export const ydelser = [
     beskrivelse: 'Fugefrit gulv i epoxy eller metallic til køkken, stue, gang og bryggers. Tåler gulvvarme. Se prisen på dit nye gulv på et minut.',
     h1: 'Fugefrit gulv i boligen',
     intro: 'Et støbt gulv uden fuger giver et roligt, moderne udtryk og er nemt at holde rent. Det passer til køkken, stue, gang og bryggers.',
-    billede: 'gulv-bolig',
-    kortBillede: 'rum-bolig',
     rum: 'bolig',
     fordele: [
       { titel: 'Ingen fuger', tekst: 'Ét sammenhængende gulv gennem hele rummet. Intet snavs i fugerne og et roligt udtryk.' },
@@ -124,7 +112,6 @@ export const ydelser = [
   },
   {
     slug: 'erhvervsgulve',
-    prisTitel: 'Se en pris på jeres gulv',
     fordeleTitel: 'Det får I med et epoxygulv',
     gruppe: 'erhverv',
     navn: 'Erhverv',
@@ -133,8 +120,6 @@ export const ydelser = [
     beskrivelse: 'Slidstærke epoxygulve til værksted, lager, butik og showroom. Tåler truck, olie og kemikalier. Se en vejledende pris ekskl. moms på et minut.',
     h1: 'Gulve til værksted, lager og butik',
     intro: 'Et epoxygulv tåler truck, palleløfter, olie og kemikalier. Og det er hurtigt at gøre rent, så det ser ordentligt ud, når kunderne kommer.',
-    billede: 'arbejde-primer',
-    kortBillede: 'rum-erhverv',
     rum: 'erhverv',
     fordele: [
       { titel: 'Tåler trafik', tekst: 'Truck, palleløfter og tunge maskiner. Vi vælger opbygning efter, hvor hårdt gulvet bliver brugt.' },
@@ -162,7 +147,6 @@ export const ydelser = [
   },
   {
     slug: 'ensfarvet-epoxy',
-    prisTitel: 'Se prisen på et ensfarvet gulv',
     fordeleTitel: 'Derfor vælger folk ensfarvet',
     gruppe: 'gulvtype',
     navn: 'Ensfarvet epoxy',
@@ -171,8 +155,6 @@ export const ydelser = [
     beskrivelse: 'Ensfarvet epoxygulv i én farve: blankt, glat og nemt at holde rent. Klassikeren til garage, kælder og erhverv. Se prisen på dit gulv.',
     h1: 'Ensfarvet epoxygulv',
     intro: 'Én farve fra væg til væg. Ensfarvet epoxy er det enkleste og billigste epoxygulv, og det ser skarpt ud i både garage, kælder og erhverv.',
-    billede: 'gulv-ensfarvet',
-    kortBillede: 'overflade-ensfarvet',
     overflade: 'ensfarvet',
     fordele: [
       { titel: 'Det billigste valg', tekst: 'Færrest lag og mindst arbejde. Derfor er det den laveste pris pr. m².' },
@@ -186,13 +168,6 @@ export const ydelser = [
         tekst: 'Når du vil have et roligt og lyst rum til en lav pris, fx i kælder, værksted og bryggers. De fleste vælger en grå tone. Bemærk, at en helt ensfarvet overflade viser støv og hjulspor mere end flakes. Står der bil i garagen hver dag, er flakes ofte det bedre valg.',
       },
     ],
-    farveTitel: 'Populære farver',
-    farver: [
-      { navn: 'Lysegrå', kode: 'RAL 7035', hex: '#C8CBC7' },
-      { navn: 'Vinduesgrå', kode: 'RAL 7040', hex: '#9CA1A5' },
-      { navn: 'Støvgrå', kode: 'RAL 7037', hex: '#7D7F7D' },
-      { navn: 'Antracitgrå', kode: 'RAL 7016', hex: '#383E42' },
-    ],
     faq: [
       { spg: 'Kan jeg vælge alle farver?', svar: 'Næsten. De mest brugte er grå toner og lyse beige. Vi har farvekort med, når vi kommer ud.' },
       { spg: 'Bliver det glat?', svar: 'Blank epoxy kan være glat, når den er våd. Vi kan lægge kvartssand i toplaget, hvor der bliver vådt.' },
@@ -202,7 +177,6 @@ export const ydelser = [
   },
   {
     slug: 'flakesgulv',
-    prisTitel: 'Se prisen på et flakesgulv',
     fordeleTitel: 'Derfor vælger folk flakes',
     gruppe: 'gulvtype',
     navn: 'Flakesgulv',
@@ -211,8 +185,6 @@ export const ydelser = [
     beskrivelse: 'Flakesgulv: epoxy med farvede chips, der skjuler snavs og giver greb. Populært i garager og bryggers. Se prisen på dit flakesgulv på et minut.',
     h1: 'Flakesgulv',
     intro: 'Farvede chips drysset i epoxyen og forseglet med en klar toplak. Flakes skjuler snavs og hjulspor og giver gulvet lidt struktur under fødderne.',
-    billede: 'gulv-flakes-2',
-    kortBillede: 'overflade-flakes',
     overflade: 'flakes',
     fordele: [
       { titel: 'Skjuler snavs', tekst: 'Chipsene gør, at støv, sand og hjulspor ikke ses så tydeligt.' },
@@ -226,13 +198,6 @@ export const ydelser = [
         tekst: 'Betonen bliver slebet og primet. Så lægger vi grundlaget og drysser chipsene i, mens det er vådt. Når det er hærdet, fjerner vi de løse chips og slutter af med en klar toplak.',
       },
     ],
-    farveTitel: 'Populære blandinger',
-    farver: [
-      { navn: 'Grå mix', billede: 'flakes-graa' },
-      { navn: 'Sort og hvid', billede: 'flakes-sort-hvid' },
-      { navn: 'Beige mix', billede: 'flakes-beige' },
-      { navn: 'Blå og grå', billede: 'flakes-blaa' },
-    ],
     faq: [
       { spg: 'Hvor meget flakes skal der på?', svar: 'Fra et let drys til helt dækkende. De fleste garager får et tæt lag, fordi det skjuler mest.' },
       { spg: 'Er flakes dyrere end ensfarvet?', svar: 'Ja, lidt. Der er et ekstra trin og en klar toplak. Beregneren viser forskellen.' },
@@ -242,7 +207,6 @@ export const ydelser = [
   },
   {
     slug: 'metallic-epoxy',
-    prisTitel: 'Se prisen på et metallic-gulv',
     fordeleTitel: 'Derfor vælger folk metallic',
     gruppe: 'gulvtype',
     navn: 'Metallic epoxy',
@@ -251,8 +215,6 @@ export const ydelser = [
     beskrivelse: 'Metallic epoxygulv med pigmenter, der flyder i mønstre, så hvert gulv bliver unikt. Til bolig, butik og showroom. Se prisen på dit gulv.',
     h1: 'Metallic epoxygulv',
     intro: 'Metalliske pigmenter flyder i epoxyen, mens den hærder, og laver mønstre med dybde og glans. Det giver et gulv, der ikke ligner noget andet.',
-    billede: 'gulv-metallic',
-    kortBillede: 'overflade-metallic',
     overflade: 'metallic',
     fordele: [
       { titel: 'Unikt', tekst: 'Mønsteret opstår i gulvet. To metallic-gulve bliver aldrig ens.' },
@@ -265,13 +227,6 @@ export const ydelser = [
         titel: 'Hvorfor koster metallic mere?',
         tekst: 'Metallic kræver flere lag og mere håndarbejde, og mønsteret skal styres, mens gulvet er vådt. Derfor er prisen pr. m² højere end ensfarvet og flakes.',
       },
-    ],
-    farveTitel: 'Farver',
-    farver: [
-      { navn: 'Sølv', billede: 'metallic-soelv' },
-      { navn: 'Grafit', billede: 'metallic-grafit' },
-      { navn: 'Kobber', billede: 'metallic-kobber' },
-      { navn: 'Perlehvid', billede: 'metallic-perle' },
     ],
     faq: [
       { spg: 'Kan jeg se prøver?', svar: 'Ja. Vi har prøver med ved besigtigelsen, og vi kan lave en prøve i dit rum.' },

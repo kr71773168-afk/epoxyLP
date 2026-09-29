@@ -8,9 +8,9 @@ import FAQ from '../components/FAQ.astro';
 import Forloeb from '../components/Forloeb.astro';
 import Slut from '../components/Slut.astro';
 import Tillid from '../components/Tillid.astro';
-import YdelsesKort from '../components/YdelsesKort.astro';
+import YdelsesListe from '../components/YdelsesListe.astro';
 import { byer, bySti } from '../data/byer.js';
-import { erhverv, privat } from '../data/ydelser.js';
+import { erhverv, gulvtyper, privat } from '../data/ydelser.js';
 import Side from '../layouts/Side.astro';
 import { link } from '../lib/link.js';
 
@@ -71,9 +71,9 @@ const faq = [
     <div class="kolonne">
       <div class="sektion-hoved">
         <h2 class="sektion-titel" id="ydelser-titel">Det laver vi i {b.navn}</h2>
-        <p>Garager, kældre, boliger og erhverv. Se, hvad der passer til dit rum.</p>
+        <p>Garager, kældre, boliger og erhverv, i ensfarvet, flakes eller metallic.</p>
       </div>
-      <YdelsesKort ydelser={[...privat, ...erhverv]} />
+      <YdelsesListe ydelser={[...privat, ...erhverv, ...gulvtyper]} />
     </div>
   </section>
 

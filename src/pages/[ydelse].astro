@@ -1,14 +1,16 @@
 ---
-/** Én side pr. ydelse fra src/data/ydelser.js: garagegulv, kældergulv, erhverv, flakes osv. */
+/**
+ * Én side pr. ydelse fra src/data/ydelser.js: garagegulv, kældergulv, erhverv, flakes osv.
+ * Beregneren står øverst med rummet eller overfladen valgt på forhånd, ligesom på forsiden.
+ */
 import cfg from '../calculator/pricing.config.js';
 import Beregner from '../components/Beregner.astro';
 import Brodkrummer from '../components/Brodkrummer.astro';
 import FAQ from '../components/FAQ.astro';
-import Farver from '../components/Farver.astro';
-import Foto from '../components/Foto.astro';
+import Forloeb from '../components/Forloeb.astro';
 import Slut from '../components/Slut.astro';
 import Tillid from '../components/Tillid.astro';
-import YdelsesKort from '../components/YdelsesKort.astro';
+import YdelsesListe from '../components/YdelsesListe.astro';
 import { firma } from '../data/firma.js';
 import { guide } from '../data/viden.js';
 import { ydelse, ydelser } from '../data/ydelser.js';
@@ -30,7 +32,6 @@ const prisPrM2 = y.overflade
   ? cfg.overflader[y.overflade].prisPrM2
   : Math.min(...Object.values(cfg.overflader).map((o) => o.prisPrM2));
 const fraPris = `fra ${fmt(prisPrM2 * moms)} kr/m²`;
-const spoergsmaal = y.rum ? 'fem spørgsmål, rummet er valgt' : 'fem spørgsmål, overfladen er valgt';
 
 const service = {
   '@context': 'https://schema.org',
@@ -44,18 +45,15 @@ const service = {
 <Side titel={y.titel} beskrivelse={y.beskrivelse} slug={y.slug} schema={[service]}>
   <Brodkrummer sti={[{ navn: y.navn, slug: y.slug }]} />
 
-  <section class="kolonne side-hero" aria-labelledby="side-titel">
-    <div class="side-hero-tekst">
+  <section class="kolonne hero hero-by" aria-labelledby="hero-titel">
+    <div class="hero-tekst">
       <p class="hero-over">{gruppe}</p>
-      <h1 id="side-titel">{y.h1}</h1>
+      <h1 id="hero-titel">{y.h1}</h1>
       <p class="hero-sub">{y.intro}</p>
       <p class="fra-pris"><strong data-pladsholder>{fraPris}</strong> {erhverv ? 'ekskl. moms' : 'inkl. moms'}, vejledende</p>
-      <div class="side-hero-knapper">
-        <a class="knap knap-stor" href="#pris">Beregn prisen <span aria-hidden="true">→</span></a>
-        <a class="pil-link" href={`tel:${firma.telefonLink}`} data-telefon>Ring <span data-pladsholder>{firma.telefon}</span></a>
-      </div>
     </div>
-    <Foto navn={y.billede} alt="" class="side-hero-billede" eager />
+    <Beregner rum={y.rum} overflade={y.overflade} />
+    <Tillid />
   </section>
 
   <section class="sektion" aria-labelledby="fordele-titel">
@@ -72,35 +70,16 @@ const service = {
     </div>
   </section>
 
-  <section class="sektion beregner-sektion" id="pris" aria-labelledby="pris-titel">
-    <div class="kolonne beregner-grid">
-      <div class="beregner-tekst">
-        <h2 class="sektion-titel" id="pris-titel">{y.prisTitel}</h2>
-        <p>Svar på {spoergsmaal}. Så ser du en vejledende pris med det samme, og du skal ikke give os dit nummer for at se den.</p>
-        <Tillid />
-      </div>
-      <Beregner rum={y.rum} overflade={y.overflade} />
-    </div>
-  </section>
+  <Forloeb />
 
   <section class="sektion" aria-label={`Mere om ${y.navn.toLowerCase()}`}>
     <div class="kolonne afsnit-grid">
-      {y.farver ? (
-        <div class="afsnit-stak">
-          {y.afsnit.map((a) => (
-            <div class="afsnit">
-              <h2>{a.titel}</h2>
-              <p>{a.tekst}</p>
-            </div>
-          ))}
-        </div>
-      ) : y.afsnit.map((a) => (
+      {y.afsnit.map((a) => (
         <div class="afsnit">
           <h2>{a.titel}</h2>
           <p>{a.tekst}</p>
         </div>
       ))}
-      {y.farver && <Farver titel={y.farveTitel} farver={y.farver} />}
     </div>
   </section>
 
@@ -109,7 +88,7 @@ const service = {
   <section class="sektion" aria-labelledby="se-ogsaa">
     <div class="kolonne">
       <h2 class="sektion-titel" id="se-ogsaa">Se også</h2>
-      <YdelsesKort ydelser={relaterede} />
+      <YdelsesListe ydelser={relaterede} />
       {laesOgsaa.length > 0 && (
         <div class="laes-ogsaa">
           <p class="laes-ogsaa-titel">Guides</p>

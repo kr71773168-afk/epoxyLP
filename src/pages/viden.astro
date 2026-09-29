@@ -1,7 +1,6 @@
 ---
 /** Oversigt over guiderne i src/data/viden.js */
 import Brodkrummer from '../components/Brodkrummer.astro';
-import Foto from '../components/Foto.astro';
 import Slut from '../components/Slut.astro';
 import { guides, laesetid } from '../data/viden.js';
 import Side from '../layouts/Side.astro';
@@ -22,16 +21,13 @@ import { link } from '../lib/link.js';
 
   <section class="kolonne guide-oversigt" aria-label="Guides">
     <ul class="guide-liste">
-      {guides.map((g, i) => (
+      {guides.map((g) => (
         <li>
           <a class="guide-kort" href={link(g.slug)}>
-            <Foto navn={g.billede} alt="" class="guide-kort-billede" sizes="(max-width: 700px) 100vw, 22rem" eager={i < 2} />
-            <span class="guide-kort-tekst">
-              <span class="guide-kort-meta">{laesetid(g)} min. at læse</span>
-              <span class="guide-kort-titel">{g.h1}</span>
-              <span class="guide-kort-desk">{g.kort}</span>
-              <span class="guide-kort-link">Læs guiden <span aria-hidden="true">→</span></span>
-            </span>
+            <span class="guide-kort-titel">{g.h1}</span>
+            <span class="guide-kort-desk">{g.kort}</span>
+            <span class="guide-kort-meta">{laesetid(g)} min. at læse</span>
+            <span class="yl-pil" aria-hidden="true">→</span>
           </a>
         </li>
       ))}

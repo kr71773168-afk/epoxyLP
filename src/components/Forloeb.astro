@@ -1,6 +1,13 @@
 ---
+import { beregnPris } from '../calculator/engine.js';
 import cfg from '../calculator/pricing.config.js';
 import Foto from './Foto.astro';
+
+// Eksemplet i trin 1 regnes med samme motor som beregneren (dobbelt garage, 36 m², flakes), så tallet passer med priserne
+const fmt = (n) => Math.round(n).toLocaleString('da-DK');
+const eks = beregnPris({ rum: 'garage', areal: 36, overflade: 'flakes', stand: 'paen', tilvalg: [], postnummer: '8600' }, cfg);
+const eksPris = eks.lav === eks.hoej ? `${fmt(eks.lav)} kr` : `${fmt(eks.lav)}–${fmt(eks.hoej)} kr`;
+const eksM2 = `ca. ${fmt((eks.lav + eks.hoej) / 2 / 36)} kr/m²`;
 ---
 <section class="sektion" aria-labelledby="forloeb-titel">
   <div class="kolonne">
@@ -10,8 +17,8 @@ import Foto from './Foto.astro';
         <div class="forloeb-billede forloeb-pris" aria-hidden="true">
           <div class="mini-pris">
             <span>Din vejledende pris</span>
-            <strong>17.000–19.500 kr</strong>
-            <span>inkl. moms · ca. 505 kr/m²</span>
+            <strong>{eksPris}</strong>
+            <span>inkl. moms · {eksM2}</span>
           </div>
         </div>
         <span class="forloeb-nr" aria-hidden="true">1</span>

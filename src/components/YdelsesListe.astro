@@ -1,0 +1,33 @@
+---
+/**
+ * Ydelser som en enkel liste: navn, kort tekst og fra-pris.
+ * Bevidst uden billeder og kasser, så listen ikke ligner valgene i beregneren.
+ */
+import cfg from '../calculator/pricing.config.js';
+import { link } from '../lib/link.js';
+
+interface Props {
+  ydelser: any[];
+}
+const { ydelser } = Astro.props;
+const fmt = (n) => Math.round(n).toLocaleString('da-DK');
+function fraPris(y) {
+  if (y.overflade) return `fra ${fmt(cfg.overflader[y.overflade].prisPrM2 * (1 + cfg.moms))} kr/m²`;
+  const r = cfg.rum[y.rum];
+  if (!r) return '';
+  const billigst = Math.min(...Object.values(cfg.overflader).map((o) => o.prisPrM2));
+  return r.erhverv ? `fra ${fmt(billigst)} kr/m² ekskl. moms` : `fra ${fmt(billigst * (1 + cfg.moms))} kr/m²`;
+}
+---
+<ul class="ydelses-liste">
+  {ydelser.map((y) => (
+    <li>
+      <a href={link(y.slug)}>
+        <span class="yl-navn">{y.navn}</span>
+        <span class="yl-desk">{y.kort}</span>
+        <span class="yl-pris">{fraPris(y)}</span>
+        <span class="yl-pil" aria-hidden="true">→</span>
+      </a>
+    </li>
+  ))}
+</ul>
