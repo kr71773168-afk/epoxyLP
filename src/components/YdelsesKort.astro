@@ -7,6 +7,8 @@ interface Props {
   ydelser: any[];
 }
 const { ydelser } = Astro.props;
+// Fire kort står bedst to og to, tre kort på én række
+const kolonner = ydelser.length === 4 ? 'kort-grid-2' : '';
 const billeder = import.meta.glob<{ default: ImageMetadata }>('../media/valg/*.webp', { eager: true });
 const fmt = (n) => Math.round(n).toLocaleString('da-DK');
 function fraPris(y) {
@@ -17,7 +19,7 @@ function fraPris(y) {
   return r.erhverv ? `fra ${fmt(billigst)} kr/m² ekskl. moms` : `fra ${fmt(billigst * (1 + cfg.moms))} kr/m²`;
 }
 ---
-<ul class="kort-grid">
+<ul class:list={['kort-grid', kolonner]}>
   {ydelser.map((y) => (
     <li>
       <a class="kort" href={link(y.slug)}>

@@ -7,7 +7,7 @@
   node_bundler = "esbuild"
 
 [[headers]]
-  for = "/assets/*"
+  for = "/_astro/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 

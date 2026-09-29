@@ -7,8 +7,10 @@ const demo = process.env.DEMO === '1';
 export default defineConfig({
   site: 'https://silkeborgepoxy.dk', // PLADSHOLDER: kundens rigtige domæne
   outDir: demo ? './dist-demo' : './dist',
-  build: { format: demo ? 'file' : 'directory' },
+  // Preview: artifact-tjenesten tillader ikke mapper, der starter med _, så _astro hedder filer
+  build: { format: demo ? 'file' : 'directory', assets: demo ? 'filer' : '_astro' },
   integrations: demo ? [] : [sitemap()],
+  devToolbar: { enabled: false },
   vite: {
     envPrefix: ['PUBLIC_', 'VITE_'],
     define: { __FLADE_LINKS__: JSON.stringify(demo) },

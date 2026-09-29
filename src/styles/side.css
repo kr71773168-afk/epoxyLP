@@ -150,8 +150,8 @@
 .fod ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
 .fod a { text-decoration: none; }
 .fod a:hover { text-decoration: underline; }
-.fod-bund { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--linje); font-size: var(--t-lille); }
-.fod-bund p { margin: 0; }
+.fod-bund { margin-top: 2.5rem; font-size: var(--t-lille); }
+.fod-bund p { margin: 0; padding-top: 1.25rem; border-top: 1px solid var(--linje); }
 @media (max-width: 1080px) { .fod-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fod-firma { grid-column: 1 / -1; } }
 @media (max-width: 900px) { .fod { padding-bottom: 5.5rem; } }
 
@@ -215,7 +215,9 @@
 .sektion-hoved-link { max-width: none; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .75rem 1.5rem; }
 
 /* ---------- kort med ydelser ---------- */
-.kort-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: .75rem; }
+.kort-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: .75rem; }
+.kort-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 700px) { .kort-grid-2 { grid-template-columns: minmax(0, 1fr); } }
 .kort {
   display: grid; grid-template-columns: 6.25rem minmax(0, 1fr); align-items: center; gap: 1rem; height: 100%;
   padding: .6rem 1rem .6rem .6rem; background: var(--flade); border: 1px solid var(--linje); text-decoration: none;
@@ -286,7 +288,7 @@
 .pris-tabel tbody + tbody tr:first-child > * { border-top: 2px solid var(--ink); }
 .pris-tabel td { white-space: nowrap; }
 @media (max-width: 860px) { .pris-grid { grid-template-columns: minmax(0, 1fr); } }
-.eksempler { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr)); gap: .75rem; }
+.eksempler { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr)); gap: .75rem; }
 .eksempler li { display: grid; gap: .15rem; padding: 1rem 1.1rem; background: var(--flade); border: 1px solid var(--linje); }
 .eks-navn { font-weight: 560; }
 .eks-meta { font-size: .88rem; color: var(--ink-2); }
@@ -309,3 +311,6 @@
 @media (max-width: 900px) { .kontakt { grid-template-columns: minmax(0, 1fr); } }
 .om-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 5vw, 4rem); align-items: start; }
 @media (max-width: 860px) { .om-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Mobilmenuen er åben: bundbaren skal ikke ligge ovenpå */
+.menu-aaben .bundbar { display: none !important; }

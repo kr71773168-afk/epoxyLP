@@ -24,7 +24,9 @@ const eksempler = [
   { navn: 'Værksted, skridsikkert', rum: 'erhverv', areal: 120, overflade: 'ensfarvet', stand: 'paen', tilvalg: ['skridsikker'] },
 ].map((e) => {
   const r = beregnPris({ ...e, postnummer: '8600' }, cfg);
-  return { ...e, pris: `${fmt(r.lav)}–${fmt(r.hoej)} kr`, moms: r.inklMoms ? 'inkl. moms' : 'ekskl. moms' };
+  const pris = r.lav === r.hoej ? `${fmt(r.lav)} kr` : `${fmt(r.lav)}–${fmt(r.hoej)} kr`;
+  const moms = r.inklMoms ? 'inkl. moms' : 'ekskl. moms';
+  return { ...e, pris, moms: r.minimumspris ? `${moms} · minimumspris` : moms };
 });
 
 const faq = [
