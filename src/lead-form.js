@@ -61,10 +61,6 @@ export function startLead({ beregner, samtykke }) {
     felter[navn].el.addEventListener('input', () => { if (forsoegt) tjekFelt(navn); });
   }
 
-  form.addEventListener('change', (e) => {
-    if (e.target.name === 'hvornaar') beregner.haeld.marker(form.querySelectorAll('input[name="hvornaar"]'));
-  });
-
   function payload(type, kontakt, eventId) {
     const b = beregner.data();
     return {

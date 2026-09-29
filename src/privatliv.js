@@ -1,5 +1,4 @@
-import '@fontsource-variable/archivo/wdth.css';
-import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource-variable/schibsted-grotesk';
 import './styles/tokens.css';
 import './styles/base.css';
-import './styles/sections.css';
+import './styles/side.css';

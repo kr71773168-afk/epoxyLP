@@ -1,8 +1,10 @@
 # Silkeborg Epoxy · landingpage med prisberegner
 
-Første udkast (v0.1). Statisk side (Vite + vanilla JS) med prisberegner, lead-formular og en Netlify-funktion, der sender leads videre til Zapier/Make og Meta CAPI. Baggrund, research og designretning står i [PLAN.md](PLAN.md).
+Udkast v0.3. Statisk side (Vite + vanilla JS) med en prisberegner, der stiller ét spørgsmål ad gangen og viser prisen til sidst. Dertil en lead-formular og en Netlify-funktion, der sender leads videre til Zapier/Make og Meta CAPI. Baggrund og research står i [PLAN.md](PLAN.md).
 
 **Alle priser er pladsholdere.** Siden kører i "kladde"-tilstand: tekster og tal, der skal bekræftes af kunden, er markeret med gult.
+
+**Billederne i beregneren er pladsholdere.** Ni er AI-genererede (Canva) og skal skiftes til kundens egne fotos før launch. Fire er stillbilleder fra kundens egen video (erhverv, pæn beton, ved ikke, skridsikker).
 
 ## Kom i gang
 
@@ -19,20 +21,21 @@ I `npm run dev` er `VITE_DEMO=1` slået til (`.env.development`). Tak-skærmen v
 
 | Hvad | Hvor |
 |---|---|
-| Priser, opstart, minimumspris, tilvalg, tider, farver, zone | `src/calculator/pricing.config.js` (alt ekskl. moms) |
+| Priser, opstart, minimumspris, tilvalg, tider, zone, hurtigvalg for størrelse | `src/calculator/pricing.config.js` (alt ekskl. moms) |
 | Kundens rigtige tilbud til kalibrering | `src/calculator/calibration.cases.js` |
 | Tekster på siden | `index.html` |
-| Overskrifter pr. annonce (`?gulv=`) | `src/hero.js` |
+| Overskrifter pr. annonce (`?gulv=`) | `src/calculator/quiz.js`, øverst |
 | Farver, typografi, afstande | `src/styles/tokens.css` |
-| Før/efter-billeder | `index.html`, sektionen `#foer-efter`: skift de to `<canvas>` til `<img class="fe-foer">` og `<img class="fe-efter">` |
-| Video bag hero og afslutning | `src/media/arbejde.mp4`, `arbejde.webm` og stillbilledet `arbejde.jpg`, se herunder |
+| Billeder i beregneren | `src/media/valg/`, fx `rum-garage.webp`. Samme navn, 4:3, gerne 400×300 px |
+| Billeder i "Sådan foregår det" og afslutningen | `src/media/forloeb-*.webp` og `src/media/slut.webp` |
+| Videoen i toppen | `src/media/arbejde.mp4`, `arbejde.webm` og stillbilledet `arbejde.jpg`, se herunder |
 | Privatlivspolitik | `privatliv.html` |
 
 Beregneren er testet, så intervallet altid dækker prisen for enhver måde at svare færdig på. Når kundens tilbud er lagt ind i `calibration.cases.js`, fejler `npm test`, hvis beregneren rammer ved siden af et tilbud.
 
 ### Video
 
-Videoen spiller uden lyd i loop og kun, mens den er på skærmen. Ved "reducer bevægelse" eller datasparetilstand vises stillbilledet i stedet. Skift den ved at lave nye filer med samme navne (1280 px bred, ingen lyd, gerne under 2 MB):
+Videoen spiller uden lyd i loop og kun, mens den er på skærmen. Den hentes først, når den kommer i syne. Ved "reducer bevægelse" eller datasparetilstand vises stillbilledet i stedet. Skift den ved at lave nye filer med samme navne (1280 px bred, ingen lyd, gerne under 2 MB):
 
 ```sh
 ffmpeg -i nyt-klip.mov -an -vf "fps=30,scale=1280:-2,format=yuv420p" -c:v libx264 -profile:v high -preset slow -crf 29 -movflags +faststart src/media/arbejde.mp4
@@ -44,7 +47,7 @@ Stillbilledet skal være første billede i klippet, så der ikke er et hop, når
 
 ## URL-parametre
 
-- `?gulv=garage` / `kaelder` / `bolig` / `erhverv`: skifter overskriften og vælger rummet på forhånd. Brug én pr. annoncesæt.
+- `?gulv=garage` / `kaelder` / `bolig` / `erhverv`: skifter overskriften, vælger rummet og starter beregneren ved størrelsen. Brug én pr. annoncesæt.
 - `?kladde=0`: skjuler de gule pladsholder-markeringer, fx til skærmbilleder.
 
 ## Deploy på Netlify
@@ -73,11 +76,13 @@ Formular → `/api/lead` (`netlify/functions/lead.mjs`) →
 
 `CalculatorStart`, `CalculatorStep`, `CalculatorComplete` (custom), `Lead` og `Contact` (standard). Pixel indlæses først efter samtykke.
 
+Browserens tilbage-knap går ét spørgsmål tilbage i beregneren, så folk i Facebook- og Instagram-browseren ikke ryger ud af siden, når de vil rette et svar.
+
 ## Før launch
 
 - [ ] Kundens priser i `pricing.config.js` og 5-10 tilbud i `calibration.cases.js` (`npm test` grøn)
 - [ ] Telefon, mail, adresse, garanti, svartid, ejerens navn og foto
-- [ ] Rigtige før/efter-billeder
+- [ ] Kundens egne fotos i stedet for AI-billederne i `src/media/valg/`
 - [ ] Zone (kommuner) bekræftet
 - [ ] Privatlivspolitik gennemgået
 - [ ] Fjern `class="kladde"` og `<meta name="robots" content="noindex">` i `index.html` og `privatliv.html`

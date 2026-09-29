@@ -1,83 +1,27 @@
-/*
- * Silkeborg Epoxy · v0.2 "Showroom"
- * Mørke, blanke flader (som et nyt antracit-gulv) skifter med lys beton.
- * Materialet selv er billedsproget: flakes, metallic, beton og blank toplak.
- * Signalgul, som afmærkningen på et værkstedsgulv, markerer det, man skal gøre.
- *
- * Komponenter bruger kun tokens. .moerk og .lys skifter tokens for et helt område.
- */
+/* Enkel og troværdig: lys, varm baggrund, sort tekst, gul kun som lille accent. */
 :root {
-  color-scheme: light;
+  --bg: #F4F2EE;
+  --flade: #FFFFFF;
+  --flade-2: #ECE9E3;
+  --ink: #16181A;
+  --ink-2: #53595D;
+  --ink-3: #868B8E;
+  --linje: #E2DED7;
+  --linje-2: #CBC6BC;
+  --accent: #F2B705;
+  --accent-svag: #FCEFC4;
+  --ok: #2C7A4B;
+  --fejl: #B3261E;
 
-  --bg: #E5E6E2;           /* beton */
-  --flade: #D7D9D4;
-  --flade-lys: #EFEFEC;
-  --flade-hvid: #FAFAF7;
-  --ink: #1B1E21;          /* antracit */
-  --ink-2: #5A6064;
-  --linje: rgba(27, 30, 33, .18);
-  --linje-svag: rgba(27, 30, 33, .09);
-  --signal: #F5B800;       /* signalgul */
-  --signal-ink: #16181A;
-  --glans: rgba(255, 255, 255, .75);
-  --fejl: #A1361F;
-  --skygge: 0 18px 50px rgba(10, 12, 14, .18);
-
-  /* materialer i snittet, før/efter og prøverne */
-  --mat-beton: #8E918C;
-  --mat-tilslag: #6E716C;
-  --mat-tilslag-lys: #A9ACA6;
-  --mat-slib: #C4C7C1;
-  --mat-spartel: #B9AE95;
-  --mat-primer: #C98F2A;
-  --mat-top: rgba(255, 255, 255, .42);
-  --mat-sand: #D8CFB8;
-  --mat-blad: #1B1D1F;
-  --mat-skaft: #A9AFB3;
-
-  --f-display: "Archivo Variable", "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --f-tekst: "Archivo Variable", "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-
-  --t-hero: clamp(2.3rem, 4.6vw, 4.4rem);
-  --t-h2: clamp(1.9rem, 3.8vw, 3.3rem);
-  --t-h3: 1.25rem;
+  --f: 'Schibsted Grotesk Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --t-h1: clamp(2.05rem, 1.35rem + 2.6vw, 3.5rem);
+  --t-h2: clamp(1.65rem, 1.25rem + 1.4vw, 2.35rem);
+  --t-spg: clamp(1.35rem, 1.2rem + .5vw, 1.6rem);
   --t-tekst: 1.0625rem;
-  --t-lille: .9375rem;
-  --t-label: .75rem;
+  --t-lille: .9rem;
 
-  --gutter: clamp(16px, 4vw, 48px);
-  --maks: 1240px;
-  --flyd: cubic-bezier(.22, .8, .26, 1);
-}
-
-/* Mørkt område: hero, prisbord, før/efter, ejer, afslutning, footer */
-.moerk {
-  --bg: #111315;
-  --flade: #1D2124;
-  --flade-lys: #24292C;
-  --flade-hvid: #2B3034;
-  --ink: #F1F2EE;
-  --ink-2: #A7ADB0;
-  --linje: rgba(241, 242, 238, .17);
-  --linje-svag: rgba(241, 242, 238, .08);
-  --glans: rgba(255, 255, 255, .16);
-  --fejl: #FF9B82;
-  --skygge: 0 24px 70px rgba(0, 0, 0, .5);
-  color: var(--ink);
-}
-
-/* Lyst område inde i et mørkt, fx startpanelet i hero og cookie-banneret */
-.lys {
-  --bg: #EDEDEA;
-  --flade: #DCDDD9;
-  --flade-lys: #F4F4F1;
-  --flade-hvid: #FFFFFD;
-  --ink: #1B1E21;
-  --ink-2: #5A6064;
-  --linje: rgba(27, 30, 33, .18);
-  --linje-svag: rgba(27, 30, 33, .09);
-  --glans: rgba(255, 255, 255, .75);
-  --fejl: #A1361F;
-  color: var(--ink);
+  --maks: 1200px;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --skygge: 0 1px 2px rgba(22, 24, 26, .05), 0 22px 50px -18px rgba(22, 24, 26, .22);
+  --ease: cubic-bezier(.2, .7, .2, 1);
 }

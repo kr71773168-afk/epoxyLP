@@ -1,6 +1,6 @@
 # Silkeborg Epoxy · landingpage med prisberegner
 
-**Status:** Udkast v0.2 er bygget (29.09.2026): mørk hero med video fra jobs, prisberegneren starter direkte i hero med billedfliser, mørkt prisbord. Se [README.md](README.md) for opsætning, pladsholdere og tjekliste før launch.
+**Status:** Udkast v0.3 er bygget (29.09.2026): lyst og enkelt design, prisberegneren stiller ét spørgsmål ad gangen og viser prisen til sidst, rigtige billeder fra kundens video. Designafsnittet længere nede beskriver den første retning ("Fugefri"), som er erstattet. Se [README.md](README.md) for opsætning, pladsholdere og tjekliste før launch.
 **Priser i dette dokument** er markedsniveau eller pladsholdere. De skal erstattes af kundens egne tal før noget går live.
 **Visuel version med skitser** (hero-refleksion, beregner, snit, gummiskraber): https://claude.ai/artifact/EtPejGYeD86SAgKEQwpe81
 

@@ -19,6 +19,7 @@ export default {
       navn: 'Garage',
       beskrivelse: 'Carport og værksted derhjemme',
       standardAreal: 36,
+      genveje: [[18, 'Enkelt garage'], [36, 'Dobbelt garage']], // hurtigvalg under størrelse: [m², tekst]
       vaegFaktor: 0.75, // andel af væggene, der kan få hulkehl (porten tæller ikke)
       anbefalet: 'flakes',
       erhverv: false,
@@ -27,6 +28,7 @@ export default {
       navn: 'Kælder',
       beskrivelse: 'Fyrrum, vaskerum, hobbyrum',
       standardAreal: 40,
+      genveje: [[25, 'Et rum'], [60, 'Hele kælderen']], // hurtigvalg under størrelse: [m², tekst]
       vaegFaktor: 0.9,
       anbefalet: 'ensfarvet',
       erhverv: false,
@@ -35,6 +37,7 @@ export default {
       navn: 'Bolig',
       beskrivelse: 'Køkken, stue og gang',
       standardAreal: 50,
+      genveje: [[20, 'Køkken'], [60, 'Stue og køkken']], // hurtigvalg under størrelse: [m², tekst]
       vaegFaktor: 0.85,
       anbefalet: 'metallic',
       erhverv: false,
@@ -43,6 +46,7 @@ export default {
       navn: 'Erhverv',
       beskrivelse: 'Værksted, lager og butik',
       standardAreal: 120,
+      genveje: [[100, 'Værksted'], [200, 'Lager']], // hurtigvalg under størrelse: [m², tekst]
       vaegFaktor: 0.8,
       anbefalet: 'ensfarvet',
       erhverv: true, // priser vises ekskl. moms
@@ -93,25 +97,6 @@ export default {
     arbejdsdage: '2-3 arbejdsdage',
     gaaPaa: 'Gå på det efter 24 timer',
     koerPaa: 'Kør bil på det efter 7 døgn',
-  },
-
-  // Farver ændrer ikke prisen. Hex er kun til visning og ca. RAL-farven.
-  farver: [
-    { kode: '7035', navn: 'Lysgrå', hex: '#C9CDC9' },
-    { kode: '7040', navn: 'Vinduesgrå', hex: '#9BA1A4' },
-    { kode: '7016', navn: 'Antracitgrå', hex: '#3A4044' },
-    { kode: '1015', navn: 'Lys elfenben', hex: '#E3D3B6' },
-  ],
-  standardFarve: '7040',
-
-  // Lagene i snittet. Tykkelser er pladsholdere, indtil kunden har sendt deres opbygning.
-  lag: {
-    toplak: { navn: 'Toplak', beskrivelse: 'PU, klar og blank', mm: '0,1 mm' },
-    flakes: { navn: 'Flakes', beskrivelse: 'Blanding efter farvekort', mm: '' },
-    metallic: { navn: 'Metallic', beskrivelse: 'Pigment i grundlaget', mm: '' },
-    grundlag: { navn: 'Grundlag', beskrivelse: 'Epoxy', mm: '1,5 mm' },
-    primer: { navn: 'Primer', beskrivelse: 'Epoxy-primer', mm: '0,3 mm' },
-    forbehandling: { navn: 'Forbehandling', beskrivelse: 'Diamantslibning', mm: '' },
   },
 
   zone: {
