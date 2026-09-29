@@ -8,6 +8,7 @@ import { estimerLbm, tilvalgPris } from '../calculator/engine.js';
 import cfg from '../calculator/pricing.config.js';
 import { firma } from '../data/firma.js';
 import { link } from '../lib/link.js';
+import Ikon from './Ikon.astro';
 import Raekke from './Raekke.astro';
 
 interface Props {
@@ -39,8 +40,18 @@ const valgStand = [
 const valgTilvalg = Object.entries(cfg.tilvalg).map(([k, t]) => ({
   vaerdi: k, titel: t.navn, desk: t.beskrivelse, billede: billede(`tilvalg-${k}`), tilvalgPris: `+ ca. ${fmt(tilvalgPris(t, standardAreal, lbm) * moms)} kr`,
 }));
+// Teksten i kortets top: hvor mange spørgsmål der er tilbage, når noget er valgt på forhånd
+const forvalgt = [cfg.rum[rum]?.navn, cfg.overflader[overflade]?.navn].filter(Boolean);
+const antal = ['Seks', 'Fem', 'Fire'][forvalgt.length];
+const undertekst = forvalgt.length
+  ? `${forvalgt.join(' og ')} er valgt. ${antal} korte spørgsmål, så kommer prisen.`
+  : 'Seks korte spørgsmål. Prisen kommer med det samme.';
 ---
 <section class="quiz" id="beregner" aria-label="Prisberegner" data-rum={rum} data-overflade={overflade}>
+  <div class="quiz-top">
+    <p class="quiz-titel">Se prisen på dit gulv</p>
+    <p class="quiz-sub">{undertekst}</p>
+  </div>
   <div class="quiz-hoved">
     <button type="button" class="quiz-tilbage" id="quiz-tilbage" hidden><span aria-hidden="true">←</span> Tilbage</button>
     <p class="quiz-trin" id="quiz-trin">Trin 1 af 6</p>
@@ -111,9 +122,10 @@ const valgTilvalg = Object.entries(cfg.tilvalg).map(([k, t]) => ({
       </label>
       <p class="post-info" id="postnummer-info" aria-live="polite"></p>
       <p class="spg-hint" aria-live="polite"></p>
-      <div class="spg-fod"><button type="submit" class="knap">Se min pris <span aria-hidden="true">→</span></button></div>
+      <div class="spg-fod"><button type="submit" class="knap knap-accent">Se min pris <span aria-hidden="true">→</span></button></div>
     </div>
   </form>
+  <p class="quiz-note"><Ikon navn="laas" class="quiz-note-ikon" />Du skal ikke give os dit nummer for at se prisen.</p>
 
   <div class="resultat" id="resultat" hidden>
     <h2 class="res-titel" id="res-titel" tabindex="-1">Din vejledende pris</h2>
@@ -162,7 +174,7 @@ const valgTilvalg = Object.entries(cfg.tilvalg).map(([k, t]) => ({
           <label for="lf-firma">Firma</label>
           <input type="text" id="lf-firma" name="firma" tabindex="-1" autocomplete="off">
         </div>
-        <button type="submit" class="knap knap-stor knap-fuld" id="lf-send">Send og få en fast pris <span aria-hidden="true">→</span></button>
+        <button type="submit" class="knap knap-accent knap-stor knap-fuld" id="lf-send">Send og få en fast pris <span aria-hidden="true">→</span></button>
         <p class="form-fejl" id="lf-fejl" role="alert" hidden></p>
         <p class="lead-note">Vi bruger kun dine oplysninger til at kontakte dig om dit gulv. <a href={link('privatliv')}>Privatlivspolitik</a></p>
       </form>

@@ -2,6 +2,7 @@
 import { firma } from '../data/firma.js';
 import { link } from '../lib/link.js';
 import Foto from './Foto.astro';
+import Ikon from './Ikon.astro';
 
 interface Props {
   titel?: string;
@@ -18,12 +19,12 @@ const {
 ---
 <section class="slut" aria-labelledby="slut-titel">
   <Foto navn={foto} alt="" class="slut-billede" sizes="100vw" />
-  <div class="kolonne slut-indre">
+  <div class="kolonne moerk">
     <h2 id="slut-titel">{titel}</h2>
     <p>{tekst}</p>
     <div class="slut-knapper">
       <a class="knap knap-stor knap-accent" href={harBeregner ? '#beregner' : link('pris')}>Beregn din pris <span aria-hidden="true">→</span></a>
-      <a class="slut-tlf" href={`tel:${firma.telefonLink}`} data-telefon>Eller ring <span data-pladsholder>{firma.telefon}</span></a>
+      <a class="knap knap-stor knap-hvid" href={`tel:${firma.telefonLink}`} data-telefon><Ikon navn="tlf" />Ring <span data-pladsholder>{firma.telefon}</span></a>
     </div>
   </div>
 </section>

@@ -4,12 +4,12 @@
  * Beregneren står øverst med rummet eller overfladen valgt på forhånd, ligesom på forsiden.
  */
 import cfg from '../calculator/pricing.config.js';
-import Beregner from '../components/Beregner.astro';
 import Brodkrummer from '../components/Brodkrummer.astro';
 import FAQ from '../components/FAQ.astro';
 import Forloeb from '../components/Forloeb.astro';
+import Hero from '../components/Hero.astro';
+import Ikon from '../components/Ikon.astro';
 import Slut from '../components/Slut.astro';
-import Tillid from '../components/Tillid.astro';
 import YdelsesListe from '../components/YdelsesListe.astro';
 import { firma } from '../data/firma.js';
 import { guide } from '../data/viden.js';
@@ -32,6 +32,8 @@ const prisPrM2 = y.overflade
   ? cfg.overflader[y.overflade].prisPrM2
   : Math.min(...Object.values(cfg.overflader).map((o) => o.prisPrM2));
 const fraPris = `fra ${fmt(prisPrM2 * moms)} kr/m²`;
+// Foto i toppen: gulvtypen selv, eller et foto, der passer til rummet
+const foto = y.overflade ? `gulv-${y.overflade}` : { garage: 'gulv-flakes', kaelder: 'gulv-ensfarvet', bolig: 'gulv-bolig', erhverv: 'hal' }[y.rum] ?? 'hal';
 
 const service = {
   '@context': 'https://schema.org',
@@ -43,18 +45,18 @@ const service = {
 };
 ---
 <Side titel={y.titel} beskrivelse={y.beskrivelse} slug={y.slug} schema={[service]}>
-  <Brodkrummer sti={[{ navn: y.navn, slug: y.slug }]} />
-
-  <section class="kolonne hero hero-by" aria-labelledby="hero-titel">
-    <div class="hero-tekst">
-      <p class="hero-over">{gruppe}</p>
-      <h1 id="hero-titel">{y.h1}</h1>
-      <p class="hero-sub">{y.intro}</p>
-      <p class="fra-pris"><strong data-pladsholder>{fraPris}</strong> {erhverv ? 'ekskl. moms' : 'inkl. moms'}, vejledende</p>
-    </div>
-    <Beregner rum={y.rum} overflade={y.overflade} />
-    <Tillid />
-  </section>
+  <Hero
+    over={gruppe}
+    titel={y.h1}
+    tekst={y.intro}
+    medie={foto}
+    rum={y.rum}
+    overflade={y.overflade}
+    punkter={['Fast pris på skrift efter gratis besigtigelse', `<span data-pladsholder>${firma.garanti}</span>, og ejeren kommer selv`]}
+  >
+    <Brodkrummer slot="top" sti={[{ navn: y.navn, slug: y.slug }]} class="" />
+    <p class="fra-pris"><strong data-pladsholder>{fraPris}</strong> {erhverv ? 'ekskl. moms' : 'inkl. moms'}, vejledende</p>
+  </Hero>
 
   <section class="sektion" aria-labelledby="fordele-titel">
     <div class="kolonne">
@@ -62,6 +64,7 @@ const service = {
       <ul class="fordele">
         {y.fordele.map((f) => (
           <li>
+            <Ikon navn="tjek" />
             <h3>{f.titel}</h3>
             <p>{f.tekst}</p>
           </li>
@@ -70,7 +73,7 @@ const service = {
     </div>
   </section>
 
-  <Forloeb />
+  <Forloeb alt />
 
   <section class="sektion" aria-label={`Mere om ${y.navn.toLowerCase()}`}>
     <div class="kolonne afsnit-grid">
@@ -83,7 +86,7 @@ const service = {
     </div>
   </section>
 
-  <FAQ items={y.faq} titel={`Spørgsmål om ${y.navn.toLowerCase()}`} />
+  <FAQ items={y.faq} titel={`Spørgsmål om ${y.navn.toLowerCase()}`} alt />
 
   <section class="sektion" aria-labelledby="se-ogsaa">
     <div class="kolonne">

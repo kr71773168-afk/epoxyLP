@@ -7,20 +7,25 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--f);
+  font-family: var(--f-tekst);
+  font-weight: var(--tekst-vaegt);
   font-size: var(--t-tekst);
-  line-height: 1.55;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 img, svg, video { display: block; max-width: 100%; }
-h1, h2, h3 { font-weight: 560; letter-spacing: -.022em; line-height: 1.08; margin: 0; text-wrap: balance; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: var(--h-vaegt); letter-spacing: var(--h-spacing); line-height: var(--h-linje); margin: 0; text-wrap: balance; }
+h1, h2 { text-transform: var(--h-transform); }
+h3 { font-weight: max(500, var(--h-vaegt)); letter-spacing: min(var(--h-spacing), 0em); line-height: 1.2; }
+h1 em, h2 em { font-style: normal; color: var(--noegleord); }
 p { margin: 0 0 1rem; }
+b, strong { font-weight: var(--tekst-fed); }
 button, input, textarea { font: inherit; color: inherit; }
 a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; text-decoration-color: var(--linje-2); }
-a:hover { text-decoration-color: var(--ink); }
-:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+a:hover { text-decoration-color: currentColor; }
+:focus-visible { outline: 2px solid var(--accent-deko); outline-offset: 3px; }
 [hidden] { display: none !important; }
 
 .kolonne { max-width: var(--maks); margin-inline: auto; padding-inline: var(--gutter); }
@@ -31,29 +36,33 @@ a:hover { text-decoration-color: var(--ink); }
 }
 .spring {
   position: absolute; left: var(--gutter); top: -4rem; z-index: 50;
-  background: var(--ink); color: #fff; padding: .6rem 1rem; text-decoration: none;
+  background: var(--primaer); color: var(--primaer-ink); padding: .6rem 1rem; border-radius: var(--r-lille); text-decoration: none;
 }
 .spring:focus { top: .5rem; }
 
-/* Knapper: sort hovedknap, skarpe hjørner, ingen fed skrift */
+/* Knapper: runde piller i alle tre stilarter. Farverne kommer fra stilen. */
 .knap {
-  display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
-  background: var(--ink); color: #fff; border: 1px solid var(--ink); border-radius: 0;
-  padding: .85rem 1.3rem; font-size: 1rem; font-weight: 500; line-height: 1.2;
-  text-decoration: none; cursor: pointer;
-  transition: background-color .2s, transform .2s var(--ease);
+  display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+  background: var(--primaer); color: var(--primaer-ink); border: 1.5px solid var(--primaer); border-radius: var(--r-knap);
+  padding: .8rem 1.4rem; font-family: var(--f-display); font-size: 1rem; font-weight: var(--knap-vaegt); line-height: 1.2;
+  text-decoration: none; white-space: nowrap; cursor: pointer;
+  transition: background-color .2s, border-color .2s, color .2s, transform .2s var(--ease);
 }
-.knap:hover { background: #2B2F32; text-decoration: none; }
+.knap:hover { background: var(--primaer-hover); border-color: var(--primaer-hover); text-decoration: none; }
 .knap:active { transform: translateY(1px); }
 .knap:disabled { cursor: progress; opacity: .65; }
 .knap span[aria-hidden] { transition: transform .25s var(--ease); }
 .knap:hover span[aria-hidden] { transform: translateX(3px); }
-.knap-stor { padding: 1.05rem 1.6rem; font-size: 1.08rem; }
+.knap-stor { padding: 1rem 1.7rem; font-size: 1.06rem; }
 .knap-fuld { width: 100%; justify-content: space-between; }
-.knap-accent { background: var(--accent); color: var(--ink); border-color: var(--accent); }
-.knap-accent:hover { background: #FFC61A; }
-.knap-lys { background: var(--flade); color: var(--ink); border-color: var(--linje-2); }
-.knap-lys:hover { background: var(--flade); border-color: var(--ink); }
+.knap-accent { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.knap-accent:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.knap-lys { background: var(--sekundaer); color: var(--sekundaer-ink); border-color: var(--sekundaer-linje); }
+.knap-lys:hover { background: var(--sekundaer); border-color: var(--sekundaer-ink); }
+/* På mørk baggrund: hvid pille */
+.knap-hvid { background: #fff; color: var(--primaer); border-color: #fff; }
+.knap-hvid:hover { background: #fff; border-color: #fff; color: var(--primaer); box-shadow: 0 0 0 3px rgba(255, 255, 255, .28); }
+.knap-ikon { width: 1.05em; height: 1.05em; flex: none; }
 
 .tekstknap {
   background: none; border: 0; padding: .2rem 0; cursor: pointer; color: var(--ink);
@@ -61,14 +70,36 @@ a:hover { text-decoration-color: var(--ink); }
 }
 .tekstknap:hover { text-decoration-color: var(--ink); }
 
-/* Kladde: pladsholdere markeres, så kunden kan se, hvad der mangler */
+/* Flueben i en cirkel. Farven følger stilen og baggrunden. */
+.tjek { width: 1.35rem; height: 1.35rem; flex: none; }
+.tjek circle { fill: var(--tjek-lys-bg); }
+.tjek path { fill: none; stroke: var(--tjek-lys-ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.tjekliste { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+.tjekliste li { display: grid; grid-template-columns: 1.35rem minmax(0, 1fr); gap: .7rem; align-items: start; }
+.tjekliste .tjek { margin-top: .15rem; }
+
+.stjerner { display: inline-flex; gap: 2px; color: var(--stjerne); }
+.stjerner svg { width: 1.05rem; height: 1.05rem; fill: currentColor; }
+
+/* ---------- kladde: pladsholdere markeres, og stilen kan skiftes ---------- */
 .kladde-bjaelke { display: none; }
 .kladde .kladde-bjaelke {
-  display: block; margin: 0; padding: .45rem var(--gutter);
-  background: var(--accent); color: var(--ink);
-  font-size: .8rem; text-align: center;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .35rem 1.25rem;
+  padding: .4rem var(--gutter); background: var(--kladde); color: #1A1A1A;
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: .8rem; font-weight: 500; line-height: 1.3;
 }
+.kladde-bjaelke p { margin: 0; }
+.stilvaelger { display: flex; align-items: center; gap: .3rem; }
+.stilvaelger-titel { margin-right: .2rem; }
+.stilvaelger button {
+  border: 1px solid rgba(0, 0, 0, .35); background: rgba(255, 255, 255, .55); color: #1A1A1A; border-radius: 999px;
+  padding: .22rem .7rem; font-size: .78rem; font-weight: 600; cursor: pointer;
+}
+.stilvaelger button[aria-pressed="true"] { background: #1A1A1A; border-color: #1A1A1A; color: #fff; }
+html:not(.kladde) [data-kun-kladde] { display: none !important; }
 .kladde [data-pladsholder] {
-  background-image: linear-gradient(transparent 62%, rgba(242, 183, 5, .55) 62%);
+  background-image: linear-gradient(transparent 62%, rgba(255, 216, 77, .75) 62%);
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
+.kladde .moerk [data-pladsholder], .kladde .hero-moerk [data-pladsholder] { background-image: linear-gradient(transparent 62%, rgba(255, 216, 77, .45) 62%); }
+@media (max-width: 640px) { .kladde-tekst-lang { display: none; } }

@@ -10,6 +10,19 @@ if (new URLSearchParams(window.location.search).get('kladde') === '0') {
 startSamtykke();
 startVideo();
 
+/* ---------- kladde: skift stilart (A, B, C) ---------- */
+const stilKnapper = Array.from(document.querySelectorAll('[data-stil-knap]'));
+const markerStil = () => {
+  const aktivStil = document.documentElement.dataset.stil;
+  stilKnapper.forEach((k) => k.setAttribute('aria-pressed', String(k.dataset.stilKnap === aktivStil)));
+};
+stilKnapper.forEach((k) => k.addEventListener('click', () => {
+  document.documentElement.dataset.stil = k.dataset.stilKnap;
+  try { localStorage.setItem('se-stil', k.dataset.stilKnap); } catch { /* privat browsing */ }
+  markerStil();
+}));
+markerStil();
+
 document.addEventListener('click', (e) => {
   if (e.target.closest('a[href^="tel:"]')) track('Contact', { kilde: 'telefon' });
 });
@@ -21,7 +34,7 @@ menuKnap?.addEventListener('click', () => {
   const aabn = mobilmenu.hidden;
   mobilmenu.hidden = !aabn;
   menuKnap.setAttribute('aria-expanded', String(aabn));
-  menuKnap.textContent = aabn ? 'Luk' : 'Menu';
+  menuKnap.querySelector('.menu-tekst').textContent = aabn ? 'Luk' : 'Menu';
   document.documentElement.classList.toggle('menu-aaben', aabn);
 });
 

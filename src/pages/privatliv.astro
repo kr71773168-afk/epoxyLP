@@ -1,11 +1,12 @@
 ---
+import SideBand from '../components/SideBand.astro';
 import { firma } from '../data/firma.js';
 import Side from '../layouts/Side.astro';
 import { link } from '../lib/link.js';
 ---
 <Side titel="Privatlivspolitik · Silkeborg Epoxy" beskrivelse="Sådan behandler Silkeborg Epoxy dine oplysninger, når du bruger prisberegneren eller kontaktformularen." slug="privatliv">
+  <SideBand titel="Privatlivspolitik" tekst="Sådan behandler vi dine oplysninger, når du bruger prisberegneren eller skriver til os." sti={[{ navn: 'Privatlivspolitik', slug: 'privatliv' }]} />
   <div class="kolonne tekstside">
-    <h1>Privatlivspolitik</h1>
     <p><span data-pladsholder>Denne tekst er en skabelon. Den skal gennemgås og tilpasses, før siden går live.</span></p>
 
     <h2>Hvem er vi</h2>

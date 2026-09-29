@@ -9,7 +9,7 @@ import { ydelse } from '../data/ydelser.js';
 import Side from '../layouts/Side.astro';
 import { link } from '../lib/link.js';
 import Beregner from './Beregner.astro';
-import Brodkrummer from './Brodkrummer.astro';
+import SideBand from './SideBand.astro';
 import Slut from './Slut.astro';
 import Tillid from './Tillid.astro';
 import YdelsesListe from './YdelsesListe.astro';
@@ -37,14 +37,8 @@ const artikel = {
 };
 ---
 <Side titel={`${g.titel} · ${firma.navn}`} beskrivelse={g.beskrivelse} slug={g.slug} schema={[artikel]}>
-  <Brodkrummer sti={[{ navn: 'Viden', slug: 'viden' }, { navn: g.h1, slug: g.slug }]} />
-
   <article>
-    <header class="kolonne side-top guide-top">
-      <p class="hero-over">Viden · {minutter} min. at læse</p>
-      <h1 id="side-titel">{g.h1}</h1>
-      <p class="hero-sub">{g.intro}</p>
-    </header>
+    <SideBand over={`Viden · ${minutter} min. at læse`} titel={g.h1} tekst={g.intro} sti={[{ navn: 'Viden', slug: 'viden' }, { navn: g.h1, slug: g.slug }]} />
 
     <div class="sektion">
       <div class="kolonne guide-krop">
@@ -71,7 +65,7 @@ const artikel = {
           <div class="guide-cta">
             <p class="guide-cta-titel">Hvad koster dit gulv?</p>
             <p>Svar på seks spørgsmål, så ser du en vejledende pris med det samme.</p>
-            <a class="knap knap-fuld" href="#pris">Beregn prisen <span aria-hidden="true">→</span></a>
+            <a class="knap knap-accent knap-fuld" href="#pris">Beregn prisen <span aria-hidden="true">→</span></a>
           </div>
           <nav class="guide-flere" aria-label="Flere guides">
             <p class="guide-flere-titel">Flere guides</p>
@@ -82,7 +76,7 @@ const artikel = {
     </div>
   </article>
 
-  <section class="sektion beregner-sektion" id="pris" aria-labelledby="pris-titel">
+  <section class="sektion sektion-alt beregner-sektion" id="pris" aria-labelledby="pris-titel">
     <div class="kolonne beregner-grid">
       <div class="beregner-tekst">
         <h2 class="sektion-titel" id="pris-titel">Se prisen på dit gulv</h2>

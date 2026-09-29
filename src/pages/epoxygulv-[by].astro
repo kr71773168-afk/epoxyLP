@@ -2,15 +2,16 @@
 /** Én side pr. by i src/data/byer.js, fx /epoxygulv-aarhus/. */
 import { beregnPris } from '../calculator/engine.js';
 import cfg from '../calculator/pricing.config.js';
-import Beregner from '../components/Beregner.astro';
 import Brodkrummer from '../components/Brodkrummer.astro';
 import FAQ from '../components/FAQ.astro';
 import Forloeb from '../components/Forloeb.astro';
+import GulvKort from '../components/GulvKort.astro';
+import Hero from '../components/Hero.astro';
 import Slut from '../components/Slut.astro';
-import Tillid from '../components/Tillid.astro';
 import YdelsesListe from '../components/YdelsesListe.astro';
 import { byer, bySti } from '../data/byer.js';
-import { erhverv, gulvtyper, privat } from '../data/ydelser.js';
+import { firma } from '../data/firma.js';
+import { erhverv, privat } from '../data/ydelser.js';
 import Side from '../layouts/Side.astro';
 import { link } from '../lib/link.js';
 
@@ -50,30 +51,41 @@ const faq = [
   beskrivelse={`Epoxygulv til garage, kælder, bolig og erhverv i ${b.navn} og omegn. Se prisen på dit gulv på et minut. Fast pris efter gratis besigtigelse.`}
   slug={sti}
 >
-  <Brodkrummer sti={[{ navn: `Epoxygulv ${b.navn}`, slug: sti }]} />
-
-  <section class="kolonne hero hero-by" aria-labelledby="hero-titel">
-    <div class="hero-tekst">
-      <p class="hero-over">Epoxygulve i {b.navn} og omegn</p>
-      <h1 id="hero-titel">Epoxygulv i {b.navn}</h1>
-      <p class="hero-sub">{b.tekst}</p>
-      <ul class="by-fakta">
-        {erSilkeborg ? <li>Vi holder til i Silkeborg</li> : <li>Ca. {b.km} km fra Silkeborg</li>}
-        {!erSilkeborg && <li>Ca. {b.min} min i bil</li>}
-        <li>Kørsel med i prisen</li>
-      </ul>
-    </div>
-    <Beregner />
-    <Tillid />
-  </section>
+  <Hero
+    over={`Epoxygulve i ${b.navn} og omegn`}
+    titel={`Epoxygulv i [${b.navn}]`}
+    tekst={b.tekst}
+    punkter={['Se prisen på et minut, uden at give os dit nummer', 'Fast pris på skrift efter gratis besigtigelse', `<span data-pladsholder>${firma.garanti}</span>, og ejeren kommer selv`]}
+  >
+    <Brodkrummer slot="top" sti={[{ navn: `Epoxygulv ${b.navn}`, slug: sti }]} class="" />
+    <ul class="by-fakta">
+      {erSilkeborg ? <li>Vi holder til i Silkeborg</li> : <li>Ca. {b.km} km fra Silkeborg</li>}
+      {!erSilkeborg && <li>Ca. {b.min} min i bil</li>}
+      <li>Kørsel med i prisen</li>
+    </ul>
+  </Hero>
 
   <section class="sektion" aria-labelledby="ydelser-titel">
     <div class="kolonne">
       <div class="sektion-hoved">
-        <h2 class="sektion-titel" id="ydelser-titel">Det laver vi i {b.navn}</h2>
-        <p>Garager, kældre, boliger og erhverv, i ensfarvet, flakes eller metallic.</p>
+        <div>
+          <h2 class="sektion-titel" id="ydelser-titel">Det laver vi i {b.navn}</h2>
+          <p>Garager, kældre, boliger og erhverv, i ensfarvet, flakes eller metallic.</p>
+        </div>
       </div>
-      <YdelsesListe ydelser={[...privat, ...erhverv, ...gulvtyper]} />
+      <YdelsesListe ydelser={[...privat, ...erhverv]} />
+    </div>
+  </section>
+
+  <section class="sektion sektion-alt" aria-labelledby="gulve-titel">
+    <div class="kolonne">
+      <div class="sektion-hoved">
+        <div>
+          <h2 class="sektion-titel" id="gulve-titel">Vælg dit <em>epoxygulv</em></h2>
+          <p>Tre overflader. Prisen pr. m² står på hver, inkl. moms.</p>
+        </div>
+      </div>
+      <GulvKort />
     </div>
   </section>
 
@@ -89,7 +101,7 @@ const faq = [
     </div>
   </section>
 
-  <Forloeb />
+  <Forloeb alt />
   <FAQ items={faq} titel={`Spørgsmål fra ${b.navn}`} />
   <Slut harBeregner />
 </Side>

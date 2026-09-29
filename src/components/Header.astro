@@ -3,6 +3,7 @@ import { firma } from '../data/firma.js';
 import { guides } from '../data/viden.js';
 import { gulvtyper, privat } from '../data/ydelser.js';
 import { link } from '../lib/link.js';
+import Ikon from './Ikon.astro';
 
 const { aktiv: side = '' } = Astro.props;
 // Guides hører under Viden i menuen
@@ -11,6 +12,7 @@ const menu = [
   { navn: 'Privat', punkter: privat },
   { navn: 'Erhverv', slug: 'erhvervsgulve' },
   { navn: 'Gulvtyper', punkter: gulvtyper },
+  { navn: 'Priser', slug: 'pris' },
   { navn: 'Referencer', slug: 'referencer' },
   { navn: 'Viden', slug: 'viden' },
   { navn: 'Om os', slug: 'om-os' },
@@ -19,9 +21,18 @@ const menu = [
 const nu = (slug) => (side === slug ? 'page' : undefined);
 const gruppeAktiv = (punkter) => punkter.some((p) => p.slug === aktiv);
 ---
+<div class="topbar">
+  <div class="kolonne topbar-indre">
+    <p class="topbar-tillid">Lokalt gulvfirma i Silkeborg · <b data-pladsholder>{firma.garanti}</b><span class="topbar-ekstra"> · Fast pris på skrift</span></p>
+    <p class="topbar-tlf"><a href={`tel:${firma.telefonLink}`} data-telefon>Ring <b data-pladsholder>{firma.telefon}</b></a> · <span data-pladsholder>{firma.aabningstider}</span></p>
+  </div>
+</div>
 <header class="top">
   <div class="kolonne top-indre">
-    <a class="logo" href={link()} aria-label={`${firma.navn}, til forsiden`}>Silkeborg <b>Epoxy</b></a>
+    <a class="logo" href={link()} aria-label={`${firma.navn}, til forsiden`}>
+      <span class="logo-maerke" aria-hidden="true"></span>
+      <span class="logo-tekst"><span class="logo-1">Silkeborg</span> <span class="logo-2">Epoxy</span></span>
+    </a>
 
     <nav class="nav" aria-label="Hovedmenu">
       <ul class="nav-liste">
@@ -40,17 +51,20 @@ const gruppeAktiv = (punkter) => punkter.some((p) => p.slug === aktiv);
       </ul>
     </nav>
 
-    <a class="top-tlf" href={`tel:${firma.telefonLink}`} data-telefon>
-      <span class="top-tlf-label">Ring</span>
-      <span class="tlf-nr" data-pladsholder>{firma.telefon}</span>
-    </a>
-    <a class="knap top-cta" href={link('pris')}>Beregn pris</a>
-    <button type="button" class="menu-knap" aria-expanded="false" aria-controls="mobilmenu">Menu</button>
+    <div class="top-knapper">
+      <a class="knap knap-lys top-tlf" href={`tel:${firma.telefonLink}`} data-telefon aria-label={`Ring ${firma.telefon}`}>
+        <Ikon navn="tlf" /><span class="tlf-nr" data-pladsholder>{firma.telefon}</span>
+      </a>
+      <a class="knap knap-accent top-cta" href={link('pris')}>Beregn pris</a>
+      <button type="button" class="menu-knap" aria-expanded="false" aria-controls="mobilmenu">
+        <span class="menu-streger" aria-hidden="true"><i></i><i></i><i></i></span><span class="menu-tekst">Menu</span>
+      </button>
+    </div>
   </div>
 
   <div class="mobilmenu" id="mobilmenu" hidden>
     <div class="kolonne mobilmenu-indre">
-      <a class="knap knap-stor knap-fuld" href={link('pris')}>Beregn prisen på dit gulv <span aria-hidden="true">→</span></a>
+      <a class="knap knap-accent knap-stor knap-fuld" href={link('pris')}>Beregn prisen på dit gulv <span aria-hidden="true">→</span></a>
       <div class="mobilmenu-grupper">
         <div>
           <p class="mobilmenu-titel">Privat</p>
@@ -64,6 +78,7 @@ const gruppeAktiv = (punkter) => punkter.some((p) => p.slug === aktiv);
           <p class="mobilmenu-titel">Firmaet</p>
           <ul>
             <li><a href={link('erhvervsgulve')} aria-current={nu('erhvervsgulve')}>Erhverv</a></li>
+            <li><a href={link('pris')} aria-current={nu('pris')}>Priser</a></li>
             <li><a href={link('referencer')} aria-current={nu('referencer')}>Referencer</a></li>
             <li><a href={link('viden')} aria-current={nu('viden')}>Viden og guides</a></li>
             <li><a href={link('om-os')} aria-current={nu('om-os')}>Om os</a></li>
@@ -71,7 +86,7 @@ const gruppeAktiv = (punkter) => punkter.some((p) => p.slug === aktiv);
           </ul>
         </div>
       </div>
-      <a class="mobilmenu-tlf" href={`tel:${firma.telefonLink}`} data-telefon>Ring <span data-pladsholder>{firma.telefon}</span></a>
+      <a class="knap knap-lys knap-fuld mobilmenu-tlf" href={`tel:${firma.telefonLink}`} data-telefon><span><Ikon navn="tlf" /> Ring <span data-pladsholder>{firma.telefon}</span></span><span aria-hidden="true">→</span></a>
     </div>
   </div>
 </header>

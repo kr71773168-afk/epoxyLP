@@ -1,8 +1,9 @@
 ---
 import { firma } from '../data/firma.js';
+import Ikon from './Ikon.astro';
 ---
-<ul class="tillid">
-  <li>Fast pris efter gratis besigtigelse</li>
-  <li><span data-pladsholder>{firma.garanti}</span></li>
-  <li>Lokalt firma fra Silkeborg</li>
+<ul class="tjekliste tillid">
+  <li><Ikon navn="tjek" /><span>Fast pris efter gratis besigtigelse</span></li>
+  <li><Ikon navn="tjek" /><span><span data-pladsholder>{firma.garanti}</span> på gulvet</span></li>
+  <li><Ikon navn="tjek" /><span>Lokalt firma fra Silkeborg</span></li>
 </ul>

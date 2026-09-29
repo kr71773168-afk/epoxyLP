@@ -5,11 +5,12 @@
  */
 import { beregnPris } from '../calculator/engine.js';
 import cfg from '../calculator/pricing.config.js';
-import Beregner from '../components/Beregner.astro';
 import Brodkrummer from '../components/Brodkrummer.astro';
 import FAQ from '../components/FAQ.astro';
+import GulvKort from '../components/GulvKort.astro';
+import Hero from '../components/Hero.astro';
 import Slut from '../components/Slut.astro';
-import Tillid from '../components/Tillid.astro';
+import { firma } from '../data/firma.js';
 import Side from '../layouts/Side.astro';
 
 const fmt = (n) => Math.round(n).toLocaleString('da-DK');
@@ -41,17 +42,14 @@ const faq = [
   beskrivelse="Hvad koster et epoxygulv? Se priser pr. m² for ensfarvet, flakes og metallic, eksempler på garager og kældre, og beregn prisen på dit eget gulv på et minut."
   slug="pris"
 >
-  <Brodkrummer sti={[{ navn: 'Pris', slug: 'pris' }]} />
-
-  <section class="kolonne hero hero-pris" aria-labelledby="hero-titel">
-    <div class="hero-tekst">
-      <p class="hero-over">Priser og beregner</p>
-      <h1 id="hero-titel">Hvad koster et epoxygulv?</h1>
-      <p class="hero-sub">Prisen afhænger af størrelsen, overfladen og betonens stand. Svar på seks spørgsmål, så får du en vejledende pris med det samme.</p>
-    </div>
-    <Beregner />
-    <Tillid />
-  </section>
+  <Hero
+    over="Priser og beregner"
+    titel="Hvad koster et [epoxygulv]?"
+    tekst="Prisen afhænger af størrelsen, overfladen og betonens stand. Svar på seks spørgsmål, så får du en vejledende pris med det samme."
+    punkter={['Priser inkl. moms for private, ekskl. moms for erhverv', 'Fast pris på skrift efter gratis besigtigelse', `<span data-pladsholder>${firma.garanti}</span> på gulvet`]}
+  >
+    <Brodkrummer slot="top" sti={[{ navn: 'Pris', slug: 'pris' }]} class="" />
+  </Hero>
 
   <section class="sektion" aria-labelledby="m2-titel">
     <div class="kolonne pris-grid">
@@ -83,11 +81,13 @@ const faq = [
     </div>
   </section>
 
-  <section class="sektion" aria-labelledby="eks-titel">
+  <section class="sektion sektion-alt" aria-labelledby="eks-titel">
     <div class="kolonne">
       <div class="sektion-hoved">
-        <h2 class="sektion-titel" id="eks-titel">Eksempler på priser</h2>
-        <p>Regnet med beregneren, pæn beton og inden for vores område.</p>
+        <div>
+          <h2 class="sektion-titel" id="eks-titel">Eksempler på priser</h2>
+          <p>Regnet med beregneren, pæn beton og inden for vores område.</p>
+        </div>
       </div>
       <ul class="eksempler">
         {eksempler.map((e) => (
@@ -102,7 +102,19 @@ const faq = [
     </div>
   </section>
 
-  <section class="sektion" aria-labelledby="faktorer-titel">
+  <section class="sektion" aria-labelledby="gulve-titel">
+    <div class="kolonne">
+      <div class="sektion-hoved">
+        <div>
+          <h2 class="sektion-titel" id="gulve-titel">De tre <em>gulvtyper</em></h2>
+          <p>Tryk på en gulvtype for at se, hvad den kan, og hvad den koster.</p>
+        </div>
+      </div>
+      <GulvKort />
+    </div>
+  </section>
+
+  <section class="sektion sektion-alt" aria-labelledby="faktorer-titel">
     <div class="kolonne afsnit-grid">
       <div class="afsnit">
         <h2 id="faktorer-titel">Hvad påvirker prisen?</h2>

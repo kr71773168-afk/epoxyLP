@@ -1,6 +1,6 @@
 ---
 /** Oversigt over guiderne i src/data/viden.js */
-import Brodkrummer from '../components/Brodkrummer.astro';
+import SideBand from '../components/SideBand.astro';
 import Slut from '../components/Slut.astro';
 import { guides, laesetid } from '../data/viden.js';
 import Side from '../layouts/Side.astro';
@@ -11,15 +11,10 @@ import { link } from '../lib/link.js';
   beskrivelse="Korte guides om epoxygulve: epoxy eller maling, levetid, gulvvarme, rengøring og epoxy på fliser. Skrevet af dem, der lægger gulvene."
   slug="viden"
 >
-  <Brodkrummer sti={[{ navn: 'Viden', slug: 'viden' }]} />
+  <SideBand over="Viden" titel="Viden om [epoxygulve]" tekst="Korte svar på det, folk oftest spørger om, før de får lagt et epoxygulv." sti={[{ navn: 'Viden', slug: 'viden' }]} />
 
-  <section class="kolonne side-top" aria-labelledby="side-titel">
-    <p class="hero-over">Viden</p>
-    <h1 id="side-titel">Viden om epoxygulve</h1>
-    <p class="hero-sub">Korte svar på det, folk oftest spørger om, før de får lagt et epoxygulv.</p>
-  </section>
-
-  <section class="kolonne guide-oversigt" aria-label="Guides">
+  <section class="sektion" aria-label="Guides">
+    <div class="kolonne">
     <ul class="guide-liste">
       {guides.map((g) => (
         <li>
@@ -32,6 +27,7 @@ import { link } from '../lib/link.js';
         </li>
       ))}
     </ul>
+    </div>
   </section>
 
   <Slut />

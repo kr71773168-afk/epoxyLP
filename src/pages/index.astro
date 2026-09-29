@@ -1,15 +1,17 @@
 ---
-import Beregner from '../components/Beregner.astro';
 import FAQ from '../components/FAQ.astro';
 import Forloeb from '../components/Forloeb.astro';
+import Foto from '../components/Foto.astro';
+import GulvKort from '../components/GulvKort.astro';
+import Hero from '../components/Hero.astro';
+import Ikon from '../components/Ikon.astro';
 import Slut from '../components/Slut.astro';
-import Tillid from '../components/Tillid.astro';
-import Video from '../components/Video.astro';
 import YdelsesListe from '../components/YdelsesListe.astro';
 import { faq } from '../data/faq.js';
 import { firma } from '../data/firma.js';
-import { erhverv, gulvtyper, privat } from '../data/ydelser.js';
+import { erhverv, privat } from '../data/ydelser.js';
 import Side from '../layouts/Side.astro';
+import { link } from '../lib/link.js';
 
 // Det, der adskiller firmaet fra de fleste gulvfirmaer. Garantien er en pladsholder i firma.js.
 const loefter = [
@@ -23,40 +25,64 @@ const loefter = [
   titel="Epoxygulve i Silkeborg · Se prisen på 60 sekunder · Silkeborg Epoxy"
   beskrivelse="Epoxygulve til garage, kælder, bolig og erhverv i Silkeborg og 60 km omkring. Se prisen på dit gulv på et minut. Fast pris efter gratis besigtigelse."
 >
-  <section class="kolonne hero" aria-labelledby="hero-titel">
-    <div class="hero-tekst">
-      <p class="hero-over">Epoxygulve i Silkeborg og 60 km omkring</p>
-      <h1 id="hero-titel" data-hero-titel>Epoxygulve til garage, kælder, bolig og erhverv</h1>
-      <p class="hero-sub">Se prisen på dit nye gulv på et minut. Du skal ikke give os dit nummer for at se den.</p>
+  <Hero
+    over="Garage · kælder · bolig · erhverv"
+    titel="Epoxygulve i Silkeborg. [Se prisen på 60 sekunder.]"
+    punkter={[
+      'Pris på et minut, uden at give os dit nummer',
+      'Fast pris på skrift efter gratis besigtigelse',
+      `<span data-pladsholder>${firma.garanti}</span>, og ejeren kommer selv`,
+    ]}
+    bjaelke
+    annonceTitel
+  />
+
+  <section class="sektion" aria-labelledby="gulve-titel">
+    <div class="kolonne">
+      <div class="sektion-hoved">
+        <div>
+          <h2 class="sektion-titel" id="gulve-titel">Vælg dit <em>epoxygulv</em></h2>
+          <p>Tre overflader. Prisen pr. m² står på hver, inkl. moms.</p>
+        </div>
+        <a class="knap knap-lys" href={link('pris')}>Se alle priser <span aria-hidden="true">→</span></a>
+      </div>
+      <GulvKort />
     </div>
-    <Beregner />
-    <Tillid />
-    <Video class="hero-video" />
   </section>
 
-  <section class="sektion" aria-labelledby="loefter-titel">
-    <div class="kolonne">
-      <h2 class="sektion-titel" id="loefter-titel">Derfor vælger folk os</h2>
-      <ul class="fordele">
-        {loefter.map((l) => (
-          <li>
-            <h3>{l.pladsholder ? <span data-pladsholder>{l.titel}</span> : l.titel}</h3>
-            <p>{l.tekst}</p>
-          </li>
-        ))}
-      </ul>
+  <section class="sektion sektion-alt" aria-labelledby="loefter-titel">
+    <div class="kolonne folk">
+      <div class="folk-billede-ramme">
+        <Foto navn="arbejde-taet" alt="Vi trækker epoxy ud over et gulv på et job" class="folk-billede" sizes="(max-width: 900px) 100vw, 50vw" />
+        <p class="folk-maerke"><b>Ejeren kommer selv</b>Fra første besøg til sidste lag</p>
+      </div>
+      <div>
+        <h2 class="sektion-titel" id="loefter-titel">Derfor vælger folk os</h2>
+        <ul class="folk-liste">
+          {loefter.map((l) => (
+            <li>
+              <Ikon navn="tjek" />
+              <h3>{l.pladsholder ? <span data-pladsholder>{l.titel}</span> : l.titel}</h3>
+              <p>{l.tekst}</p>
+            </li>
+          ))}
+        </ul>
+        <a class="knap knap-lys" href={link('om-os')}>Mere om os <span aria-hidden="true">→</span></a>
+      </div>
     </div>
   </section>
 
   <Forloeb />
 
-  <section class="sektion" aria-labelledby="ydelser-titel">
+  <section class="sektion sektion-alt" aria-labelledby="ydelser-titel">
     <div class="kolonne">
       <div class="sektion-hoved">
-        <h2 class="sektion-titel" id="ydelser-titel">Det laver vi</h2>
-        <p>Garager, kældre, boliger og erhverv, i ensfarvet, flakes eller metallic.</p>
+        <div>
+          <h2 class="sektion-titel" id="ydelser-titel">Gulve til hjem og erhverv</h2>
+          <p>Garager, kældre, boliger og erhverv. Vælg dit rum og se, hvad vi kan.</p>
+        </div>
       </div>
-      <YdelsesListe ydelser={[...privat, ...erhverv, ...gulvtyper]} />
+      <YdelsesListe ydelser={[...privat, ...erhverv]} />
     </div>
   </section>
 

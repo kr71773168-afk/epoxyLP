@@ -1,6 +1,6 @@
 # Silkeborg Epoxy · landingpage med prisberegner
 
-**Status:** Opgaven er udvidet fra landingpage til komplet hjemmeside. Udkast v0.6 er bygget (29.09.2026) i Astro med 28 sider: forside, prisside, 7 ydelser, 8 bysider, 5 guides med en Viden-side, referencer, om os og kontakt. Lighthouse på mobil: 98-99 i hastighed og 100 i tilgængelighed, best practices og SEO (uden kladde-noindex). Designet følger retningen fra v0.3: lyst, få sektioner, ingen mørke sektioner, labels eller tegnede gulve. Beregneren ligger på alle salgssider. Referencer fra kunden: vestbjergepoxygulve.dk (direkte konkurrent i Silkeborg) og viborg-design.dk. Ingen af dem har en prisberegner. Designafsnittet længere nede beskriver den første retning ("Fugefri"), som er erstattet af "enkel og troværdig". Se [README.md](README.md) for opsætning, pladsholdere og tjekliste før launch.
+**Status:** Opgaven er udvidet fra landingpage til komplet hjemmeside. Udkast v0.7 er bygget (29.09.2026) i Astro med 28 sider: forside, prisside, 7 ydelser, 8 bysider, 5 guides med en Viden-side, referencer, om os og kontakt. Designet følger nu ejerens referencer, vestbjergepoxygulve.dk (direkte konkurrent i Silkeborg) og viborg-design.dk, i tre stilarter (A · Blå, B · Grøn, C · Egen), som kan skiftes i kladden. C er standard. Videoen fra et job er levende baggrund i toppen. Ingen af referencerne har en prisberegner, så beregneren står i toppen af alle salgssider. Lighthouse på mobil: 98-100 i hastighed og 100 i tilgængelighed og best practices i alle tre stilarter, SEO 100 uden kladde-noindex. Afsnit 6 beskriver stilarterne. De tidligere retninger ("Fugefri" og "enkel og troværdig") er erstattet. Se [README.md](README.md) for opsætning, pladsholdere og tjekliste før launch.
 **Priser i dette dokument** er markedsniveau eller pladsholdere. De skal erstattes af kundens egne tal før noget går live.
 **Visuel version med skitser** (hero-refleksion, beregner, snit, gummiskraber): https://claude.ai/artifact/EtPejGYeD86SAgKEQwpe81
 
@@ -210,7 +210,32 @@ Postnumre ligger som statisk liste i koden. Ingen afhængighed af eksterne adres
 
 ---
 
-## 6. Designretning: "Fugefri"
+## 6. Designretning: tre stilarter ud fra referencerne (v0.7)
+
+Ejeren pegede på vestbjergepoxygulve.dk og viborg-design.dk. Begge følger samme opskrift, og sitet gør det samme:
+
+| Træk fra referencerne | Sådan står det på sitet |
+|---|---|
+| Tillid først | Stjerner (når der er anmeldelser), garanti og "lokalt firma" i topbjælken og i toppen |
+| Fluebensliste | 3 korte løfter med flueben under overskriften |
+| Telefonen som knap | Rund knap med nummeret, plus "Book gratis besigtigelse" |
+| Én stærk farve | Farven går igen på knapper, flueben og nøgleord i overskrifterne |
+| Rigtige mennesker | Video og fotos fra et rigtigt job. Afsnittet "Derfor vælger folk os" viser ejeren i arbejde |
+| Handling i toppen | Vestbjerg har en formular. Her er det prisberegneren, som ingen af dem har |
+
+Tre stilarter med samme indhold og opbygning. Kun farver, skrift og former skifter (`src/styles/tokens.css`):
+
+| Stil | Farver | Skrift | Særpræg |
+|---|---|---|---|
+| A · Blå | Marine `#10293A`, blå `#1B96DB`, lys `#EAF4FA` | Red Hat Display + Text | Navy topbjælke, beregneren med navy top |
+| B · Grøn | Grøn `#33775C`, mørkegrøn `#245A45`, beige `#ECE7DC` | Lexend (tynde versaler) | Lys top, videoen i en rund ramme, beregneren ind over |
+| C · Egen | Antracit `#1E2428`, rav `#D9982B`, sand `#F2EDE4` | Manrope | Antracit topbjælke, beregneren med ravgul kant |
+
+**Anbefaling: C.** Samme opskrift som referencerne, men en farve, ingen af dem bruger. Vestbjerg holder også til i Silkeborg, og A ligner dem for meget.
+
+Toppen (hero) på forsiden, prissiden og bysiderne har videoen fra et job som levende baggrund bag en mørk tone, med beregneren som et kort ovenpå og en bjælke med "60 sek. til en pris · fast pris på skrift · garanti · 60 km kørsel med i prisen". Videoen kan stoppes (WCAG 2.2.2) og vises som stillbillede ved "reducer bevægelse".
+
+### Første retning: "Fugefri" (erstattet)
 
 Et epoxygulv er én flade uden fuger, helt plan, med et blankt lag øverst. Siden bygges efter de samme regler. Det giver et look, ingen andre i branchen har, og "ingen kasser" bliver en konsekvens af materialet i stedet for en smagssag.
 
@@ -382,6 +407,7 @@ Formular → `/api/lead` →
 | Prislinjer i resultatet | **3 grupper**, ikke hver post | Undgår forhandling post for post |
 | Billedupload i formularen | **Ikke i v1.** Tak-skærmen beder om billeder via SMS/mail | Mindre friktion, simplere |
 | Postnummer før eller efter prisen | **Før** (sidste spørgsmål) | Lav friktion, kvalificerer, personlig pris |
+| Stilart | **C · Egen** (A og B kan vises i kladden) | Samme opskrift som referencerne, men kan ikke forveksles med Vestbjerg |
 
 **Senere, høj effekt:** Google-anmeldelser fra de første kunder (widget på siden ved 5+), og pour-videoer fra jobs til annoncerne.
 

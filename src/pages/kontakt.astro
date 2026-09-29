@@ -1,5 +1,6 @@
 ---
-import Brodkrummer from '../components/Brodkrummer.astro';
+import Ikon from '../components/Ikon.astro';
+import SideBand from '../components/SideBand.astro';
 import { firma } from '../data/firma.js';
 import Side from '../layouts/Side.astro';
 import { link } from '../lib/link.js';
@@ -10,24 +11,35 @@ import '../styles/quiz.css';
   beskrivelse="Ring eller skriv til Silkeborg Epoxy. Vi kommer gratis ud, måler op og giver en fast pris på dit nye epoxygulv."
   slug="kontakt"
 >
-  <Brodkrummer sti={[{ navn: 'Kontakt', slug: 'kontakt' }]} />
+  <SideBand
+    titel="Kontakt os"
+    tekst={`Ring, skriv eller book en gratis besigtigelse. Vi svarer <span data-pladsholder>${firma.svartid}</span>.`}
+    sti={[{ navn: 'Kontakt', slug: 'kontakt' }]}
+    foto="arbejde-primer"
+  >
+    <div class="side-band-knapper">
+      <a class="knap knap-accent knap-stor" href={`tel:${firma.telefonLink}`} data-telefon><Ikon navn="tlf" />Ring <span data-pladsholder>{firma.telefon}</span></a>
+      <a class="knap knap-hvid knap-stor" href={link('pris')}>Se prisen først <span aria-hidden="true">→</span></a>
+    </div>
+  </SideBand>
 
-  <section class="kolonne kontakt" aria-labelledby="side-titel">
-    <div class="kontakt-info">
-      <h1 id="side-titel">Kontakt</h1>
-      <p class="hero-sub">Ring, skriv eller send formularen. Vi svarer <span data-pladsholder>{firma.svartid}</span>.</p>
+  <section class="sektion kolonne kontakt" aria-label="Kontaktoplysninger og formular">
+    <div class="kontakt-kort">
+      <h2>Oplysninger</h2>
       <dl class="kontakt-liste">
-        <div><dt>Telefon</dt><dd><a class="kontakt-tlf" href={`tel:${firma.telefonLink}`} data-telefon><span class="tlf-nr" data-pladsholder>{firma.telefon}</span></a></dd></div>
+        <div><dt>Telefon</dt><dd><a href={`tel:${firma.telefonLink}`} data-telefon><span class="tlf-nr" data-pladsholder>{firma.telefon}</span></a></dd></div>
         <div><dt>Mail</dt><dd><a href={`mailto:${firma.mail}`}><span data-pladsholder>{firma.mail}</span></a></dd></div>
         <div><dt>Adresse</dt><dd><span data-pladsholder>{firma.adresse.vej}, {firma.adresse.postnr} {firma.adresse.by}</span></dd></div>
         <div><dt>Åbent</dt><dd><span data-pladsholder>{firma.aabningstider}</span></dd></div>
+        <div><dt>Område</dt><dd>{firma.omraade}</dd></div>
       </dl>
-      <p class="kontakt-pris">Vil du bare kende prisen? <a href={link('pris')}>Brug prisberegneren</a>. Det tager et minut.</p>
+      <p class="kontakt-pris">Vil du bare kende prisen? <a href={link('pris')}>Brug prisberegneren</a>. Det tager et minut, og du skal ikke give os dit nummer.</p>
     </div>
 
-    <div class="quiz kontakt-kort">
+    <div class="quiz kontakt-form">
       <form class="lead-form" id="kontakt-form" novalidate>
-        <h2 class="lead-titel">Skriv til os</h2>
+        <h2 class="lead-titel">Book en gratis besigtigelse</h2>
+        <p class="lead-intro">Skriv lidt om gulvet, så ringer vi og finder en tid. Vi måler op og giver en fast pris på skrift.</p>
         <div class="felt">
           <label for="kf-navn">Navn</label>
           <input type="text" id="kf-navn" name="navn" autocomplete="name" required aria-describedby="kf-navn-fejl">

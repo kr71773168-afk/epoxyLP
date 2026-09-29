@@ -9,13 +9,17 @@ const aar = new Date().getFullYear();
 <footer class="fod">
   <div class="kolonne fod-grid">
     <div class="fod-firma">
-      <a class="logo" href={link()}>Silkeborg <b>Epoxy</b></a>
+      <a class="logo" href={link()} aria-label={`${firma.navn}, til forsiden`}>
+        <span class="logo-maerke" aria-hidden="true"></span>
+        <span class="logo-tekst"><span class="logo-1">Silkeborg</span> <span class="logo-2">Epoxy</span></span>
+      </a>
       <p>Epoxygulve til garage, kælder, bolig og erhverv i {firma.omraade}.</p>
       <p>
         <a href={`tel:${firma.telefonLink}`} data-telefon><span data-pladsholder>{firma.telefon}</span></a><br>
         <a href={`mailto:${firma.mail}`}><span data-pladsholder>{firma.mail}</span></a><br>
         <span data-pladsholder>{firma.adresse.vej}, {firma.adresse.postnr} {firma.adresse.by}</span>
       </p>
+      <a class="knap knap-accent fod-knap" href={link('pris')}>Beregn prisen på dit gulv <span aria-hidden="true">→</span></a>
     </div>
     <nav class="fod-kol" aria-label="Privat">
       <p class="fod-titel">Privat</p>

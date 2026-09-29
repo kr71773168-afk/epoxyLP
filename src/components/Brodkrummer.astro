@@ -3,8 +3,9 @@ import { link } from '../lib/link.js';
 
 interface Props {
   sti: { navn: string; slug?: string }[];
+  class?: string;
 }
-const { sti } = Astro.props;
+const { sti, class: klasse = 'kolonne' } = Astro.props;
 const alle = [{ navn: 'Forside', slug: '' }, ...sti];
 const schema = {
   '@context': 'https://schema.org',
@@ -17,7 +18,7 @@ const schema = {
   })),
 };
 ---
-<nav class="kolonne brodkrummer" aria-label="Du er her">
+<nav class:list={[klasse, 'brodkrummer']} aria-label="Du er her">
   <ol>
     {alle.map((s, i) => (
       <li>{i < alle.length - 1 ? <a href={link(s.slug)}>{s.navn}</a> : <span aria-current="page">{s.navn}</span>}</li>

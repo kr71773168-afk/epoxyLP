@@ -1,0 +1,26 @@
+---
+/**
+ * De tre gulvtyper som kort med foto, kort tekst og fra-pris inkl. moms. Linker til siden om gulvtypen.
+ * Fotoene ligger i src/media/foto og hedder gulv-<overflade>.jpg.
+ */
+import cfg from '../calculator/pricing.config.js';
+import { gulvtyper } from '../data/ydelser.js';
+import { link } from '../lib/link.js';
+import Foto from './Foto.astro';
+
+const fmt = (n) => Math.round(n).toLocaleString('da-DK');
+---
+<ul class="gulvkort">
+  {gulvtyper.map((y) => (
+    <li>
+      <a href={link(y.slug)}>
+        <Foto navn={`gulv-${y.overflade}`} alt="" class="gulvkort-billede" sizes="(max-width: 860px) 100vw, 33vw" />
+        <span class="gulvkort-tekst">
+          <span class="gulvkort-navn">{y.navn}</span>
+          <span class="gulvkort-desk">{y.kort}</span>
+          <span class="gulvkort-pris"><span data-pladsholder>fra {fmt(cfg.overflader[y.overflade].prisPrM2 * (1 + cfg.moms))} kr/m²</span> <span class="gulvkort-pil" aria-hidden="true">→</span></span>
+        </span>
+      </a>
+    </li>
+  ))}
+</ul>

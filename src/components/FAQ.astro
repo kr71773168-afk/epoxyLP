@@ -1,19 +1,27 @@
 ---
 /** Spørgsmål og svar som foldeliste, plus FAQPage-data til Google. */
+import { firma } from '../data/firma.js';
+import Ikon from './Ikon.astro';
+
 interface Props {
   items: { spg: string; svar: string }[];
   titel?: string;
+  alt?: boolean;
 }
-const { items, titel = 'Det bliver vi tit spurgt om' } = Astro.props;
+const { items, titel = 'Det bliver vi tit spurgt om', alt = false } = Astro.props;
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: items.map((i) => ({ '@type': 'Question', name: i.spg, acceptedAnswer: { '@type': 'Answer', text: i.svar } })),
 };
 ---
-<section class="sektion" aria-labelledby="faq-titel">
+<section class:list={['sektion', { 'sektion-alt': alt }]} aria-labelledby="faq-titel">
   <div class="kolonne faq-grid">
-    <h2 class="sektion-titel" id="faq-titel">{titel}</h2>
+    <div class="faq-intro">
+      <h2 class="sektion-titel" id="faq-titel">{titel}</h2>
+      <p>Finder du ikke svaret, så ring. Det er ejeren, der tager telefonen.</p>
+      <a class="knap knap-lys" href={`tel:${firma.telefonLink}`} data-telefon><Ikon navn="tlf" />Ring <span data-pladsholder>{firma.telefon}</span></a>
+    </div>
     <div class="faq">
       {items.map((i) => (
         <details>

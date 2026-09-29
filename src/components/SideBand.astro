@@ -1,0 +1,30 @@
+---
+/**
+ * Toppen på sider uden beregner: kontakt, om os, referencer, viden og guides.
+ * Stil A og C: mørk flade, evt. med et foto bag (`foto` er navnet i src/media/foto). Stil B: beige flade.
+ * Skriv [ord] i titlen for at fremhæve dem. `tekst` må indeholde HTML (fx en pladsholder).
+ */
+import Brodkrummer from './Brodkrummer.astro';
+import Foto from './Foto.astro';
+
+interface Props {
+  titel: string;
+  over?: string;
+  tekst?: string;
+  sti?: { navn: string; slug?: string }[];
+  foto?: string;
+}
+const { titel, over, tekst, sti, foto } = Astro.props;
+const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const titelHtml = esc(titel).replace(/\[(.+?)\]/g, '<em>$1</em>');
+---
+<header class="side-band">
+  {foto && <div class="hero-medie"><Foto navn={foto} alt="" class="hero-plakat" sizes="100vw" eager /></div>}
+  <div class="kolonne moerk">
+    {sti && <Brodkrummer sti={sti} class="" />}
+    {over && <p class="hero-over">{over}</p>}
+    <h1 id="side-titel" set:html={titelHtml} />
+    {tekst && <p class="hero-sub" set:html={tekst} />}
+    <slot />
+  </div>
+</header>

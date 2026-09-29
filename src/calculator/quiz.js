@@ -8,11 +8,12 @@ const spaend = ([a, b]) => (Math.round(a) === Math.round(b) ? `${fmt(a)} kr` : `
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
 // Overskrift pr. annonce-segment (?gulv=garage osv.). Rummet vælges også på forhånd.
+// [ord] bliver fremhævet i stilens farve, ligesom i overskrifterne på siden
 const OVERSKRIFTER = {
-  garage: 'Hvad koster et nyt garagegulv?',
-  kaelder: 'Hvad koster et nyt gulv i kælderen?',
-  bolig: 'Hvad koster et fugefrit gulv i hjemmet?',
-  erhverv: 'Hvad koster et nyt gulv til værksted eller lager?',
+  garage: 'Hvad koster et nyt [garagegulv]?',
+  kaelder: 'Hvad koster et nyt gulv i [kælderen]?',
+  bolig: 'Hvad koster et [fugefrit gulv] i hjemmet?',
+  erhverv: 'Hvad koster et nyt gulv til [værksted eller lager]?',
 };
 
 const RADIO = ['rum', 'overflade', 'stand'];
@@ -378,7 +379,7 @@ export function startQuiz() {
   const forvalgtRum = cfg.rum[segment] ? segment : (cfg.rum[quiz.dataset.rum] ? quiz.dataset.rum : null);
   if (forvalgtRum) {
     const titel = document.querySelector('[data-hero-titel]');
-    if (titel && segment === forvalgtRum && OVERSKRIFTER[segment]) titel.textContent = OVERSKRIFTER[segment];
+    if (titel && segment === forvalgtRum && OVERSKRIFTER[segment]) titel.innerHTML = esc(OVERSKRIFTER[segment]).replace(/\[(.+?)\]/g, '<em>$1</em>');
     $(`input[name="rum"][value="${forvalgtRum}"]`).checked = true;
     vaelg('rum', forvalgtRum);
     besvar('rum', { bruger: false });

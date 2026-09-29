@@ -1,6 +1,6 @@
 ---
-import Brodkrummer from '../components/Brodkrummer.astro';
-import Foto from '../components/Foto.astro';
+import Ikon from '../components/Ikon.astro';
+import SideBand from '../components/SideBand.astro';
 import Slut from '../components/Slut.astro';
 import Video from '../components/Video.astro';
 import { firma } from '../data/firma.js';
@@ -18,16 +18,13 @@ const vaerdier = [
   beskrivelse="Silkeborg Epoxy er et lokalt firma, der lægger epoxygulve i garager, kældre, boliger og erhverv i Silkeborg og 60 km omkring."
   slug="om-os"
 >
-  <Brodkrummer sti={[{ navn: 'Om os', slug: 'om-os' }]} />
-
-  <section class="kolonne side-hero" aria-labelledby="side-titel">
-    <div class="side-hero-tekst">
-      <p class="hero-over">Om os</p>
-      <h1 id="side-titel">Et lokalt firma, der står inde for sine gulve</h1>
-      <p class="hero-sub"><span data-pladsholder>Silkeborg Epoxy er startet af {firma.ejer}, der har lagt gulve i [X] år.</span> Vi er et lille firma, og det er ejeren selv, der kommer ud til dig.</p>
-    </div>
-    <Foto navn="hal-lys" alt="Vi lægger epoxy i et showroom" class="side-hero-billede" eager />
-  </section>
+  <SideBand
+    over="Om os"
+    titel="Et lokalt firma, der [står inde for sine gulve]"
+    tekst={`<span data-pladsholder>Silkeborg Epoxy er startet af ${firma.ejer}, der har lagt gulve i [X] år.</span> Vi er et lille firma, og det er ejeren selv, der kommer ud til dig.`}
+    sti={[{ navn: 'Om os', slug: 'om-os' }]}
+    foto="hal-lys"
+  />
 
   <section class="sektion" aria-labelledby="vaerdi-titel">
     <div class="kolonne">
@@ -35,7 +32,8 @@ const vaerdier = [
       <ul class="fordele">
         {vaerdier.map((v) => (
           <li>
-            <h3 data-pladsholder={v.titel === firma.garanti ? '' : undefined}>{v.titel}</h3>
+            <Ikon navn="tjek" />
+            <h3>{v.titel === firma.garanti ? <span data-pladsholder>{v.titel}</span> : v.titel}</h3>
             <p>{v.tekst}</p>
           </li>
         ))}
@@ -43,11 +41,11 @@ const vaerdier = [
     </div>
   </section>
 
-  <section class="sektion" aria-labelledby="historie-titel">
+  <section class="sektion sektion-alt" aria-labelledby="historie-titel">
     <div class="kolonne om-grid">
       <div class="afsnit">
         <h2 id="historie-titel">Historien</h2>
-        <p data-pladsholder>Her skal ejerens egen historie stå: hvorfor han startede, hvad han har lavet før, og hvad han går op i. Kort og i hans egne ord.</p>
+        <p><span data-pladsholder>Her skal ejerens egen historie stå: hvorfor firmaet blev startet, hvad ejeren har lavet før, og hvad ejeren går op i. Kort og med ejerens egne ord.</span></p>
         <h2>Firmaoplysninger</h2>
         <p>{firma.juridiskNavn}<br>CVR {firma.cvr}<br><span data-pladsholder>{firma.adresse.vej}, {firma.adresse.postnr} {firma.adresse.by}</span></p>
       </div>

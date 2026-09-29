@@ -1,12 +1,20 @@
 # Silkeborg Epoxy · hjemmeside med prisberegner
 
-Udkast v0.6: komplet hjemmeside i [Astro](https://astro.build) med 28 statiske sider, heraf 5 guides under Viden. Prisberegneren stiller ét spørgsmål ad gangen og ligger på forsiden, prissiden, alle ydelser, alle bysider og alle guides. Leads går gennem en Netlify-funktion til Zapier/Make og Meta CAPI. Baggrund og research står i [PLAN.md](PLAN.md).
+Udkast v0.7: komplet hjemmeside i [Astro](https://astro.build) med 28 statiske sider, heraf 5 guides under Viden. Prisberegneren stiller ét spørgsmål ad gangen og ligger på forsiden, prissiden, alle ydelser, alle bysider og alle guides. Leads går gennem en Netlify-funktion til Zapier/Make og Meta CAPI. Baggrund og research står i [PLAN.md](PLAN.md).
 
 **Alle priser er pladsholdere.** Siden kører i "kladde"-tilstand: tekster og tal, der skal bekræftes af kunden, er markeret med gult, og alle sider har `noindex`.
 
 **Billederne er pladsholdere.** I beregneren er ni billeder AI-genererede (Canva) og fire stillbilleder fra kundens egen video. Fotoene på siderne er stillbilleder fra videoen. De skal skiftes til kundens egne billeder af færdige gulve før launch.
 
-**Designretning (aftalt i v0.3):** lyst og enkelt, beregneren øverst på alle salgssider, rigtige fotos, få sektioner og ingen kasser. Ingen mørke sektioner midt på siden, ingen mono-/nummer-labels og ingen gulve tegnet med kode. Den eneste mørke flade er afslutningen med et foto fra et job.
+**Stilarter (v0.7):** Sitet er bygget efter samme opskrift som ejerens referencer (vestbjergepoxygulve.dk og viborg-design.dk): tillid øverst, fluebensliste, telefonen som rund knap, én stærk farve og rigtige fotos. Det findes i tre stilarter med samme indhold:
+
+| Stil | Udtryk | Skrift |
+|---|---|---|
+| A · Blå | Marineblå og klar blå, tættest på Vestbjerg | Red Hat Display + Red Hat Text |
+| B · Grøn | Hvid, dyb grøn og beige, tættest på Viborg Design | Lexend |
+| C · Egen (standard) | Antracit som et gulv, ravgul som epoxy, sand | Manrope |
+
+C er standard, fordi den ikke kan forveksles med Vestbjerg, der også holder til i Silkeborg. Stilen vælges med `stil` i `src/data/firma.js`. I kladden kan man skifte med knapperne i den gule bjælke øverst eller med `?stil=A` i adressen. Valget huskes i browseren. Videoen fra et job er levende baggrund i toppen af forsiden, prissiden og bysiderne. Ydelserne har et foto af gulvtypen eller rummet i stedet.
 
 ## Kom i gang
 
@@ -39,24 +47,25 @@ En ny ydelse eller by er en ny post i data-filen. Siden, menuen, footeren og sit
 |---|---|
 | Priser, opstart, minimumspris, tilvalg, tider, zone, hurtigvalg for størrelse | `src/calculator/pricing.config.js` (alt ekskl. moms) |
 | Kundens rigtige tilbud til kalibrering | `src/calculator/calibration.cases.js` |
-| Telefon, mail, adresse, garanti, svartid, kladde-tilstand | `src/data/firma.js` |
+| Telefon, mail, adresse, garanti, svartid, kladde-tilstand, stilart, anmeldelser | `src/data/firma.js` |
 | Tekster, fordele og spørgsmål pr. ydelse | `src/data/ydelser.js` |
 | Byer, afstande og lokale tekster | `src/data/byer.js` |
 | Generelle spørgsmål | `src/data/faq.js` |
-| Guides (tekster, tabel, billede) | `src/data/viden.js` |
+| Guides (tekster og tabeller) | `src/data/viden.js` |
 | "Derfor vælger folk os" på forsiden | `loefter` øverst i `src/pages/index.astro` |
 | Referencer | `src/data/referencer.js` (pladsholdere) |
 | Domæne | `astro.config.mjs` (`site`) og `public/robots.txt` |
 | Billeder i beregneren | `src/media/valg/`, fx `rum-garage.webp`. Samme navn, 4:3 |
 | Fotos på siderne | `src/media/foto/`. Læg en ny fil med samme navn, så laver Astro selv de mindre størrelser. Referencernes fotos står i `src/data/referencer.js` |
 | Videoen | `src/media/arbejde.mp4`, `arbejde.webm` og stillbilledet `arbejde.jpg`, se herunder |
-| Farver, typografi, afstande | `src/styles/tokens.css` |
+| Farver, skrift og former pr. stilart | `src/styles/tokens.css` (A, B og C hver for sig) |
+| Toppen med video eller foto, flueben og beregneren | `src/components/Hero.astro` |
 
 Beregneren er testet, så intervallet altid dækker prisen for enhver måde at svare færdig på. Når kundens tilbud er lagt ind i `calibration.cases.js`, fejler `npm test`, hvis beregneren rammer ved siden af et tilbud. Prissidens tabel og eksempler og bysidernes eksempelpris regnes med samme motor, så tallene altid passer med beregneren.
 
 ### Video
 
-Videoen spiller uden lyd i loop og kun, mens den er på skærmen. Den hentes først, når den kommer i syne. Ved "reducer bevægelse" eller datasparetilstand vises stillbilledet i stedet. Skift den ved at lave nye filer med samme navne (1280 px bred, ingen lyd, gerne under 2 MB):
+Videoen spiller uden lyd i loop og kun, mens den er på skærmen. I toppen ligger et stillbillede (webp i flere størrelser) under videoen, og videoen toner frem, når den spiller. Den kan stoppes med knappen ved "Fra et af vores jobs". Ved "reducer bevægelse" eller datasparetilstand vises kun stillbilledet. Skift den ved at lave nye filer med samme navne (1280 px bred, ingen lyd, gerne under 2 MB):
 
 ```sh
 ffmpeg -i nyt-klip.mov -an -vf "fps=30,scale=1280:-2,format=yuv420p" -c:v libx264 -profile:v high -preset slow -crf 29 -movflags +faststart src/media/arbejde.mp4
@@ -82,20 +91,23 @@ Lighthouse (29.09.2026, produktionsbyg, mobil med simuleret 4G):
 
 | Side | Hastighed | Tilgængelighed | Best practices | SEO |
 |---|---|---|---|---|
-| Forside | 99 | 100 | 100 | 100 |
-| Garagegulv | 99 | 100 | 100 | 100 |
-| Pris | 99 | 100 | 100 | 100 |
-| Guide | 98 | 100 | 100 | 100 |
-| Epoxygulv Aarhus | 99 | 100 | 100 | 100 |
+| Side | Hastighed | Tilgængelighed | Best practices |
+|---|---|---|---|
+| Forside | 100 | 100 | 100 |
+| Garagegulv | 98 | 100 | 100 |
+| Pris | 99 | 100 | 100 |
+| Guide | 100 | 100 | 100 |
+| Epoxygulv Aarhus | 99 | 100 | 100 |
 
-Desktop: 100 på forsiden. Ingen layout-hop (CLS 0). SEO er målt uden kladde-tilstand. Med `kladde: true` giver `noindex` med vilje 69.
+Stil C. A og B giver også 100 i tilgængelighed og 99-100 i hastighed. Desktop: 100. Ingen layout-hop (CLS 0-0,001). SEO er 100 uden kladde-tilstand (målt på forsiden). Med `kladde: true` giver `noindex` med vilje 69.
 
-Det, der holder siden hurtig: CSS ligger direkte i HTML'en, skrifttypen hentes først (preload), billederne laves i flere størrelser som webp, og beregnerens valg bygges på serveren, så intet hopper, når JavaScript starter.
+Det, der holder siden hurtig: CSS ligger direkte i HTML'en, kun den valgte stilarts skrift hentes (preload), billederne laves i flere størrelser som webp, videoen hentes først, når siden er vist, og beregnerens valg bygges på serveren, så intet hopper, når JavaScript starter.
 
 ## URL-parametre
 
 - `?gulv=garage` / `kaelder` / `bolig` / `erhverv`: skifter overskriften på forsiden, vælger rummet og starter beregneren ved størrelsen. Brug én pr. annoncesæt.
 - `?kladde=0`: skjuler de gule pladsholder-markeringer, fx til skærmbilleder.
+- `?stil=A` / `B` / `C`: viser siden i en anden stilart (kun i kladden). Valget huskes, så man kan klikke rundt på sitet.
 
 ## Deploy på Netlify
 
@@ -128,7 +140,9 @@ Browserens tilbage-knap går ét spørgsmål tilbage i beregneren, så folk i Fa
 ## Før launch
 
 - [ ] Kundens priser i `pricing.config.js` og 5-10 tilbud i `calibration.cases.js` (`npm test` grøn)
+- [ ] Stilart valgt (`stil: 'A'`, `'B'` eller `'C'` i `src/data/firma.js`)
 - [ ] Telefon, mail, adresse, garanti, svartid og åbningstider i `src/data/firma.js`
+- [ ] Rigtige anmeldelser (`anmeldelser` i `src/data/firma.js`). Stjernerne i toppen vises først, når snit og antal står der
 - [ ] Ejerens navn, historie og foto på Om os
 - [ ] Kundens egne fotos i stedet for AI-billederne i `src/media/valg/` og videostillbillederne i `src/media/foto/`
 - [ ] Rigtige referencer i `src/data/referencer.js` og anmeldelser fra Trustpilot eller Google

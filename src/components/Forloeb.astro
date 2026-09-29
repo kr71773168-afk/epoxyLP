@@ -3,13 +3,18 @@ import { beregnPris } from '../calculator/engine.js';
 import cfg from '../calculator/pricing.config.js';
 import Foto from './Foto.astro';
 
+interface Props {
+  alt?: boolean;
+}
+const { alt = false } = Astro.props;
+
 // Eksemplet i trin 1 regnes med samme motor som beregneren (dobbelt garage, 36 m², flakes), så tallet passer med priserne
 const fmt = (n) => Math.round(n).toLocaleString('da-DK');
 const eks = beregnPris({ rum: 'garage', areal: 36, overflade: 'flakes', stand: 'paen', tilvalg: [], postnummer: '8600' }, cfg);
 const eksPris = eks.lav === eks.hoej ? `${fmt(eks.lav)} kr` : `${fmt(eks.lav)}–${fmt(eks.hoej)} kr`;
 const eksM2 = `ca. ${fmt((eks.lav + eks.hoej) / 2 / 36)} kr/m²`;
 ---
-<section class="sektion" aria-labelledby="forloeb-titel">
+<section class:list={['sektion', { 'sektion-alt': alt }]} aria-labelledby="forloeb-titel">
   <div class="kolonne">
     <h2 class="sektion-titel" id="forloeb-titel">Sådan foregår det</h2>
     <ol class="forloeb">

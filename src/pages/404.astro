@@ -1,15 +1,17 @@
 ---
+import SideBand from '../components/SideBand.astro';
 import YdelsesListe from '../components/YdelsesListe.astro';
 import { erhverv, privat } from '../data/ydelser.js';
 import Side from '../layouts/Side.astro';
 import { link } from '../lib/link.js';
 ---
 <Side titel="Siden findes ikke · Silkeborg Epoxy" beskrivelse="Siden findes ikke. Gå til forsiden eller se prisen på dit nye gulv." slug="404">
-  <section class="kolonne side-top">
-    <h1>Siden findes ikke</h1>
-    <p class="hero-sub">Måske er den flyttet. Prøv forsiden, eller se prisen på dit gulv.</p>
-    <p><a class="knap knap-stor" href={link('pris')}>Beregn pris <span aria-hidden="true">→</span></a> <a class="pil-link" href={link()}>Til forsiden</a></p>
-  </section>
+  <SideBand titel="Siden findes ikke" tekst="Måske er den flyttet. Prøv forsiden, eller se prisen på dit gulv.">
+    <div class="side-band-knapper">
+      <a class="knap knap-accent knap-stor" href={link('pris')}>Beregn pris <span aria-hidden="true">→</span></a>
+      <a class="knap knap-hvid knap-stor" href={link()}>Til forsiden</a>
+    </div>
+  </SideBand>
   <section class="sektion">
     <div class="kolonne"><YdelsesListe ydelser={[...privat, ...erhverv]} /></div>
   </section>
