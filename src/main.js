@@ -10,6 +10,7 @@ import { startBeregner } from './calculator/ui.js';
 import { startSamtykke } from './consent.js';
 import { startFoerEfter } from './effects/before-after.js';
 import { startNiveaulinjer } from './effects/level-lines.js';
+import { startScener } from './effects/scenes.js';
 import { startHero } from './hero.js';
 import { startLead } from './lead-form.js';
 import { track } from './tracking.js';
@@ -19,6 +20,7 @@ if (new URLSearchParams(window.location.search).get('kladde') === '0') {
   document.documentElement.classList.remove('kladde');
 }
 
+startScener();
 const samtykke = startSamtykke();
 const beregner = startBeregner();
 startHero({ beregner });

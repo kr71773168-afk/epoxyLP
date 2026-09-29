@@ -74,6 +74,8 @@ a:hover { text-decoration-color: var(--signal); text-decoration-thickness: 2px; 
   .cta:hover::after { animation: glansstrejf .9s var(--flyd) forwards; }
 }
 .cta:disabled { cursor: progress; opacity: .7; }
+.cta-stor { font-size: 1.12rem; padding: 1.15rem 1.6rem; }
+.cta:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 .knap-moerk {
   background: var(--ink); color: var(--bg); border: 0; border-radius: 0;
   padding: .75rem 1.15rem; font-stretch: 112%; cursor: pointer;
@@ -93,6 +95,6 @@ a:hover { text-decoration-color: var(--signal); text-decoration-thickness: 2px; 
 }
 .kladde .kladde-note { display: block; }
 .kladde [data-pladsholder] {
-  background-image: linear-gradient(transparent 62%, rgba(240, 180, 0, .45) 62%);
+  background-image: linear-gradient(transparent 62%, rgba(245, 184, 0, .5) 62%);
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }

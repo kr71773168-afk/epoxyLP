@@ -4,21 +4,31 @@ import { startSnit } from './section-view.js';
 import { forvarmPostnumre, slaaOpPostnummer } from './postnumre.js';
 import { Boelgelinje, reduceretBevaegelse } from '../effects/wave.js';
 import { startHaeld } from '../effects/pour.js';
-import { tegnProeve } from '../effects/materials.js';
+import { tegnProeve, tegnRumBillede, tegnStandBillede, tegnTilvalgBillede } from '../effects/materials.js';
 import { track } from '../tracking.js';
 
 const fmt = (n) => Math.round(n).toLocaleString('da-DK');
 const spaend = ([a, b]) => (Math.round(a) === Math.round(b) ? `${fmt(a)} kr` : `${fmt(a)}–${fmt(b)} kr`);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
-function opt({ type = 'radio', navn, vaerdi, titel, desk = '', meta = '', anbefaling = false, klasse = '' }) {
+/** Et valg som flise med billede af materialet, tydelig markering og et flueben, når det er valgt. */
+function flise({ type = 'radio', navn, vaerdi, titel, desk = '', meta = '', tegn, klasse = '' }) {
   const id = `${navn}-${vaerdi}`;
-  return `<label class="opt ${klasse}" for="${id}" data-vaerdi="${esc(vaerdi)}">
+  return `<label class="flise ${klasse}" for="${id}" data-vaerdi="${esc(vaerdi)}">
     <input type="${type}" name="${navn}" id="${id}" value="${esc(vaerdi)}">
-    <span class="ind" aria-hidden="true"></span>
-    <span class="opt-tekst"><span class="opt-navn">${esc(titel)}</span>${desk ? `<span class="opt-desk">${esc(desk)}</span>` : ''}${anbefaling ? '<span class="opt-anb"></span>' : ''}</span>
-    ${meta}
+    <canvas class="flise-billede" data-tegn="${tegn}" width="480" height="300" aria-hidden="true"></canvas>
+    <span class="flise-tekst"><span class="flise-anb"></span><span class="flise-navn">${esc(titel)}</span>${desk ? `<span class="flise-desk">${esc(desk)}</span>` : ''}${meta}</span>
+    <span class="flise-tjek" aria-hidden="true"></span>
   </label>`;
+}
+
+/** Tegner billedet på en flise ud fra data-tegn="gruppe:type". */
+export function tegnFliseBillede(canvas, hex) {
+  const [gruppe, type] = canvas.dataset.tegn.split(':');
+  if (gruppe === 'rum') tegnRumBillede(canvas, type);
+  else if (gruppe === 'stand') tegnStandBillede(canvas, type);
+  else if (gruppe === 'tilvalg') tegnTilvalgBillede(canvas, type, hex);
+  else if (gruppe === 'overflade') tegnProeve(canvas, type, hex);
 }
 
 /**
@@ -47,20 +57,20 @@ export function startBeregner() {
 
   /* ---------- valgmuligheder fra config ---------- */
   $('[data-valg="rum"]').innerHTML = Object.entries(cfg.rum)
-    .map(([k, r]) => opt({ navn: 'rum', vaerdi: k, titel: r.navn, desk: r.beskrivelse })).join('');
+    .map(([k, r]) => flise({ navn: 'rum', vaerdi: k, titel: r.navn, desk: r.beskrivelse, tegn: `rum:${k}` })).join('');
   $('[data-valg="overflade"]').innerHTML = Object.entries(cfg.overflader)
-    .map(([k, o]) => opt({
-      navn: 'overflade', vaerdi: k, titel: o.navn, desk: o.beskrivelse, anbefaling: true, klasse: 'ov',
-      meta: `<span class="opt-meta"><span class="opt-pris" data-pris-m2="${k}"></span><canvas class="swatch" data-type="${k}" width="128" height="80" aria-hidden="true"></canvas></span>`,
+    .map(([k, o]) => flise({
+      navn: 'overflade', vaerdi: k, titel: o.navn, desk: o.beskrivelse, tegn: `overflade:${k}`, klasse: 'ov',
+      meta: `<span class="flise-meta" data-pris-m2="${k}"></span>`,
     })).join('');
   $('[data-valg="stand"]').innerHTML = [
-    ...Object.entries(cfg.stand).map(([k, s]) => opt({ navn: 'stand', vaerdi: k, titel: s.navn, desk: s.beskrivelse })),
-    opt({ navn: 'stand', vaerdi: 'vedikke', titel: 'Ved ikke', desk: 'Vi kigger på det ved besigtigelsen' }),
+    ...Object.entries(cfg.stand).map(([k, st]) => flise({ navn: 'stand', vaerdi: k, titel: st.navn, desk: st.beskrivelse, tegn: `stand:${k}` })),
+    flise({ navn: 'stand', vaerdi: 'vedikke', titel: 'Ved ikke', desk: 'Vi kigger på det ved besigtigelsen', tegn: 'stand:vedikke' }),
   ].join('');
   $('[data-valg="tilvalg"]').innerHTML = Object.entries(cfg.tilvalg)
-    .map(([k, t]) => opt({
-      type: 'checkbox', navn: 'tilvalg', vaerdi: k, titel: t.navn, desk: t.beskrivelse,
-      meta: `<span class="opt-meta"><span class="opt-pris" data-tilvalg-pris="${k}"></span></span>`,
+    .map(([k, t]) => flise({
+      type: 'checkbox', navn: 'tilvalg', vaerdi: k, titel: t.navn, desk: t.beskrivelse, tegn: `tilvalg:${k}`,
+      meta: `<span class="flise-meta" data-tilvalg-pris="${k}"></span>`,
     })).join('');
   $('[data-valg="farve"]').innerHTML = cfg.farver
     .map((f) => `<label class="opt" for="farve-${f.kode}"><input type="radio" name="farve" id="farve-${f.kode}" value="${f.kode}"${f.kode === ekstra.farve ? ' checked' : ''}><span class="chip" style="--c:${f.hex}" aria-hidden="true"></span><span class="opt-navn">${esc(f.navn)} <span class="mono">${f.kode}</span></span></label>`)
@@ -75,9 +85,21 @@ export function startBeregner() {
     { el: document.querySelector('.bb-linje path'), w: 200, h: 16, k: 0.06, skala: 0.5 },
   ]);
 
+  const farveHex = () => cfg.farver.find((f) => f.kode === ekstra.farve)?.hex ?? '#9BA1A4';
+  // Fliserne med rum og stand tegnes én gang. Overflader og tilvalg følger den valgte farve.
+  $$('canvas[data-tegn^="rum:"], canvas[data-tegn^="stand:"]').forEach((c) => tegnFliseBillede(c));
   function tegnProever() {
-    const hex = cfg.farver.find((f) => f.kode === ekstra.farve)?.hex ?? '#9BA1A4';
-    $$('canvas.swatch').forEach((c) => tegnProeve(c, c.dataset.type, hex));
+    const hex = farveHex();
+    $$('canvas[data-tegn^="overflade:"], canvas[data-tegn^="tilvalg:"]').forEach((c) => tegnFliseBillede(c, hex));
+    const strimmel = $('#pb-proeve');
+    const farve = cfg.farver.find((f) => f.kode === ekstra.farve);
+    if (svar.overflade) {
+      tegnProeve(strimmel, svar.overflade, hex);
+      $('#pb-proeve-tekst').textContent = `${cfg.overflader[svar.overflade].navn} · ${farve.navn} ${farve.kode}`;
+    } else {
+      tegnStandBillede(strimmel, 'paen');
+      $('#pb-proeve-tekst').textContent = 'Dit gulv · vælg overflade';
+    }
   }
 
   /* ---------- trin ---------- */
@@ -94,6 +116,9 @@ export function startBeregner() {
   }
 
   function renderTrin() {
+    const nr = aktivt ? TRIN.indexOf(aktivt) + 1 : TRIN.length;
+    document.getElementById('fremdrift-tekst').textContent = aktivt ? `Trin ${nr} af ${TRIN.length}` : 'Alle trin besvaret';
+    document.getElementById('fremdrift-fyld').style.width = `${(besvaret.size / TRIN.length) * 100}%`;
     for (const li of $$('.trin', form)) {
       const t = li.dataset.trin;
       const erAktiv = t === aktivt;
@@ -174,14 +199,18 @@ export function startBeregner() {
   /* ---------- areal ---------- */
   const arealTal = $('#areal-tal');
   const arealLineal = $('#areal-lineal');
+  // Feltet følger tallets bredde, så "m²" står lige efter tallet
+  const tilpasTal = () => { arealTal.style.width = `${Math.max(2, arealTal.value.length) + 0.3}ch`; };
   function visAreal(v) {
     arealTal.value = String(v);
     arealLineal.value = String(Math.min(250, Math.max(10, v)));
+    tilpasTal();
   }
   function saetAreal(v, { fraTal = false } = {}) {
+    if (Number.isFinite(v) && !fraTal) arealTal.value = String(Math.round(v));
+    tilpasTal();
     if (!Number.isFinite(v)) return;
     const m2 = Math.round(v);
-    if (!fraTal) arealTal.value = String(m2);
     arealLineal.value = String(Math.min(250, Math.max(10, m2)));
     if (m2 >= cfg.minM2) {
       svar.areal = m2;
@@ -192,6 +221,7 @@ export function startBeregner() {
   arealLineal.addEventListener('input', () => saetAreal(Number(arealLineal.value)));
   arealLineal.addEventListener('change', () => opdater());
   arealTal.addEventListener('input', () => saetAreal(parseInt(arealTal.value, 10), { fraTal: true }));
+  tilpasTal();
   $$('.genveje [data-m2]').forEach((b) => b.addEventListener('click', () => {
     saetAreal(Number(b.dataset.m2));
     besvar('areal');
@@ -263,6 +293,7 @@ export function startBeregner() {
       svar[t.name] = t.value;
       haeld.marker($$(`input[name="${t.name}"]`, form));
       if (t.name === 'rum' && svar.areal === null) visAreal(cfg.rum[t.value].standardAreal);
+      if (t.name === 'overflade') tegnProever();
       hint(t.name, '');
       opdater();
       if (haeld.fraPointer()) autoVidere(t.name);
@@ -351,18 +382,18 @@ export function startBeregner() {
     }
 
     for (const el of $$('[data-pris-m2]')) {
-      el.textContent = `${fmt(cfg.overflader[el.dataset.prisM2].prisPrM2 * momsFaktor)} kr/m²`;
+      el.textContent = `fra ${fmt(cfg.overflader[el.dataset.prisM2].prisPrM2 * momsFaktor)} kr/m²`;
     }
     const anbefalet = cfg.rum[svar.rum]?.anbefalet;
-    for (const el of $$('.opt.ov')) {
+    for (const el of $$('.flise.ov')) {
       const erAnb = anbefalet === el.dataset.vaerdi;
       el.classList.toggle('anbefalet', erAnb);
-      if (erAnb) el.querySelector('.opt-anb').textContent = `Anbefalet til ${cfg.rum[svar.rum].navn.toLowerCase()}`;
+      if (erAnb) el.querySelector('.flise-anb').textContent = `Anbefalet til ${cfg.rum[svar.rum].navn.toLowerCase()}`;
     }
     const areal = svar.areal ?? (Number(arealTal.value) || 36);
     const lbm = estimerLbm(areal, svar.rum, cfg);
     for (const el of $$('[data-tilvalg-pris]')) {
-      el.textContent = `ca. ${fmt(tilvalgPris(cfg.tilvalg[el.dataset.tilvalgPris], areal, lbm) * momsFaktor)} kr`;
+      el.textContent = `+ ca. ${fmt(tilvalgPris(cfg.tilvalg[el.dataset.tilvalgPris], areal, lbm) * momsFaktor)} kr til dit gulv`;
     }
 
     snit.opdater({ ...svar, farve: ekstra.farve }, r);

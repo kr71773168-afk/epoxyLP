@@ -25,9 +25,22 @@ I `npm run dev` er `VITE_DEMO=1` slået til (`.env.development`). Tak-skærmen v
 | Overskrifter pr. annonce (`?gulv=`) | `src/hero.js` |
 | Farver, typografi, afstande | `src/styles/tokens.css` |
 | Før/efter-billeder | `index.html`, sektionen `#foer-efter`: skift de to `<canvas>` til `<img class="fe-foer">` og `<img class="fe-efter">` |
+| Video bag hero og afslutning | `src/media/arbejde.mp4`, `arbejde.webm` og stillbilledet `arbejde.jpg`, se herunder |
 | Privatlivspolitik | `privatliv.html` |
 
 Beregneren er testet, så intervallet altid dækker prisen for enhver måde at svare færdig på. Når kundens tilbud er lagt ind i `calibration.cases.js`, fejler `npm test`, hvis beregneren rammer ved siden af et tilbud.
+
+### Video
+
+Videoen spiller uden lyd i loop og kun, mens den er på skærmen. Ved "reducer bevægelse" eller datasparetilstand vises stillbilledet i stedet. Skift den ved at lave nye filer med samme navne (1280 px bred, ingen lyd, gerne under 2 MB):
+
+```sh
+ffmpeg -i nyt-klip.mov -an -vf "fps=30,scale=1280:-2,format=yuv420p" -c:v libx264 -profile:v high -preset slow -crf 29 -movflags +faststart src/media/arbejde.mp4
+ffmpeg -i nyt-klip.mov -an -vf "fps=30,scale=1280:-2,format=yuv420p" -c:v libvpx-vp9 -b:v 0 -crf 46 -row-mt 1 src/media/arbejde.webm
+ffmpeg -i nyt-klip.mov -frames:v 1 -vf "scale=1280:-2" -q:v 5 src/media/arbejde.jpg
+```
+
+Stillbilledet skal være første billede i klippet, så der ikke er et hop, når videoen starter.
 
 ## URL-parametre
 

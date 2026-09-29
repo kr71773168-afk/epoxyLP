@@ -4,7 +4,7 @@ import { reduceretBevaegelse } from './wave.js';
  * Hæld-effekten: når man vælger en mulighed, flyder farven ud fra det sted,
  * man trykkede. Med tastatur flyder den fra venstre.
  */
-export function startHaeld(rod, vaelger = '.opt, .hv') {
+export function startHaeld(rod, vaelger = '.opt, .flise') {
   const reduce = reduceretBevaegelse();
   let punkt = null;
   let sidstePointer = -Infinity;
@@ -21,15 +21,6 @@ export function startHaeld(rod, vaelger = '.opt, .hv') {
     sidstePointer = performance.now();
     sidsteType = e.pointerType;
     punkt = maal(e);
-  }, { passive: true });
-
-  // Hero-valgene viser en lille dråbe under markøren, før man trykker
-  rod.addEventListener('pointermove', (e) => {
-    if (e.pointerType !== 'mouse') return;
-    const p = maal(e);
-    if (!p || !p.el.classList.contains('hv') || p.el.classList.contains('er-valgt')) return;
-    p.el.style.setProperty('--x', p.x.toFixed(1) + '%');
-    p.el.style.setProperty('--y', p.y.toFixed(1) + '%');
   }, { passive: true });
 
   function haeld(el) {

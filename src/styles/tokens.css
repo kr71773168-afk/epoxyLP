@@ -1,31 +1,29 @@
 /*
- * "Fugefri": siden er bygget som et epoxygulv. Én flade uden kasser, helt plan,
- * ét blankt lag. Farverne er materialerne: betongrå, antracit og signalgul.
- * Signalgul bruges kun på det, man trykker på.
+ * Silkeborg Epoxy · v0.2 "Showroom"
+ * Mørke, blanke flader (som et nyt antracit-gulv) skifter med lys beton.
+ * Materialet selv er billedsproget: flakes, metallic, beton og blank toplak.
+ * Signalgul, som afmærkningen på et værkstedsgulv, markerer det, man skal gøre.
+ *
+ * Komponenter bruger kun tokens. .moerk og .lys skifter tokens for et helt område.
  */
 :root {
   color-scheme: light;
 
-  --bg: #E5E6E2;           /* beton, i familie med RAL 7035 */
-  --flade: #D7D9D4;        /* valgt tilstand, prøveflader */
-  --ink: #24282B;          /* antracit, i familie med RAL 7016 */
-  --ink-2: #5C6266;        /* grafit, sekundær tekst */
-  --linje: rgba(36, 40, 43, .22);
-  --linje-svag: rgba(36, 40, 43, .1);
-  --signal: #F0B400;       /* signalgul, i familie med RAL 1003 */
-  --signal-ink: #24282B;
+  --bg: #E5E6E2;           /* beton */
+  --flade: #D7D9D4;
+  --flade-lys: #EFEFEC;
+  --flade-hvid: #FAFAF7;
+  --ink: #1B1E21;          /* antracit */
+  --ink-2: #5A6064;
+  --linje: rgba(27, 30, 33, .18);
+  --linje-svag: rgba(27, 30, 33, .09);
+  --signal: #F5B800;       /* signalgul */
+  --signal-ink: #16181A;
   --glans: rgba(255, 255, 255, .75);
   --fejl: #A1361F;
+  --skygge: 0 18px 50px rgba(10, 12, 14, .18);
 
-  --moerk: #1F2225;        /* mørk flade til afslutningen */
-  --moerk-ink: #E4E5E1;
-  --moerk-ink-2: #A3A9AC;
-  --moerk-linje: rgba(228, 229, 225, .2);
-
-  --gulv-top: #DADCD7;
-  --gulv-bund: #C9CCC6;
-
-  /* materialer i snittet og før/efter */
+  /* materialer i snittet, før/efter og prøverne */
   --mat-beton: #8E918C;
   --mat-tilslag: #6E716C;
   --mat-tilslag-lys: #A9ACA6;
@@ -41,15 +39,45 @@
   --f-tekst: "Archivo Variable", "Archivo", "Helvetica Neue", Arial, sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-  --t-hero: clamp(2rem, 5.4vw, 4.5rem);
-  --t-h2: clamp(1.7rem, 3.3vw, 2.7rem);
+  --t-hero: clamp(2.3rem, 4.6vw, 4.4rem);
+  --t-h2: clamp(1.9rem, 3.8vw, 3.3rem);
   --t-h3: 1.25rem;
   --t-tekst: 1.0625rem;
   --t-lille: .9375rem;
   --t-label: .75rem;
 
   --gutter: clamp(16px, 4vw, 48px);
-  --maks: 1200px;
-  --rail: 10.5rem;
+  --maks: 1240px;
   --flyd: cubic-bezier(.22, .8, .26, 1);
+}
+
+/* Mørkt område: hero, prisbord, før/efter, ejer, afslutning, footer */
+.moerk {
+  --bg: #111315;
+  --flade: #1D2124;
+  --flade-lys: #24292C;
+  --flade-hvid: #2B3034;
+  --ink: #F1F2EE;
+  --ink-2: #A7ADB0;
+  --linje: rgba(241, 242, 238, .17);
+  --linje-svag: rgba(241, 242, 238, .08);
+  --glans: rgba(255, 255, 255, .16);
+  --fejl: #FF9B82;
+  --skygge: 0 24px 70px rgba(0, 0, 0, .5);
+  color: var(--ink);
+}
+
+/* Lyst område inde i et mørkt, fx startpanelet i hero og cookie-banneret */
+.lys {
+  --bg: #EDEDEA;
+  --flade: #DCDDD9;
+  --flade-lys: #F4F4F1;
+  --flade-hvid: #FFFFFD;
+  --ink: #1B1E21;
+  --ink-2: #5A6064;
+  --linje: rgba(27, 30, 33, .18);
+  --linje-svag: rgba(27, 30, 33, .09);
+  --glans: rgba(255, 255, 255, .75);
+  --fejl: #A1361F;
+  color: var(--ink);
 }
