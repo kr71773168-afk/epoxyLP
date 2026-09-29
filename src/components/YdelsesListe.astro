@@ -1,10 +1,11 @@
 ---
 /**
- * Ydelser som en enkel liste: navn, kort tekst og fra-pris.
- * Bevidst uden billeder og kasser, så listen ikke ligner valgene i beregneren.
+ * Ydelser som kort: ikon (rum) eller et lille foto (gulvtype), navn, kort tekst og fra-pris.
  */
 import cfg from '../calculator/pricing.config.js';
 import { link } from '../lib/link.js';
+import Foto from './Foto.astro';
+import Ikon from './Ikon.astro';
 
 interface Props {
   ydelser: any[];
@@ -23,6 +24,9 @@ function fraPris(y) {
   {ydelser.map((y) => (
     <li>
       <a href={link(y.slug)}>
+        {y.overflade
+          ? <Foto navn={`gulv-${y.overflade}`} alt="" class="yl-foto" sizes="96px" />
+          : <span class="yl-ikon"><Ikon navn={y.rum} /></span>}
         <span class="yl-navn">{y.navn}</span>
         <span class="yl-desk">{y.kort}</span>
         <span class="yl-pris">{fraPris(y)}</span>

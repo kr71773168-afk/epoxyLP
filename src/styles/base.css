@@ -1,6 +1,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + .75rem); }
+@media (max-width: 560px) { :root { --header-h: 4rem; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
@@ -81,30 +82,44 @@ a:hover { text-decoration-color: currentColor; }
 .stjerner { display: inline-flex; gap: 2px; color: var(--stjerne); }
 .stjerner svg { width: 1.05rem; height: 1.05rem; fill: currentColor; }
 
-/* ---------- kladde: pladsholdere markeres, og stilen kan skiftes ---------- */
-.kladde-bjaelke { display: none; }
-.kladde .kladde-bjaelke {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .35rem 1.25rem;
-  padding: .4rem var(--gutter); background: var(--kladde); color: #1A1A1A;
-  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: .8rem; font-weight: 500; line-height: 1.3;
+/* ---------- kladde: lille knap i hjørnet med stilart og pladsholdere ---------- */
+.kladde-panel { display: none; }
+.kladde .kladde-panel {
+  display: block; position: fixed; z-index: 45; left: .75rem; bottom: calc(.75rem + env(safe-area-inset-bottom));
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: .8rem; line-height: 1.3; color: #1A1A1A;
 }
-.kladde-bjaelke p { margin: 0; }
-.stilvaelger { display: flex; align-items: center; gap: .3rem; }
-.stilvaelger-titel { margin-right: .2rem; }
-.stilvaelger button {
-  border: 1px solid rgba(0, 0, 0, .35); background: rgba(255, 255, 255, .55); color: #1A1A1A; border-radius: 999px;
-  padding: .22rem .7rem; font-size: .78rem; font-weight: 600; cursor: pointer;
+.kladde-fane {
+  display: inline-flex; align-items: center; gap: .4rem; padding: .4rem .75rem; border: 0; border-radius: 999px;
+  background: #1A1A1A; color: #fff; font: inherit; font-weight: 600; cursor: pointer; box-shadow: 0 6px 20px -8px rgba(0, 0, 0, .5);
 }
-.stilvaelger button[aria-pressed="true"] { background: #1A1A1A; border-color: #1A1A1A; color: #fff; }
+.kladde-prik { width: .5rem; height: .5rem; border-radius: 50%; background: var(--kladde); }
+.kladde-indhold {
+  position: absolute; left: 0; bottom: calc(100% + .5rem); width: 15.5rem; padding: .85rem .9rem .9rem;
+  background: #fff; border: 1px solid rgba(0, 0, 0, .12); border-radius: 12px; box-shadow: 0 18px 40px -18px rgba(0, 0, 0, .45);
+}
+.kladde-tekst { margin: 0 0 .7rem; color: #555; }
+.kladde-titel { margin: 0 0 .35rem; font-weight: 600; }
+.stilvaelger { display: flex; flex-wrap: wrap; gap: .3rem; margin-bottom: .7rem; }
+.stilvaelger button, .kladde-knap {
+  border: 1px solid rgba(0, 0, 0, .25); background: #fff; color: #1A1A1A; border-radius: 999px;
+  padding: .3rem .7rem; font: inherit; font-size: .78rem; font-weight: 600; cursor: pointer;
+}
+.stilvaelger button[aria-pressed="true"], .kladde-knap[aria-pressed="true"] { background: #1A1A1A; border-color: #1A1A1A; color: #fff; }
+/* På mobil kun en lille prik, så den ikke dækker indholdet */
+@media (max-width: 900px) {
+  .kladde .kladde-panel { bottom: calc(5.1rem + env(safe-area-inset-bottom)); left: .5rem; }
+  .kladde-fane { width: 2rem; height: 2rem; padding: 0; justify-content: center; font-size: 0; opacity: .85; }
+  .kladde-fane .kladde-prik { width: .6rem; height: .6rem; }
+}
+.menu-aaben .kladde-panel { display: none !important; }
 html:not(.kladde) [data-kun-kladde] { display: none !important; }
+/* Stjernerne er en pladsholder, indtil der er rigtige anmeldelser. De vises kun, når pladsholderne er slået til. */
+.kladde:not(.vis-pladsholdere) .hero-rating[data-kun-kladde] { display: none; }
+/* Afsnit, der kun er en pladsholder (fx anmeldelser, før der er nogen) */
+.kun-pladsholder { display: none; }
+.vis-pladsholdere .kun-pladsholder { display: block; }
 .vis-pladsholdere [data-pladsholder] {
   background: rgba(255, 216, 77, .28); border-radius: 3px;
   outline: 1.5px dashed #E0A800; outline-offset: 1px;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
-.kladde-knap {
-  border: 1px solid rgba(0, 0, 0, .35); background: rgba(255, 255, 255, .55); color: #1A1A1A; border-radius: 999px;
-  padding: .22rem .7rem; font-size: .78rem; font-weight: 600; cursor: pointer; margin-left: auto;
-}
-.kladde-knap[aria-pressed="true"] { background: #1A1A1A; border-color: #1A1A1A; color: #fff; }
-@media (max-width: 640px) { .kladde-tekst-lang { display: none; } }

@@ -10,6 +10,19 @@ if (new URLSearchParams(window.location.search).get('kladde') === '0') {
 startSamtykke();
 startVideo();
 
+/* ---------- kladde: panelet i hjørnet ---------- */
+const kladdeFane = document.querySelector('.kladde-fane');
+const kladdeIndhold = document.getElementById('kladde-indhold');
+if (kladdeFane && kladdeIndhold) {
+  const saetAaben = (aaben) => {
+    kladdeIndhold.hidden = !aaben;
+    kladdeFane.setAttribute('aria-expanded', String(aaben));
+  };
+  kladdeFane.addEventListener('click', () => saetAaben(kladdeIndhold.hidden));
+  document.addEventListener('click', (e) => { if (!e.target.closest('.kladde-panel')) saetAaben(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') saetAaben(false); });
+}
+
 /* ---------- kladde: skift stilart (A, B, C) ---------- */
 const stilKnapper = Array.from(document.querySelectorAll('[data-stil-knap]'));
 const markerStil = () => {
@@ -20,19 +33,6 @@ stilKnapper.forEach((k) => k.addEventListener('click', () => {
   document.documentElement.dataset.stil = k.dataset.stilKnap;
   try { localStorage.setItem('se-stil', k.dataset.stilKnap); } catch { /* privat browsing */ }
   markerStil();
-
-/* ---------- kladde: vis eller skjul pladsholderne ---------- */
-const pladsholderKnap = document.querySelector('[data-pladsholder-knap]');
-if (pladsholderKnap) {
-  const rod = document.documentElement;
-  const marker = () => pladsholderKnap.setAttribute('aria-pressed', String(rod.classList.contains('vis-pladsholdere')));
-  pladsholderKnap.addEventListener('click', () => {
-    const vis = rod.classList.toggle('vis-pladsholdere');
-    try { localStorage.setItem('se-pladsholdere', vis ? '1' : '0'); } catch { /* privat browsing */ }
-    marker();
-  });
-  marker();
-}
 }));
 markerStil();
 
@@ -52,6 +52,12 @@ if (pladsholderKnap) {
 document.addEventListener('click', (e) => {
   if (e.target.closest('a[href^="tel:"]')) track('Contact', { kilde: 'telefon' });
 });
+
+/* ---------- header med skygge, når siden er rullet ---------- */
+const hoved = document.querySelector('.top');
+const markerRul = () => hoved?.classList.toggle('er-rullet', window.scrollY > 8);
+window.addEventListener('scroll', markerRul, { passive: true });
+markerRul();
 
 /* ---------- menu ---------- */
 const menuKnap = document.querySelector('.menu-knap');

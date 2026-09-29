@@ -99,18 +99,6 @@ const virksomhed = {
   </head>
   <body>
     <a class="spring" href="#indhold">Spring til indholdet</a>
-    {firma.kladde && (
-      <div class="kladde-bjaelke">
-        <p>Kladde<span class="kladde-tekst-lang"> · priser, tekster og billeder er ikke endelige</span></p>
-        <button type="button" class="kladde-knap" data-pladsholder-knap aria-pressed="false">Vis pladsholdere</button>
-        <div class="stilvaelger" role="group" aria-label="Vælg stilart">
-          <span class="stilvaelger-titel">Stil:</span>
-          <button type="button" data-stil-knap="A" aria-pressed="false">A · Blå</button>
-          <button type="button" data-stil-knap="B" aria-pressed="false">B · Grøn</button>
-          <button type="button" data-stil-knap="C" aria-pressed="false">C · Egen</button>
-        </div>
-      </div>
-    )}
     <Header aktiv={slug} />
     <main id="indhold">
       <slot />
@@ -126,6 +114,22 @@ const virksomhed = {
       </div>
       <a class="samtykke-link" href={link('privatliv', '#cookies')}>Læs mere</a>
     </div>
+
+    {firma.kladde && (
+      <div class="kladde-panel">
+        <button type="button" class="kladde-fane" aria-expanded="false" aria-controls="kladde-indhold"><span class="kladde-prik" aria-hidden="true"></span>Kladde</button>
+        <div class="kladde-indhold" id="kladde-indhold" hidden>
+          <p class="kladde-tekst">Priser, tekster og billeder er ikke endelige.</p>
+          <p class="kladde-titel">Stilart</p>
+          <div class="stilvaelger" role="group" aria-label="Vælg stilart">
+            <button type="button" data-stil-knap="A" aria-pressed="false">A · Blå</button>
+            <button type="button" data-stil-knap="B" aria-pressed="false">B · Grøn</button>
+            <button type="button" data-stil-knap="C" aria-pressed="false">C · Egen</button>
+          </div>
+          <button type="button" class="kladde-knap" data-pladsholder-knap aria-pressed="false">Vis pladsholdere</button>
+        </div>
+      </div>
+    )}
 
     <script>
       import '../scripts/side.js';

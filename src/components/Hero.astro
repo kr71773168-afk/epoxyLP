@@ -6,6 +6,7 @@
  * Skriv [ord] i titlen for at fremhæve dem, fx "Epoxygulve i Silkeborg. [Se prisen på 60 sekunder.]"
  * `punkter` er korte løfter med flueben. De må indeholde HTML (fx en pladsholder).
  * Slot "top" er til brødkrummer. Standard-slot kommer under teksten (fx fakta om byen).
+ * På mobil står beregneren lige under overskriften (over folden). Flueben og knapper kommer efter beregneren.
  */
 import { Image } from 'astro:assets';
 import { firma } from '../data/firma.js';
@@ -71,6 +72,9 @@ const garanti = firma.garanti.replace(/ garanti$/, '');
     <h1 id="hero-titel" data-hero-titel={annonceTitel ? '' : undefined} set:html={titelHtml} />
     {tekst && <p class="hero-sub">{tekst}</p>}
     <slot />
+  </div>
+
+  <div class="hero-ekstra">
     {punkter.length > 0 && (
       <ul class="tjekliste hero-punkter">
         {punkter.map((p) => <li><Ikon navn="tjek" /><span set:html={p} /></li>)}
@@ -88,10 +92,10 @@ const garanti = firma.garanti.replace(/ garanti$/, '');
 
   {bjaelke && (
     <ul class="hero-bjaelke">
-      <li><b>60 sek.</b><span>til en pris</span></li>
-      <li><b>Fast pris</b><span>på skrift</span></li>
-      <li><b><span data-pladsholder>{garanti}</span></b><span>garanti</span></li>
-      <li><b>60 km</b><span>kørsel med i prisen</span></li>
+      <li><Ikon navn="ur" /><b>60 sek.</b><span>til en pris</span></li>
+      <li><Ikon navn="kontrakt" /><b>Fast pris</b><span>på skrift</span></li>
+      <li><Ikon navn="skjold" /><b><span data-pladsholder>{garanti}</span></b><span>garanti</span></li>
+      <li><Ikon navn="sted" /><b>60 km</b><span>kørsel med i prisen</span></li>
     </ul>
   )}
 </section>

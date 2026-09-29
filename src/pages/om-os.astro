@@ -6,6 +6,8 @@ import Video from '../components/Video.astro';
 import { firma } from '../data/firma.js';
 import Side from '../layouts/Side.astro';
 
+// Ejerens navn står i firma.js. Indtil det er udfyldt, nævnes ejeren uden navn.
+const harEjer = !firma.ejer.startsWith('[');
 const vaerdier = [
   { titel: 'Du har ejerens nummer', tekst: 'Det er ejeren, der kommer ud og måler op, og som er der, når gulvet bliver lagt. Du skal ikke ringe ind til et callcenter.' },
   { titel: 'Fast pris på skrift', tekst: 'Efter besigtigelsen får du en fast pris. Den ændrer sig ikke undervejs, heller ikke hvis arbejdet tager længere tid.' },
@@ -21,7 +23,7 @@ const vaerdier = [
   <SideBand
     over="Om os"
     titel="Et lokalt firma, der [står inde for sine gulve]"
-    tekst={`<span data-pladsholder>Silkeborg Epoxy er startet af ${firma.ejer}, der har lagt gulve i [X] år.</span> Vi er et lille firma, og det er ejeren selv, der kommer ud til dig.`}
+    tekst={`${harEjer ? `<span data-pladsholder>Silkeborg Epoxy er startet af ${firma.ejer}.</span> ` : ''}Vi er et lille, lokalt firma, og det er ejeren selv, der kommer ud til dig, måler op og lægger gulvet.`}
     sti={[{ navn: 'Om os', slug: 'om-os' }]}
     foto="hal-lys"
   />
@@ -45,7 +47,7 @@ const vaerdier = [
     <div class="kolonne om-grid">
       <div class="afsnit">
         <h2 id="historie-titel">Historien</h2>
-        <p><span data-pladsholder>Her skal ejerens egen historie stå: hvorfor firmaet blev startet, hvad ejeren har lavet før, og hvad ejeren går op i. Kort og med ejerens egne ord.</span></p>
+        <p><span data-pladsholder>Silkeborg Epoxy er startet for at gøre det nemt at få et godt gulv: en ærlig pris med det samme, én person at tale med hele vejen og et gulv, der holder i mange år. Vi lægger epoxygulve i garager, kældre, boliger og erhverv i Silkeborg og 60 km omkring.</span></p>
         <h2>Firmaoplysninger</h2>
         <p>{firma.juridiskNavn}<br>CVR {firma.cvr}<br><span data-pladsholder>{firma.adresse.vej}, {firma.adresse.postnr} {firma.adresse.by}</span></p>
       </div>

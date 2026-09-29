@@ -9,6 +9,7 @@ import FAQ from '../components/FAQ.astro';
 import Forloeb from '../components/Forloeb.astro';
 import Hero from '../components/Hero.astro';
 import Ikon from '../components/Ikon.astro';
+import MedIPrisen from '../components/MedIPrisen.astro';
 import Slut from '../components/Slut.astro';
 import YdelsesListe from '../components/YdelsesListe.astro';
 import { firma } from '../data/firma.js';
@@ -86,9 +87,10 @@ const service = {
     </div>
   </section>
 
-  <FAQ items={y.faq} titel={`Spørgsmål om ${y.navn.toLowerCase()}`} alt />
+  <MedIPrisen alt />
+  <FAQ items={y.faq} titel={`Spørgsmål om ${y.navn.toLowerCase()}`} />
 
-  <section class="sektion" aria-labelledby="se-ogsaa">
+  <section class="sektion sektion-alt" aria-labelledby="se-ogsaa">
     <div class="kolonne">
       <h2 class="sektion-titel" id="se-ogsaa">Se også</h2>
       <YdelsesListe ydelser={relaterede} />

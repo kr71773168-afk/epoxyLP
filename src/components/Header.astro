@@ -4,6 +4,7 @@ import { guides } from '../data/viden.js';
 import { gulvtyper, privat } from '../data/ydelser.js';
 import { link } from '../lib/link.js';
 import Ikon from './Ikon.astro';
+import Logo from './Logo.astro';
 
 const { aktiv: side = '' } = Astro.props;
 // Guides hører under Viden i menuen
@@ -29,10 +30,7 @@ const gruppeAktiv = (punkter) => punkter.some((p) => p.slug === aktiv);
 </div>
 <header class="top">
   <div class="kolonne top-indre">
-    <a class="logo" href={link()} aria-label={`${firma.navn}, til forsiden`}>
-      <span class="logo-maerke" aria-hidden="true"></span>
-      <span class="logo-tekst"><span class="logo-1">Silkeborg</span> <span class="logo-2">Epoxy</span></span>
-    </a>
+    <Logo />
 
     <nav class="nav" aria-label="Hovedmenu">
       <ul class="nav-liste">

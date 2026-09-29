@@ -2,6 +2,7 @@
 import { beregnPris } from '../calculator/engine.js';
 import cfg from '../calculator/pricing.config.js';
 import Foto from './Foto.astro';
+import Ikon from './Ikon.astro';
 
 interface Props {
   alt?: boolean;
@@ -29,18 +30,21 @@ const eksM2 = `ca. ${fmt((eks.lav + eks.hoej) / 2 / 36)} kr/m²`;
         <span class="forloeb-nr" aria-hidden="true">1</span>
         <h3>Se prisen her</h3>
         <p>Seks spørgsmål, et minut. Du får et prisinterval med det samme.</p>
+        <p class="forloeb-tid"><Ikon navn="ur" />Ca. 1 minut</p>
       </li>
       <li>
         <Foto navn="beton" alt="Et betongulv, før vi går i gang" class="forloeb-billede" sizes="(max-width: 760px) 100vw, 33vw" />
         <span class="forloeb-nr" aria-hidden="true">2</span>
         <h3>Gratis besigtigelse</h3>
         <p>Vi kommer ud, måler op og tjekker fugten i betonen. Så får du en fast pris på skrift.</p>
+        <p class="forloeb-tid"><Ikon navn="kontrakt" />Fast pris på skrift</p>
       </li>
       <li>
         <Foto navn="haelder" alt="Vi hælder epoxy op til gulvet" class="forloeb-billede" sizes="(max-width: 760px) 100vw, 33vw" />
         <span class="forloeb-nr" aria-hidden="true">3</span>
         <h3>Vi lægger gulvet</h3>
-        <p><span data-pladsholder>{cfg.tid.arbejdsdage}</span>. <span data-pladsholder>{cfg.tid.gaaPaa}</span>. <span data-pladsholder>{cfg.tid.koerPaa}</span>.</p>
+        <p><span data-pladsholder>{cfg.tid.gaaPaa}</span>. <span data-pladsholder>{cfg.tid.koerPaa}</span>.</p>
+        <p class="forloeb-tid"><Ikon navn="kalender" /><span data-pladsholder>{cfg.tid.arbejdsdage}</span></p>
       </li>
     </ol>
   </div>

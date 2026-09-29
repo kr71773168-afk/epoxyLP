@@ -261,10 +261,11 @@ export function startQuiz() {
 
   function fokuser(el) {
     requestAnimationFrame(() => {
-      // Er beregnerens top rullet ud af skærmen (typisk på mobil), rulles den tilbage i syne
+      // Er beregnerens top rullet ud af skærmen eller ind under headeren (typisk på mobil), rulles den tilbage i syne
+      const hoved = document.querySelector('.top')?.offsetHeight ?? 0;
       const top = quiz.getBoundingClientRect().top;
-      if (top < 0 || top > window.innerHeight * 0.5) {
-        window.scrollTo({ top: window.scrollY + top - 12, behavior: reduce ? 'auto' : 'smooth' });
+      if (top < hoved || top > window.innerHeight * 0.5) {
+        window.scrollTo({ top: window.scrollY + top - hoved - 12, behavior: reduce ? 'auto' : 'smooth' });
       }
       el.focus({ preventScroll: true });
     });

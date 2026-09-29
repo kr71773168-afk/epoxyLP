@@ -3,16 +3,14 @@ import { byer, bySti } from '../data/byer.js';
 import { firma } from '../data/firma.js';
 import { erhverv, gulvtyper, privat } from '../data/ydelser.js';
 import { link } from '../lib/link.js';
+import Logo from './Logo.astro';
 
 const aar = new Date().getFullYear();
 ---
 <footer class="fod">
   <div class="kolonne fod-grid">
     <div class="fod-firma">
-      <a class="logo" href={link()} aria-label={`${firma.navn}, til forsiden`}>
-        <span class="logo-maerke" aria-hidden="true"></span>
-        <span class="logo-tekst"><span class="logo-1">Silkeborg</span> <span class="logo-2">Epoxy</span></span>
-      </a>
+      <Logo />
       <p>Epoxygulve til garage, kælder, bolig og erhverv i {firma.omraade}.</p>
       <p>
         <a href={`tel:${firma.telefonLink}`} data-telefon><span data-pladsholder>{firma.telefon}</span></a><br>

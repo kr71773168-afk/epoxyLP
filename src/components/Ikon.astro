@@ -1,11 +1,19 @@
 ---
-/** Små ikoner som inline SVG. Farven følger teksten (currentColor), fluebenet følger stilen (se .tjek i base.css). */
+/**
+ * Små ikoner som inline SVG. Farven følger teksten (currentColor), fluebenet følger stilen (se .tjek i base.css).
+ * Streg-ikonerne (garage, skjold, ur …) kommer fra Lucide og står i src/lib/ikoner.js.
+ */
+import { streg } from '../lib/ikoner.js';
+
 interface Props {
-  navn: 'tlf' | 'stjerne' | 'tjek' | 'pause' | 'afspil' | 'laas';
+  navn: string;
   class?: string;
 }
 const { navn, class: klasse } = Astro.props;
 ---
+{streg[navn] && (
+  <svg class:list={['streg-ikon', klasse]} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={streg[navn]} />
+)}
 {navn === 'tlf' && (
   <svg class:list={['knap-ikon', klasse]} viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5l2.6 3.3-1.6 2.3a13 13 0 0 0 7.3 7.3l2.3-1.6 3.3 2.6-1.2 3.1a2 2 0 0 1-2.2 1.2C10.5 20.3 3.7 13.5 2.3 6.9a2 2 0 0 1 1.2-2.2z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" /></svg>
 )}

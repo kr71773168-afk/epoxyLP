@@ -2,7 +2,7 @@
 .quiz {
   --quiz-pad: clamp(1.1rem, 2.5vw, 1.6rem);
   background: var(--flade); color: var(--ink); border-radius: var(--r-kort); border-top: var(--beregner-top);
-  box-shadow: var(--kort-skygge); padding: var(--quiz-pad); scroll-margin-top: .75rem;
+  box-shadow: var(--kort-skygge); padding: var(--quiz-pad);
 }
 .quiz-top { margin-bottom: 1rem; }
 .quiz-titel { font-family: var(--f-display); font-size: clamp(1.3rem, 1.2rem + .4vw, 1.5rem); font-weight: max(500, var(--h-vaegt)); letter-spacing: min(var(--h-spacing), 0em); line-height: 1.15; margin: 0 0 .25rem; }
@@ -141,7 +141,15 @@
 .res-tid { font-size: .9rem; color: var(--ink-2); margin-bottom: 1.5rem; }
 
 /* ---------- sidste trin: navn, telefon og mail før prisen ---------- */
-.kontakt-trin .res-svar { margin: -.35rem 0 1.25rem; }
+.pris-teaser { margin: 0 0 1.25rem; padding: .9rem 1rem 1rem; border-radius: var(--r-felt); background: var(--flade-2); }
+.pris-teaser-label { display: flex; align-items: center; gap: .4rem; margin: 0; font-size: .86rem; font-weight: var(--tekst-fed); color: var(--ink-2); }
+.pris-teaser-ikon { width: .95rem; height: .95rem; }
+.pris-teaser-tal {
+  margin: .1rem 0 .6rem; font-family: var(--f-display); font-size: clamp(1.8rem, 1.5rem + 1.4vw, 2.3rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.1;
+  filter: blur(9px); user-select: none; -webkit-user-select: none; opacity: .75;
+}
+.pris-teaser .res-svar { margin: 0; }
+.pris-teaser .res-svar button { background: var(--flade); }
 
 /* ---------- formularer (beregneren og kontaktsiden) ---------- */
 .lead-titel { font-size: 1.45rem; text-transform: none; letter-spacing: min(var(--h-spacing), -.01em); margin-bottom: .45rem; }

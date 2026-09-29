@@ -1,0 +1,17 @@
+---
+/**
+ * Logoet: en dråbe epoxy, der lander på et blankt gulv, og navnet. Farverne følger stilarten.
+ * Stil B bruger kun navnet med den grønne streg (som Viborg Design).
+ */
+import { firma } from '../data/firma.js';
+import { link } from '../lib/link.js';
+---
+<a class="logo" href={link()} aria-label={`${firma.navn}, til forsiden`}>
+  <svg class="logo-maerke" viewBox="0 0 32 32" aria-hidden="true">
+    <rect class="logo-bund" width="32" height="32" rx="8" />
+    <path class="logo-gulv" d="M4.5 20 16 13.6 27.5 20 16 26.4z" />
+    <path class="logo-glans" d="M10.2 20.9 17.6 16.8" />
+    <path class="logo-draabe" d="M16 4.2c2.7 3.1 4.1 5.1 4.1 7a4.1 4.1 0 0 1-8.2 0c0-1.9 1.4-3.9 4.1-7z" />
+  </svg>
+  <span class="logo-tekst"><span class="logo-1">Silkeborg</span> <span class="logo-2">Epoxy</span></span>
+</a>

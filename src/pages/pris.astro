@@ -9,6 +9,7 @@ import Brodkrummer from '../components/Brodkrummer.astro';
 import FAQ from '../components/FAQ.astro';
 import GulvKort from '../components/GulvKort.astro';
 import Hero from '../components/Hero.astro';
+import MedIPrisen from '../components/MedIPrisen.astro';
 import Slut from '../components/Slut.astro';
 import { firma } from '../data/firma.js';
 import Side from '../layouts/Side.astro';
@@ -81,7 +82,9 @@ const faq = [
     </div>
   </section>
 
-  <section class="sektion sektion-alt" aria-labelledby="eks-titel">
+  <MedIPrisen alt />
+
+  <section class="sektion" aria-labelledby="eks-titel">
     <div class="kolonne">
       <div class="sektion-hoved">
         <div>
@@ -102,7 +105,7 @@ const faq = [
     </div>
   </section>
 
-  <section class="sektion" aria-labelledby="gulve-titel">
+  <section class="sektion sektion-alt" aria-labelledby="gulve-titel">
     <div class="kolonne">
       <div class="sektion-hoved">
         <div>
@@ -114,7 +117,7 @@ const faq = [
     </div>
   </section>
 
-  <section class="sektion sektion-alt" aria-labelledby="faktorer-titel">
+  <section class="sektion" aria-labelledby="faktorer-titel">
     <div class="kolonne afsnit-grid">
       <div class="afsnit">
         <h2 id="faktorer-titel">Hvad påvirker prisen?</h2>
@@ -130,6 +133,6 @@ const faq = [
     </div>
   </section>
 
-  <FAQ items={faq} titel="Spørgsmål om prisen" />
+  <FAQ items={faq} titel="Spørgsmål om prisen" alt />
   <Slut harBeregner />
 </Side>

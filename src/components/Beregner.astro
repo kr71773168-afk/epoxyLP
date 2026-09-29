@@ -131,7 +131,11 @@ const undertekst = forvalgt.length
   <div class="kontakt-trin" id="kontakt-trin" hidden>
     <h2 class="spg-titel" id="kontakt-titel" tabindex="-1">Din pris er klar</h2>
     <p class="spg-hjaelp">Skriv, hvem vi skal sende den til. Så ser du prisen med det samme.</p>
-    <div class="res-svar" id="res-svar" aria-label="Dine svar. Tryk for at rette."></div>
+    <div class="pris-teaser">
+      <p class="pris-teaser-label"><Ikon navn="laas2" class="pris-teaser-ikon" />Din vejledende pris</p>
+      <p class="pris-teaser-tal" aria-hidden="true">00.000–00.000 kr</p>
+      <div class="res-svar" id="res-svar" aria-label="Dine svar. Tryk for at rette."></div>
+    </div>
     <form class="lead-form" id="lead-form" novalidate>
       <div class="felt">
         <label for="lf-navn">Navn</label>
@@ -191,6 +195,7 @@ const undertekst = forvalgt.length
 </section>
 
 <div class="bundbar" id="bundbar" hidden>
+  <a class="bundbar-tlf" href={`tel:${firma.telefonLink}`} data-telefon aria-label={`Ring ${firma.telefon}`}><Ikon navn="tlf" /></a>
   <a class="bundbar-knap" id="bundbar-knap" href="#beregner"><span id="bundbar-tekst">Se hvad dit gulv koster</span> <span aria-hidden="true">→</span></a>
 </div>
 

@@ -26,5 +26,10 @@ const {
       <a class="knap knap-stor knap-accent" href={harBeregner ? '#beregner' : link('pris')}>Beregn din pris <span aria-hidden="true">→</span></a>
       <a class="knap knap-stor knap-hvid" href={`tel:${firma.telefonLink}`} data-telefon><Ikon navn="tlf" />Ring <span data-pladsholder>{firma.telefon}</span></a>
     </div>
+    <ul class="slut-tillid">
+      <li><Ikon navn="tjek" />Gratis besigtigelse</li>
+      <li><Ikon navn="tjek" />Fast pris på skrift</li>
+      <li><Ikon navn="tjek" /><span data-pladsholder>{firma.garanti}</span></li>
+    </ul>
   </div>
 </section>

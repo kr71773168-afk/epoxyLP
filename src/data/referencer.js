@@ -1,12 +1,12 @@
 /**
- * PLADSHOLDERE. Skal skiftes til kundens egne jobs med rigtige billeder og tal før launch.
- * Billederne er stillbilleder fra kundens video. Teksterne er opdigtede eksempler.
+ * Billeder fra kundens egen video af et job i en erhvervshal. Teksterne beskriver kun, hvad billedet viser.
+ * Når der er rigtige referencer, skiftes listen til kundens jobs med titel, sted, m², overflade og foto af det færdige gulv.
  */
 export const referencer = [
-  { titel: 'Erhvervshal med primer og kvartssand', sted: 'Midtjylland', rum: 'Erhverv', overflade: 'Ensfarvet med kvartssand', m2: 320, billede: 'arbejde-primer' },
-  { titel: 'Garage med flakes', sted: 'Silkeborg', rum: 'Garage', overflade: 'Flakes', m2: 36, billede: 'sand' },
-  { titel: 'Kælder med hulkehl', sted: 'Skanderborg', rum: 'Kælder', overflade: 'Ensfarvet', m2: 42, billede: 'hal-lys' },
-  { titel: 'Værksted med skridsikker overflade', sted: 'Herning', rum: 'Erhverv', overflade: 'Ensfarvet med kvartssand', m2: 140, billede: 'hal' },
-  { titel: 'Showroom i lys grå', sted: 'Aarhus', rum: 'Erhverv', overflade: 'Ensfarvet', m2: 180, billede: 'beton' },
-  { titel: 'Grundlag i to lag', sted: 'Viborg', rum: 'Erhverv', overflade: 'Ensfarvet', m2: 260, billede: 'haelder' },
+  { titel: 'Betonen, før vi går i gang', tekst: 'Gulvet bliver slebet og støvsuget, så epoxyen kan hæfte.', billede: 'beton' },
+  { titel: 'Primeren trækkes ud', tekst: 'Første lag binder støvet og lukker betonen.', billede: 'arbejde-primer' },
+  { titel: 'Epoxyen blandes', tekst: 'Vi vejer og blander hver portion på stedet.', billede: 'haelder' },
+  { titel: 'Kvartssand i det våde lag', tekst: 'Giver en ru, skridsikker overflade, hvor der færdes meget.', billede: 'sand' },
+  { titel: 'Hele hallen på én gang', tekst: 'Et sammenhængende gulv uden fuger fra væg til væg.', billede: 'hal' },
+  { titel: 'Kanter og hjørner i hånden', tekst: 'Langs vægge og vinduer lægger vi gulvet i hånden, så kanterne bliver pæne.', billede: 'hal-lys' },
 ];

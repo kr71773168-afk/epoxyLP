@@ -5,6 +5,7 @@ import Foto from '../components/Foto.astro';
 import GulvKort from '../components/GulvKort.astro';
 import Hero from '../components/Hero.astro';
 import Ikon from '../components/Ikon.astro';
+import MedIPrisen from '../components/MedIPrisen.astro';
 import Slut from '../components/Slut.astro';
 import YdelsesListe from '../components/YdelsesListe.astro';
 import { faq } from '../data/faq.js';
@@ -20,6 +21,8 @@ const loefter = [
   { titel: 'Fast pris på skrift', tekst: 'Efter den gratis besigtigelse får du en fast pris. Den ændrer sig ikke undervejs.' },
   { titel: firma.garanti, tekst: 'Vi står inde for gulvet. Sker der noget, der skyldes vores arbejde, kommer vi og udbedrer det.', pladsholder: true },
 ];
+const garantiAar = firma.garanti.replace(/ års? garanti$/, '');
+const ejerNavn = firma.ejer.startsWith('[') ? 'Ejeren' : firma.ejer;
 ---
 <Side
   titel="Epoxygulve i Silkeborg · Se prisen på 60 sekunder · Silkeborg Epoxy"
@@ -54,7 +57,11 @@ const loefter = [
     <div class="kolonne folk">
       <div class="folk-billede-ramme">
         <Foto navn="arbejde-taet" alt="Vi trækker epoxy ud over et gulv på et job" class="folk-billede" sizes="(max-width: 900px) 100vw, 50vw" />
-        <p class="folk-maerke"><b>Ejeren kommer selv</b>Fra første besøg til sidste lag</p>
+        <p class="segl"><Ikon navn="skjold" /><b><span data-pladsholder>{garantiAar}</span> år</b><span>garanti</span></p>
+        <figure class="citat">
+          <blockquote><p><span data-pladsholder>“Jeg kommer selv ud og måler op, og jeg er der, når gulvet bliver lagt. Så ved du, hvem du har med at gøre.”</span></p></blockquote>
+          <figcaption><span data-pladsholder>{ejerNavn}</span>, Silkeborg Epoxy</figcaption>
+        </figure>
       </div>
       <div>
         <h2 class="sektion-titel" id="loefter-titel">Derfor vælger folk os</h2>
@@ -73,8 +80,9 @@ const loefter = [
   </section>
 
   <Forloeb />
+  <MedIPrisen alt />
 
-  <section class="sektion sektion-alt" aria-labelledby="ydelser-titel">
+  <section class="sektion" aria-labelledby="ydelser-titel">
     <div class="kolonne">
       <div class="sektion-hoved">
         <div>
@@ -86,6 +94,6 @@ const loefter = [
     </div>
   </section>
 
-  <FAQ items={faq} />
+  <FAQ items={faq} alt />
   <Slut harBeregner />
 </Side>

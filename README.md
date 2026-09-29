@@ -1,8 +1,8 @@
 # Silkeborg Epoxy · hjemmeside med prisberegner
 
-Udkast v0.8: komplet hjemmeside i [Astro](https://astro.build) med 28 statiske sider, heraf 5 guides under Viden. Prisberegneren stiller ét spørgsmål ad gangen og ligger på forsiden, prissiden, alle ydelser, alle bysider og alle guides. Prisen vises først, når den besøgende har skrevet navn, telefon og mail (kundens valg, v0.8). Leads går gennem en Netlify-funktion til Zapier/Make og Meta CAPI. Baggrund og research står i [PLAN.md](PLAN.md).
+Udkast v0.9: komplet hjemmeside i [Astro](https://astro.build) med 28 statiske sider, heraf 5 guides under Viden. Prisberegneren stiller ét spørgsmål ad gangen og ligger på forsiden, prissiden, alle ydelser, alle bysider og alle guides. Prisen vises først, når den besøgende har skrevet navn, telefon og mail (kundens valg, v0.8). Leads går gennem en Netlify-funktion til Zapier/Make og Meta CAPI. Baggrund og research står i [PLAN.md](PLAN.md).
 
-**Alle priser er pladsholdere.** Siden kører i "kladde"-tilstand: der er en gul bjælke øverst, og alle sider har `noindex`. Tekster og tal, der skal bekræftes af kunden, er markeret i koden. Tryk "Vis pladsholdere" i bjælken for at se dem på siden (stiplet gul ramme). Valget huskes.
+**Alle priser er pladsholdere.** Siden kører i "kladde"-tilstand: der er en lille "Kladde"-knap nederst til venstre, og alle sider har `noindex`. Tekster og tal, der skal bekræftes af kunden, er markeret i koden. Åbn "Kladde" og tryk "Vis pladsholdere" for at se dem på siden (stiplet gul ramme). Valget huskes.
 
 **Billederne er pladsholdere.** I beregneren er ni billeder AI-genererede (Canva) og fire stillbilleder fra kundens egen video. Fotoene på siderne er stillbilleder fra videoen. De skal skiftes til kundens egne billeder af færdige gulve før launch.
 
@@ -14,7 +14,7 @@ Udkast v0.8: komplet hjemmeside i [Astro](https://astro.build) med 28 statiske s
 | B · Grøn | Hvid, dyb grøn og beige, tættest på Viborg Design | Lexend |
 | C · Egen (standard) | Antracit som et gulv, ravgul som epoxy, sand | Manrope |
 
-C er standard, fordi den ikke kan forveksles med Vestbjerg, der også holder til i Silkeborg. Stilen vælges med `stil` i `src/data/firma.js`. I kladden kan man skifte med knapperne i den gule bjælke øverst eller med `?stil=A` i adressen. Valget huskes i browseren. Videoen fra et job er levende baggrund i toppen af forsiden, prissiden og bysiderne. Ydelserne har et foto af gulvtypen eller rummet i stedet.
+C er standard, fordi den ikke kan forveksles med Vestbjerg, der også holder til i Silkeborg. Stilen vælges med `stil` i `src/data/firma.js`. I kladden kan man skifte under "Kladde" nederst til venstre eller med `?stil=A` i adressen. Valget huskes i browseren. Videoen fra et job er levende baggrund i toppen af forsiden, prissiden og bysiderne. Ydelserne har et foto af gulvtypen eller rummet i stedet.
 
 ## Kom i gang
 
@@ -106,7 +106,7 @@ Det, der holder siden hurtig: CSS ligger direkte i HTML'en, kun den valgte stila
 ## URL-parametre
 
 - `?gulv=garage` / `kaelder` / `bolig` / `erhverv`: skifter overskriften på forsiden, vælger rummet og starter beregneren ved størrelsen. Brug én pr. annoncesæt.
-- `?kladde=0`: skjuler kladde-bjælken, fx til skærmbilleder.
+- `?kladde=0`: skjuler "Kladde"-knappen, fx til skærmbilleder.
 - `?stil=A` / `B` / `C`: viser siden i en anden stilart (kun i kladden). Valget huskes, så man kan klikke rundt på sitet.
 
 ## Deploy på Netlify
@@ -137,13 +137,24 @@ Typer: `fast-pris` fra beregneren (sendes, før prisen vises) og `kontakt` fra k
 
 Browserens tilbage-knap går ét spørgsmål tilbage i beregneren, så folk i Facebook- og Instagram-browseren ikke ryger ud af siden, når de vil rette et svar.
 
+## Konvertering
+
+Det, siden gør for at få flest mulige til at se prisen og skrive sig op:
+
+- **Beregneren over folden på mobil.** Overskriften står kort i toppen, og beregneren kommer lige under. Flueben og knapper står efter beregneren.
+- **Headeren følger med**, når man scroller, med telefon og "Beregn pris". På mobil er der også en bundbar med ring-knap og "Se hvad dit gulv koster".
+- **Prisen efter kontaktoplysninger.** Sidste trin viser en sløret pris ("Din pris er klar"), så man kan se, at den ligger klar. Svarene kan rettes, før man sender.
+- **Tryghed:** garanti-segl og ejerens citat ved "Derfor vælger folk os", "Det er med i prisen" (hvad der altid er med, og hvad der kan komme oveni), tider på hvert trin i forløbet og tre løfter i afslutningen.
+- **Ærlige referencer:** billeder fra jobbet i videoen med tekster, der kun beskriver billedet. Stjerner og anmeldelser vises først, når der er rigtige.
+
 ## Før launch
 
 - [ ] Kundens priser i `pricing.config.js` og 5-10 tilbud i `calibration.cases.js` (`npm test` grøn)
 - [ ] Stilart valgt (`stil: 'A'`, `'B'` eller `'C'` i `src/data/firma.js`)
 - [ ] Telefon, mail, adresse, garanti, svartid og åbningstider i `src/data/firma.js`
 - [ ] Rigtige anmeldelser (`anmeldelser` i `src/data/firma.js`). Stjernerne i toppen vises først, når snit og antal står der
-- [ ] Ejerens navn, historie og foto på Om os
+- [ ] Ejerens navn, historie og foto på Om os, og citatet på forsiden i ejerens egne ord (`src/pages/index.astro`)
+- [ ] Logo, hvis firmaet har et (ellers bruges dråbe-logoet i `src/components/Logo.astro`)
 - [ ] Kundens egne fotos i stedet for AI-billederne i `src/media/valg/` og videostillbillederne i `src/media/foto/`
 - [ ] Rigtige referencer i `src/data/referencer.js` og anmeldelser fra Trustpilot eller Google
 - [ ] Kundens farvekort og fotos af færdige gulve pr. overflade, så gulvtypesiderne kan vise dem
@@ -151,10 +162,12 @@ Browserens tilbage-knap går ét spørgsmål tilbage i beregneren, så folk i Fa
 - [ ] Zone (kommuner) og bysidernes afstande bekræftet
 - [ ] Privatlivspolitik gennemgået
 - [ ] Domæne i `astro.config.mjs` og `public/robots.txt`
-- [ ] `kladde: false` i `src/data/firma.js` (fjerner noindex og kladde-bjælken)
+- [ ] `kladde: false` i `src/data/firma.js` (fjerner noindex og "Kladde"-knappen)
 - [ ] Miljøvariabler sat på Netlify, test-lead hele vejen igennem til Zapier/Make og Meta Test Events
 - [ ] Test i Facebook- og Instagram-browseren på iOS og Android
 
 ## Data
+
+Ikonerne i `src/lib/ikoner.js` er fra [Lucide](https://lucide.dev) (ISC-licens, © Lucide Icons and Contributors).
 
 Postnumre og bynavne i `src/calculator/postnumre.json` kommer fra PostNords postnummerfil via npm-pakken `dk-postals` (ISC). Se `scripts/postnumre-fra-csv.mjs`.

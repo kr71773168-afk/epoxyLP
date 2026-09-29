@@ -1,0 +1,53 @@
+---
+/**
+ * "Det er med i prisen": hvad der altid er med, og hvad der kan komme oveni. Ingen beløb, kun indholdet.
+ * Tilvalg og forbehandling hentes fra pricing.config.js, så listen passer med beregneren.
+ */
+import cfg from '../calculator/pricing.config.js';
+import { link } from '../lib/link.js';
+import Ikon from './Ikon.astro';
+
+interface Props {
+  alt?: boolean;
+  harBeregner?: boolean;
+}
+const { alt = false, harBeregner = true } = Astro.props;
+
+const altidMed = [
+  { ikon: 'besigtigelse', titel: 'Gratis besigtigelse', tekst: 'Vi kommer ud, måler op og måler fugten i betonen.' },
+  { ikon: 'slibning', titel: 'Slibning af betonen', tekst: 'Så epoxyen hæfter og bliver en del af gulvet.' },
+  { ikon: 'lag', titel: 'Primer, epoxy og toplak', tekst: 'Gulvet bygges op i lag, der passer til rummet.' },
+  { ikon: 'oprydning', titel: 'Afdækning og oprydning', tekst: 'Vi dækker vægge og døre af og tager affaldet med.' },
+  { ikon: 'bil', titel: 'Kørsel inden for 60 km', tekst: 'Fra Silkeborg. Kørslen er med i prisen.' },
+];
+const kanKommeOveni = [
+  ...Object.values(cfg.stand).filter((s) => s.prisPrM2 > 0).map((s) => s.navn),
+  ...Object.values(cfg.tilvalg).map((t) => t.navn),
+  'Fugtspærre, hvis betonen er for fugtig',
+];
+---
+<section class:list={['sektion', { 'sektion-alt': alt }]} aria-labelledby="med-titel">
+  <div class="kolonne med-grid">
+    <div class="med-intro">
+      <h2 class="sektion-titel" id="med-titel">Det er med i prisen</h2>
+      <p>Ingen skjulte tillæg. Efter besigtigelsen får du en fast pris på skrift, og den ændrer sig ikke undervejs.</p>
+      <a class="knap knap-accent" href={harBeregner ? '#beregner' : link('pris')}>Se prisen på dit gulv <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="med-kort">
+      <p class="med-kort-titel">Altid med</p>
+      <ul class="med-liste">
+        {altidMed.map((m) => (
+          <li>
+            <span class="med-ikon"><Ikon navn={m.ikon} /></span>
+            <span><b>{m.titel}</b>{m.tekst}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="med-oveni">
+        <p class="med-kort-titel">Kan komme oveni, hvis gulvet kræver det</p>
+        <ul>{kanKommeOveni.map((k) => <li>{k}</li>)}</ul>
+        <p class="med-note">Du ser det i beregneren og i den faste pris, før du siger ja.</p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -6,12 +6,12 @@ import { referencer } from '../data/referencer.js';
 import Side from '../layouts/Side.astro';
 ---
 <Side
-  titel="Referencer · Epoxygulve, vi har lavet · Silkeborg Epoxy"
-  beskrivelse="Se epoxygulve, vi har lavet i garager, kældre, boliger og erhverv i Midtjylland. Med størrelse, overflade og sted."
+  titel="Referencer · Fra vores arbejde med epoxygulve · Silkeborg Epoxy"
+  beskrivelse="Billeder fra et af vores jobs: sådan lægger vi et epoxygulv, fra slibning og primer til epoxy og kvartssand."
   slug="referencer"
 >
-  <SideBand over="Referencer" titel="Gulve, vi har [lavet]" tekst="Et udvalg af vores jobs med størrelse, overflade og sted." sti={[{ navn: 'Referencer', slug: 'referencer' }]} foto="hal">
-    <p class="kladde-note">Billederne er fra kundens egen video. Teksterne er eksempler og skal skiftes til rigtige jobs før launch.</p>
+  <SideBand over="Referencer" titel="Fra et af vores [jobs]" tekst="Sådan ser det ud, når vi lægger et gulv. Billederne er fra et gulv i en erhvervshal." sti={[{ navn: 'Referencer', slug: 'referencer' }]} foto="hal">
+    <p class="kladde-note">Kladde: flere referencer med foto af det færdige gulv, sted og m² kommer, når kunden har sendt dem.</p>
   </SideBand>
 
   <section class="sektion" aria-label="Referencer">
@@ -20,15 +20,15 @@ import Side from '../layouts/Side.astro';
       {referencer.map((r, i) => (
         <li class="ref">
           <Foto navn={r.billede} alt={r.titel} class="ref-billede" sizes="(max-width: 760px) 100vw, 33vw" eager={i < 3} />
-          <p class="ref-titel"><span data-pladsholder>{r.titel}</span></p>
-          <p class="ref-meta"><span data-pladsholder>{r.sted} · {r.m2} m² · {r.overflade}</span></p>
+          <p class="ref-titel"><span class="ref-nr">{i + 1}</span>{r.titel}</p>
+          <p class="ref-meta">{r.tekst}</p>
         </li>
       ))}
     </ul>
     </div>
   </section>
 
-  <section class="sektion sektion-alt" aria-labelledby="anm-titel">
+  <section class="sektion sektion-alt kun-pladsholder" aria-labelledby="anm-titel">
     <div class="kolonne anmeldelser">
       <h2 class="sektion-titel" id="anm-titel">Det siger kunderne</h2>
       <p><span data-pladsholder>Her kommer anmeldelser fra Trustpilot eller Google, når de første er på plads.</span></p>

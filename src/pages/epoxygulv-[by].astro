@@ -7,6 +7,7 @@ import FAQ from '../components/FAQ.astro';
 import Forloeb from '../components/Forloeb.astro';
 import GulvKort from '../components/GulvKort.astro';
 import Hero from '../components/Hero.astro';
+import MedIPrisen from '../components/MedIPrisen.astro';
 import Slut from '../components/Slut.astro';
 import YdelsesListe from '../components/YdelsesListe.astro';
 import { byer, bySti } from '../data/byer.js';
@@ -102,6 +103,7 @@ const faq = [
   </section>
 
   <Forloeb alt />
-  <FAQ items={faq} titel={`Spørgsmål fra ${b.navn}`} />
+  <MedIPrisen />
+  <FAQ items={faq} titel={`Spørgsmål fra ${b.navn}`} alt />
   <Slut harBeregner />
 </Side>
