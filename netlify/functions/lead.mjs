@@ -26,7 +26,8 @@ export function valider(data) {
   if (!data || typeof data !== 'object') return 'Ingen data';
   const k = data.kontakt ?? {};
   if (data.type === 'kun-mail') return gyldigMail(k.mail) ? null : 'Ugyldig mail';
-  if (data.type !== 'fast-pris') return 'Ukendt type';
+  // "fast-pris" kommer fra beregneren, "kontakt" fra kontaktsiden. Begge kræver navn, telefon og mail.
+  if (data.type !== 'fast-pris' && data.type !== 'kontakt') return 'Ukendt type';
   if (String(k.navn ?? '').trim().length < 2) return 'Navn mangler';
   if (!normaliserTelefon(k.telefon)) return 'Ugyldigt telefonnummer';
   if (!gyldigMail(k.mail)) return 'Ugyldig mail';

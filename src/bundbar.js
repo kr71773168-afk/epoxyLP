@@ -26,10 +26,12 @@ export function startBundbar(beregner) {
       opdater();
     }).observe(quiz);
     // Den sidste sektion har sin egen knap
-    new IntersectionObserver(([e]) => {
-      slutSynlig = e.isIntersecting;
-      opdater();
-    }).observe(slut);
+    if (slut) {
+      new IntersectionObserver(([e]) => {
+        slutSynlig = e.isIntersecting;
+        opdater();
+      }).observe(slut);
+    }
   }
   smal.addEventListener?.('change', opdater);
   beregner.lyt(opdater);

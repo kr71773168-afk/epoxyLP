@@ -1,0 +1,86 @@
+---
+import Beregner from '../components/Beregner.astro';
+import FAQ from '../components/FAQ.astro';
+import Forloeb from '../components/Forloeb.astro';
+import Foto from '../components/Foto.astro';
+import Slut from '../components/Slut.astro';
+import Tillid from '../components/Tillid.astro';
+import Video from '../components/Video.astro';
+import YdelsesKort from '../components/YdelsesKort.astro';
+import { byer, bySti } from '../data/byer.js';
+import { faq } from '../data/faq.js';
+import { referencer } from '../data/referencer.js';
+import { erhverv, gulvtyper, privat } from '../data/ydelser.js';
+import Side from '../layouts/Side.astro';
+import { link } from '../lib/link.js';
+---
+<Side
+  titel="Epoxygulve i Silkeborg · Se prisen på 60 sekunder · Silkeborg Epoxy"
+  beskrivelse="Epoxygulve til garage, kælder, bolig og erhverv i Silkeborg og 60 km omkring. Se prisen på dit gulv på et minut. Fast pris efter gratis besigtigelse."
+>
+  <section class="kolonne hero" aria-labelledby="hero-titel">
+    <div class="hero-tekst">
+      <p class="hero-over">Epoxygulve i Silkeborg og 60 km omkring</p>
+      <h1 id="hero-titel" data-hero-titel>Epoxygulve til garage, kælder, bolig og erhverv</h1>
+      <p class="hero-sub">Se prisen på dit nye gulv på et minut. Du skal ikke give os dit nummer for at se den.</p>
+    </div>
+    <Beregner />
+    <Tillid />
+    <Video class="hero-video" />
+  </section>
+
+  <section class="sektion" aria-labelledby="rum-titel">
+    <div class="kolonne">
+      <div class="sektion-hoved">
+        <h2 class="sektion-titel" id="rum-titel">Hvad skal have nyt gulv?</h2>
+        <p>Vi laver gulve hjemme hos folk og for virksomheder. Vælg rummet, og se hvad vi anbefaler.</p>
+      </div>
+      <YdelsesKort ydelser={[...privat, ...erhverv]} />
+    </div>
+  </section>
+
+  <section class="sektion" aria-labelledby="overflade-titel">
+    <div class="kolonne">
+      <div class="sektion-hoved">
+        <h2 class="sektion-titel" id="overflade-titel">Tre overflader at vælge imellem</h2>
+        <p>Alle tre er epoxy. Forskellen er udtrykket, og hvor meget arbejde der er i gulvet.</p>
+      </div>
+      <YdelsesKort ydelser={gulvtyper} />
+    </div>
+  </section>
+
+  <Forloeb />
+
+  <section class="sektion" aria-labelledby="ref-titel">
+    <div class="kolonne">
+      <div class="sektion-hoved sektion-hoved-link">
+        <h2 class="sektion-titel" id="ref-titel">Gulve, vi har lavet</h2>
+        <a class="pil-link" href={link('referencer')}>Se alle referencer <span aria-hidden="true">→</span></a>
+      </div>
+      <ul class="ref-grid">
+        {referencer.slice(0, 3).map((r) => (
+          <li class="ref">
+            <Foto navn={r.billede} alt={r.titel} class="ref-billede" sizes="(max-width: 760px) 100vw, 33vw" />
+            <p class="ref-titel" data-pladsholder>{r.titel}</p>
+            <p class="ref-meta" data-pladsholder>{r.sted} · {r.m2} m² · {r.overflade}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sektion" aria-labelledby="omraade-titel">
+    <div class="kolonne omraade">
+      <div>
+        <h2 class="sektion-titel" id="omraade-titel">Vi kommer ud i hele Midtjylland</h2>
+        <p>Vi kører i Silkeborg og cirka 60 km omkring. Inden for området er kørslen med i prisen.</p>
+      </div>
+      <ul class="omraade-liste">
+        {byer.map((b) => <li><a href={link(bySti(b))}>{b.navn}</a></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <FAQ items={faq} />
+  <Slut harBeregner />
+</Side>

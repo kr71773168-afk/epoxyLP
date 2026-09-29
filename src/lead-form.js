@@ -15,7 +15,6 @@ const HVORNAAR = {
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 const fmt = (n) => Math.round(n).toLocaleString('da-DK');
 
-
 function prisTekst(pris) {
   if (!pris || pris.individuel) return 'Efter besigtigelse';
   if (pris.lav === undefined) return null;
@@ -23,7 +22,7 @@ function prisTekst(pris) {
   return pris.lav === pris.hoej ? `${fmt(pris.lav)} kr ${moms}` : `${fmt(pris.lav)}–${fmt(pris.hoej)} kr ${moms}`;
 }
 
-async function sendData(payload) {
+export async function sendData(payload) {
   if (DEMO) {
     await new Promise((r) => setTimeout(r, 500));
     return;

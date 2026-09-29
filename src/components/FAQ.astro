@@ -1,0 +1,27 @@
+---
+/** Spørgsmål og svar som foldeliste, plus FAQPage-data til Google. */
+interface Props {
+  items: { spg: string; svar: string }[];
+  titel?: string;
+}
+const { items, titel = 'Det bliver vi tit spurgt om' } = Astro.props;
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((i) => ({ '@type': 'Question', name: i.spg, acceptedAnswer: { '@type': 'Answer', text: i.svar } })),
+};
+---
+<section class="sektion" aria-labelledby="faq-titel">
+  <div class="kolonne faq-grid">
+    <h2 class="sektion-titel" id="faq-titel">{titel}</h2>
+    <div class="faq">
+      {items.map((i) => (
+        <details>
+          <summary>{i.spg}</summary>
+          <p>{i.svar}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+</section>

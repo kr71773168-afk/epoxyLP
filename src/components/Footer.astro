@@ -1,0 +1,47 @@
+---
+import { byer, bySti } from '../data/byer.js';
+import { firma } from '../data/firma.js';
+import { erhverv, gulvtyper, privat } from '../data/ydelser.js';
+import { link } from '../lib/link.js';
+
+const aar = new Date().getFullYear();
+---
+<footer class="fod">
+  <div class="kolonne fod-grid">
+    <div class="fod-firma">
+      <a class="logo" href={link()}>Silkeborg <b>Epoxy</b></a>
+      <p>Epoxygulve til garage, kælder, bolig og erhverv i {firma.omraade}.</p>
+      <p>
+        <a href={`tel:${firma.telefonLink}`} data-telefon><span data-pladsholder>{firma.telefon}</span></a><br>
+        <a href={`mailto:${firma.mail}`}><span data-pladsholder>{firma.mail}</span></a><br>
+        <span data-pladsholder>{firma.adresse.vej}, {firma.adresse.postnr} {firma.adresse.by}</span>
+      </p>
+    </div>
+    <nav class="fod-kol" aria-label="Privat">
+      <p class="fod-titel">Privat</p>
+      <ul>{privat.map((y) => <li><a href={link(y.slug)}>{y.navn}</a></li>)}</ul>
+    </nav>
+    <nav class="fod-kol" aria-label="Erhverv og gulvtyper">
+      <p class="fod-titel">Erhverv og gulvtyper</p>
+      <ul>{[...erhverv, ...gulvtyper].map((y) => <li><a href={link(y.slug)}>{y.navn}</a></li>)}</ul>
+    </nav>
+    <nav class="fod-kol" aria-label="Områder">
+      <p class="fod-titel">Områder</p>
+      <ul>{byer.map((b) => <li><a href={link(bySti(b))}>Epoxygulv {b.navn}</a></li>)}</ul>
+    </nav>
+    <nav class="fod-kol" aria-label="Info">
+      <p class="fod-titel">Info</p>
+      <ul>
+        <li><a href={link('pris')}>Pris og beregner</a></li>
+        <li><a href={link('referencer')}>Referencer</a></li>
+        <li><a href={link('om-os')}>Om os</a></li>
+        <li><a href={link('kontakt')}>Kontakt</a></li>
+        <li><a href={link('privatliv')}>Privatlivspolitik</a></li>
+        <li data-cookie-indstillinger><button type="button" class="tekstknap">Cookie-indstillinger</button></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="kolonne fod-bund">
+    <p>© {aar} {firma.juridiskNavn} · CVR {firma.cvr}</p>
+  </div>
+</footer>

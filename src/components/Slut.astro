@@ -1,0 +1,27 @@
+---
+import { firma } from '../data/firma.js';
+import { link } from '../lib/link.js';
+import Foto from './Foto.astro';
+
+interface Props {
+  titel?: string;
+  tekst?: string;
+  harBeregner?: boolean;
+}
+const {
+  titel = 'Se hvad dit gulv koster',
+  tekst = 'Det tager et minut, og du skal ikke give os dit nummer for at se prisen.',
+  harBeregner = false,
+} = Astro.props;
+---
+<section class="slut" aria-labelledby="slut-titel">
+  <Foto navn="hal" alt="" class="slut-billede" sizes="100vw" />
+  <div class="kolonne slut-indre">
+    <h2 id="slut-titel">{titel}</h2>
+    <p>{tekst}</p>
+    <div class="slut-knapper">
+      <a class="knap knap-stor knap-accent" href={harBeregner ? '#beregner' : link('pris')}>Beregn din pris <span aria-hidden="true">→</span></a>
+      <a class="slut-tlf" href={`tel:${firma.telefonLink}`} data-telefon>Eller ring <span data-pladsholder>{firma.telefon}</span></a>
+    </div>
+  </div>
+</section>

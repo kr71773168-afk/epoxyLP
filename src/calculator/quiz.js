@@ -404,17 +404,23 @@ export function startQuiz() {
   /* ---------- start ---------- */
   opdaterValgtekster();
   tilpasTal();
+  // Svar valgt på forhånd: ?gulv=garage fra annoncer, eller data-rum / data-overflade på siden (fx siden om garagegulve)
   const segment = new URLSearchParams(window.location.search).get('gulv');
-  let start = 0;
-  if (cfg.rum[segment]) {
+  const forvalgtRum = cfg.rum[segment] ? segment : (cfg.rum[quiz.dataset.rum] ? quiz.dataset.rum : null);
+  if (forvalgtRum) {
     const titel = document.querySelector('[data-hero-titel]');
-    if (titel && OVERSKRIFTER[segment]) titel.textContent = OVERSKRIFTER[segment];
-    $(`input[name="rum"][value="${segment}"]`).checked = true;
-    vaelg('rum', segment);
+    if (titel && segment === forvalgtRum && OVERSKRIFTER[segment]) titel.textContent = OVERSKRIFTER[segment];
+    $(`input[name="rum"][value="${forvalgtRum}"]`).checked = true;
+    vaelg('rum', forvalgtRum);
     besvar('rum', { bruger: false });
-    start = 1;
   }
-  vis(start, { historik: 'replace', fokus: false });
+  const forvalgtOverflade = quiz.dataset.overflade;
+  if (cfg.overflader[forvalgtOverflade]) {
+    $(`input[name="overflade"][value="${forvalgtOverflade}"]`).checked = true;
+    vaelg('overflade', forvalgtOverflade);
+    besvar('overflade', { bruger: false });
+  }
+  vis(foersteAabne(), { historik: 'replace', fokus: false });
 
   return {
     data() {

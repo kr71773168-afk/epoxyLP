@@ -1,0 +1,27 @@
+---
+import { link } from '../lib/link.js';
+
+interface Props {
+  sti: { navn: string; slug?: string }[];
+}
+const { sti } = Astro.props;
+const alle = [{ navn: 'Forside', slug: '' }, ...sti];
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: alle.map((s, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: s.navn,
+    item: new URL(s.slug ? `/${s.slug}/` : '/', Astro.site).href,
+  })),
+};
+---
+<nav class="kolonne brodkrummer" aria-label="Du er her">
+  <ol>
+    {alle.map((s, i) => (
+      <li>{i < alle.length - 1 ? <a href={link(s.slug)}>{s.navn}</a> : <span aria-current="page">{s.navn}</span>}</li>
+    ))}
+  </ol>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+</nav>

@@ -1,0 +1,121 @@
+---
+/**
+ * Prissiden: beregneren øverst og en prisguide under, der kan findes på Google ("epoxygulv pris").
+ * Alle tal kommer fra pricing.config.js og prismotoren, så siden og beregneren altid siger det samme.
+ */
+import { beregnPris } from '../calculator/engine.js';
+import cfg from '../calculator/pricing.config.js';
+import Beregner from '../components/Beregner.astro';
+import Brodkrummer from '../components/Brodkrummer.astro';
+import FAQ from '../components/FAQ.astro';
+import Slut from '../components/Slut.astro';
+import Tillid from '../components/Tillid.astro';
+import Side from '../layouts/Side.astro';
+
+const fmt = (n) => Math.round(n).toLocaleString('da-DK');
+const kr = (n, moms = true) => `${fmt(n * (moms ? 1 + cfg.moms : 1))} kr`;
+const aar = new Date().getFullYear();
+
+const eksempler = [
+  { navn: 'Enkelt garage', rum: 'garage', areal: 18, overflade: 'ensfarvet', stand: 'paen', tilvalg: [] },
+  { navn: 'Dobbelt garage med flakes', rum: 'garage', areal: 36, overflade: 'flakes', stand: 'paen', tilvalg: [] },
+  { navn: 'Kælder med revner og hulkehl', rum: 'kaelder', areal: 40, overflade: 'ensfarvet', stand: 'revner', tilvalg: ['hulkehl'] },
+  { navn: 'Køkken og stue i metallic', rum: 'bolig', areal: 50, overflade: 'metallic', stand: 'paen', tilvalg: [] },
+  { navn: 'Værksted, skridsikkert', rum: 'erhverv', areal: 120, overflade: 'ensfarvet', stand: 'paen', tilvalg: ['skridsikker'] },
+].map((e) => {
+  const r = beregnPris({ ...e, postnummer: '8600' }, cfg);
+  return { ...e, pris: `${fmt(r.lav)}–${fmt(r.hoej)} kr`, moms: r.inklMoms ? 'inkl. moms' : 'ekskl. moms' };
+});
+
+const faq = [
+  { spg: 'Er priserne med moms?', svar: 'Ja, for private. Vælger du erhverv i beregneren, vises priserne ekskl. moms.' },
+  { spg: 'Hvorfor er der en minimumspris?', svar: `Der er de samme faste opgaver, uanset hvor lille gulvet er: maskiner, afdækning og kørsel. Derfor koster en opgave mindst ${kr(cfg.minimumspris)} inkl. moms.` },
+  { spg: 'Hvad er ikke med i beregneren?', svar: 'Fugtspærre, hvis betonen er for fugtig, og særlige ønsker. Det finder vi ud af ved besigtigelsen, og det står i den faste pris, før du siger ja.' },
+  { spg: 'Hvor præcis er beregneren?', svar: 'Når du har svaret på alt, er der kun ca. ±5 % tilbage til adgang og rummets form. Svarer du “ved ikke”, bliver intervallet bredere.' },
+];
+---
+<Side
+  titel={`Epoxygulv pris ${aar} · Beregn prisen på dit gulv · Silkeborg Epoxy`}
+  beskrivelse="Hvad koster et epoxygulv? Se priser pr. m² for ensfarvet, flakes og metallic, eksempler på garager og kældre, og beregn prisen på dit eget gulv på et minut."
+  slug="pris"
+>
+  <Brodkrummer sti={[{ navn: 'Pris', slug: 'pris' }]} />
+
+  <section class="kolonne hero hero-pris" aria-labelledby="hero-titel">
+    <div class="hero-tekst">
+      <p class="hero-over">Priser og beregner</p>
+      <h1 id="hero-titel">Hvad koster et epoxygulv?</h1>
+      <p class="hero-sub">Prisen afhænger af størrelsen, overfladen og betonens stand. Svar på seks spørgsmål, så får du en vejledende pris med det samme.</p>
+    </div>
+    <Beregner />
+    <Tillid />
+  </section>
+
+  <section class="sektion" aria-labelledby="m2-titel">
+    <div class="kolonne pris-grid">
+      <div>
+        <h2 class="sektion-titel" id="m2-titel">Pris pr. m²</h2>
+        <p>Priserne er vejledende fra-priser for selve gulvet. Dertil kommer opstart, og eventuel forbehandling og tilvalg. Kundens egne priser skal ind her før launch.</p>
+      </div>
+      <div class="tabel-ramme">
+        <table class="pris-tabel">
+          <caption class="vh">Vejledende priser pr. m²</caption>
+          <thead><tr><th scope="col">Overflade</th><th scope="col">Privat, inkl. moms</th><th scope="col">Erhverv, ekskl. moms</th></tr></thead>
+          <tbody>
+            {Object.values(cfg.overflader).map((o) => (
+              <tr><th scope="row">{o.navn}</th><td data-pladsholder>fra {kr(o.prisPrM2)}/m²</td><td data-pladsholder>fra {kr(o.prisPrM2, false)}/m²</td></tr>
+            ))}
+          </tbody>
+          <tbody>
+            <tr><th scope="row">Opstart pr. opgave</th><td data-pladsholder>{kr(cfg.opstart)}</td><td data-pladsholder>{kr(cfg.opstart, false)}</td></tr>
+            <tr><th scope="row">Minimumspris</th><td data-pladsholder>{kr(cfg.minimumspris)}</td><td data-pladsholder>{kr(cfg.minimumspris, false)}</td></tr>
+            {Object.values(cfg.stand).filter((s) => s.prisPrM2 > 0).map((s) => (
+              <tr><th scope="row">{s.navn}</th><td data-pladsholder>+ {kr(s.prisPrM2)}/m²</td><td data-pladsholder>+ {kr(s.prisPrM2, false)}/m²</td></tr>
+            ))}
+            {Object.values(cfg.tilvalg).map((t) => (
+              <tr><th scope="row">{t.navn}</th><td data-pladsholder>+ {kr(t.pris)}/{t.type === 'lbm' ? 'm' : 'm²'}</td><td data-pladsholder>+ {kr(t.pris, false)}/{t.type === 'lbm' ? 'm' : 'm²'}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="sektion" aria-labelledby="eks-titel">
+    <div class="kolonne">
+      <div class="sektion-hoved">
+        <h2 class="sektion-titel" id="eks-titel">Eksempler på priser</h2>
+        <p>Regnet med beregneren, pæn beton og inden for vores område.</p>
+      </div>
+      <ul class="eksempler">
+        {eksempler.map((e) => (
+          <li>
+            <span class="eks-navn">{e.navn}</span>
+            <span class="eks-meta">{e.areal} m² · {cfg.overflader[e.overflade].navn.toLowerCase()}</span>
+            <span class="eks-pris" data-pladsholder>{e.pris}</span>
+            <span class="eks-moms">{e.moms}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sektion" aria-labelledby="faktorer-titel">
+    <div class="kolonne afsnit-grid">
+      <div class="afsnit">
+        <h2 id="faktorer-titel">Hvad påvirker prisen?</h2>
+        <p><strong>Størrelsen.</strong> Opstarten er den samme, så jo større gulvet er, jo lavere bliver prisen pr. m².</p>
+        <p><strong>Overfladen.</strong> Ensfarvet er billigst. Flakes har et ekstra trin, og metallic kræver mest håndarbejde.</p>
+        <p><strong>Betonens stand.</strong> Revner, huller og gammel maling skal slibes og repareres først.</p>
+        <p><strong>Tilvalg.</strong> Hulkehl langs væggen og skridsikker overflade.</p>
+      </div>
+      <div class="afsnit">
+        <h2>Hvorfor viser vi priser?</h2>
+        <p>De fleste gulvfirmaer skriver “ring for pris”. Vi synes, du skal kunne se, om et epoxygulv passer til dit budget, før du bruger tid på at ringe. Beregneren giver et ærligt interval, og ved besigtigelsen får du en fast pris, der ikke ændrer sig undervejs.</p>
+      </div>
+    </div>
+  </section>
+
+  <FAQ items={faq} titel="Spørgsmål om prisen" />
+  <Slut harBeregner />
+</Side>

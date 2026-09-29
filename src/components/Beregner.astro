@@ -1,0 +1,182 @@
+---
+/**
+ * Prisberegneren med lead-formularen. Bruges på forsiden, prissiden, ydelserne og bysiderne.
+ * `rum` eller `overflade` vælger et svar på forhånd, fx rum="garage" på siden om garagegulve.
+ */
+import '../styles/quiz.css';
+import { firma } from '../data/firma.js';
+import { link } from '../lib/link.js';
+
+interface Props {
+  rum?: string;
+  overflade?: string;
+}
+const { rum, overflade } = Astro.props;
+---
+<section class="quiz" id="beregner" aria-label="Prisberegner" data-rum={rum} data-overflade={overflade}>
+  <div class="quiz-hoved">
+    <button type="button" class="quiz-tilbage" id="quiz-tilbage" hidden><span aria-hidden="true">←</span> Tilbage</button>
+    <p class="quiz-trin" id="quiz-trin">Trin 1 af 6</p>
+  </div>
+  <div class="quiz-bar" aria-hidden="true"><i id="quiz-bar-fyld"></i></div>
+
+  <form class="quiz-form" id="quiz-form" novalidate>
+    <div class="spg" data-trin="rum">
+      <h2 class="spg-titel" id="spg-rum" tabindex="-1">Hvad skal have nyt gulv?</h2>
+      <div class="raekker" role="radiogroup" aria-labelledby="spg-rum" data-valg="rum"></div>
+      <p class="spg-hint" aria-live="polite"></p>
+      <div class="spg-fod" hidden><button type="submit" class="knap">Næste <span aria-hidden="true">→</span></button></div>
+    </div>
+
+    <div class="spg" data-trin="areal" hidden>
+      <h2 class="spg-titel" id="spg-areal" tabindex="-1">Hvor stort er gulvet?</h2>
+      <p class="spg-hjaelp">Et skøn er fint. Vi måler op, når vi kommer ud.</p>
+      <div class="areal">
+        <button type="button" class="areal-trin" data-skridt="-1" aria-label="1 m² mindre">−</button>
+        <label class="areal-felt" for="areal-tal">
+          <span class="vh">Areal i kvadratmeter</span>
+          <input type="number" id="areal-tal" inputmode="numeric" min="5" max="2000" step="1" value="36">
+          <span class="areal-enhed" aria-hidden="true">m²</span>
+        </label>
+        <button type="button" class="areal-trin" data-skridt="1" aria-label="1 m² mere">+</button>
+      </div>
+      <input type="range" class="areal-lineal" id="areal-lineal" min="10" max="250" step="1" value="36" aria-label="Areal i kvadratmeter, træk for at justere">
+      <div class="lineal-tal" aria-hidden="true"><span>10 m²</span><span>250 m²</span></div>
+      <div class="genveje" id="genveje"></div>
+      <button type="button" class="tekstknap maal-knap" id="maal-knap" aria-expanded="false" aria-controls="maal">Regn det ud: længde gange bredde</button>
+      <div class="maal" id="maal" hidden>
+        <label for="maal-l">Længde <input type="number" id="maal-l" inputmode="decimal" min="1" step="0.1"> m</label>
+        <span aria-hidden="true">×</span>
+        <label for="maal-b">Bredde <input type="number" id="maal-b" inputmode="decimal" min="1" step="0.1"> m</label>
+      </div>
+      <p class="spg-hint" aria-live="polite"></p>
+      <div class="spg-fod"><button type="submit" class="knap">Næste <span aria-hidden="true">→</span></button></div>
+    </div>
+
+    <div class="spg" data-trin="overflade" hidden>
+      <h2 class="spg-titel" id="spg-overflade" tabindex="-1">Hvilken overflade vil du have?</h2>
+      <div class="raekker" role="radiogroup" aria-labelledby="spg-overflade" data-valg="overflade"></div>
+      <p class="spg-hint" aria-live="polite"></p>
+      <div class="spg-fod" hidden><button type="submit" class="knap">Næste <span aria-hidden="true">→</span></button></div>
+    </div>
+
+    <div class="spg" data-trin="stand" hidden>
+      <h2 class="spg-titel" id="spg-stand" tabindex="-1">Hvordan ser gulvet ud i dag?</h2>
+      <div class="raekker" role="radiogroup" aria-labelledby="spg-stand" data-valg="stand"></div>
+      <p class="spg-hint" aria-live="polite"></p>
+      <div class="spg-fod" hidden><button type="submit" class="knap">Næste <span aria-hidden="true">→</span></button></div>
+    </div>
+
+    <div class="spg" data-trin="tilvalg" hidden>
+      <h2 class="spg-titel" id="spg-tilvalg" tabindex="-1">Skal der noget med?</h2>
+      <p class="spg-hjaelp">Vælg begge, én eller ingen.</p>
+      <div class="raekker" role="group" aria-labelledby="spg-tilvalg" data-valg="tilvalg"></div>
+      <p class="spg-hint" aria-live="polite"></p>
+      <div class="spg-fod"><button type="submit" class="knap" id="tilvalg-naeste">Videre uden tilvalg <span aria-hidden="true">→</span></button></div>
+    </div>
+
+    <div class="spg" data-trin="postnummer" hidden>
+      <h2 class="spg-titel" id="spg-postnummer" tabindex="-1">Hvor ligger gulvet?</h2>
+      <p class="spg-hjaelp">Vi kører i Silkeborg og cirka 60 km omkring.</p>
+      <label class="post-felt" for="postnummer">
+        <span class="vh">Postnummer</span>
+        <input type="text" id="postnummer" inputmode="numeric" autocomplete="postal-code" maxlength="4" placeholder="Postnummer" aria-describedby="postnummer-info">
+      </label>
+      <p class="post-info" id="postnummer-info" aria-live="polite"></p>
+      <p class="spg-hint" aria-live="polite"></p>
+      <div class="spg-fod"><button type="submit" class="knap">Se min pris <span aria-hidden="true">→</span></button></div>
+    </div>
+  </form>
+
+  <div class="resultat" id="resultat" hidden>
+    <h2 class="res-titel" id="res-titel" tabindex="-1">Din vejledende pris</h2>
+    <p class="res-pris" id="res-pris"></p>
+    <p class="res-meta" id="res-meta"></p>
+    <p class="res-note" id="res-note" hidden></p>
+    <div class="res-svar" id="res-svar" aria-label="Dine svar. Tryk for at rette."></div>
+    <dl class="res-dele" id="res-dele"></dl>
+    <p class="res-tid" id="res-tid"></p>
+
+    <div class="lead" id="lead">
+      <form class="lead-form" id="lead-form" novalidate>
+        <h3 class="lead-titel" id="lead-titel" tabindex="-1">Få en fast pris</h3>
+        <p class="lead-intro">Vi kommer gratis ud, måler op og tjekker fugten i betonen. Bagefter får du en fast pris på skrift.</p>
+        <div class="felt">
+          <label for="lf-navn">Navn</label>
+          <input type="text" id="lf-navn" name="navn" autocomplete="name" required aria-describedby="lf-navn-fejl">
+          <p class="felt-fejl" id="lf-navn-fejl"></p>
+        </div>
+        <div class="felt-raekke">
+          <div class="felt">
+            <label for="lf-telefon">Telefon</label>
+            <input type="tel" id="lf-telefon" name="telefon" autocomplete="tel" inputmode="tel" required aria-describedby="lf-telefon-fejl">
+            <p class="felt-fejl" id="lf-telefon-fejl"></p>
+          </div>
+          <div class="felt">
+            <label for="lf-mail">Mail</label>
+            <input type="email" id="lf-mail" name="mail" autocomplete="email" required aria-describedby="lf-mail-fejl">
+            <p class="felt-fejl" id="lf-mail-fejl"></p>
+          </div>
+        </div>
+        <fieldset class="felt">
+          <legend>Hvornår skal gulvet laves?</legend>
+          <div class="chips">
+            <label class="chip" for="lf-hv-hurtigst"><input type="radio" name="hvornaar" id="lf-hv-hurtigst" value="hurtigst">Hurtigst muligt</label>
+            <label class="chip" for="lf-hv-1-3"><input type="radio" name="hvornaar" id="lf-hv-1-3" value="1-3-mdr">Inden for 1-3 måneder</label>
+            <label class="chip" for="lf-hv-senere"><input type="radio" name="hvornaar" id="lf-hv-senere" value="senere">Senere</label>
+            <label class="chip" for="lf-hv-undersoeger"><input type="radio" name="hvornaar" id="lf-hv-undersoeger" value="undersoeger">Jeg undersøger bare</label>
+          </div>
+        </fieldset>
+        <div class="felt">
+          <label for="lf-besked">Andet, vi skal vide? <span class="valgfrit">Valgfrit</span></label>
+          <textarea id="lf-besked" name="besked" rows="3" placeholder="Fx adgang, afløb i gulvet eller om der ligger fliser"></textarea>
+        </div>
+        <div class="honning" aria-hidden="true">
+          <label for="lf-firma">Firma</label>
+          <input type="text" id="lf-firma" name="firma" tabindex="-1" autocomplete="off">
+        </div>
+        <button type="submit" class="knap knap-stor knap-fuld" id="lf-send">Send og få en fast pris <span aria-hidden="true">→</span></button>
+        <p class="form-fejl" id="lf-fejl" role="alert" hidden></p>
+        <p class="lead-note">Vi bruger kun dine oplysninger til at kontakte dig om dit gulv. <a href={link('privatliv')}>Privatlivspolitik</a></p>
+      </form>
+
+      <div class="kun-mail" id="kun-mail">
+        <button type="button" class="tekstknap" id="km-aabn" aria-expanded="false" aria-controls="km-form">Ikke klar endnu? Få beregningen på mail</button>
+        <form class="km-form" id="km-form" novalidate hidden>
+          <div class="felt">
+            <label for="km-mail">Mail</label>
+            <input type="email" id="km-mail" name="mail" autocomplete="email" required aria-describedby="km-mail-fejl">
+            <p class="felt-fejl" id="km-mail-fejl"></p>
+          </div>
+          <button type="submit" class="knap knap-lys" id="km-send">Send beregningen</button>
+          <p class="km-tak" id="km-tak" role="status" hidden></p>
+        </form>
+      </div>
+
+      <div class="tak" id="tak" hidden>
+        <h3 class="tak-titel" id="tak-titel" tabindex="-1"></h3>
+        <dl class="tak-resume" id="tak-resume"></dl>
+        <p>Send gerne 2-3 billeder af gulvet til <a href={`mailto:${firma.mail}`}><span data-pladsholder>{firma.mail}</span></a>. Så kan vi give en mere præcis pris allerede i telefonen.</p>
+        <details class="demo-data" id="demo-data" hidden>
+          <summary>Demo: intet er sendt. Se de data, der ville blive sendt</summary>
+          <pre id="demo-data-pre"></pre>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="bundbar" id="bundbar" hidden>
+  <a class="bundbar-knap" id="bundbar-knap" href="#beregner"><span id="bundbar-tekst">Se hvad dit gulv koster</span> <span aria-hidden="true">→</span></a>
+</div>
+
+<script>
+  import { startBundbar } from '../bundbar.js';
+  import { startQuiz } from '../calculator/quiz.js';
+  import { samtykkeStatus } from '../consent.js';
+  import { startLead } from '../lead-form.js';
+
+  const beregner = startQuiz();
+  startLead({ beregner, samtykke: { status: samtykkeStatus } });
+  startBundbar(beregner);
+</script>

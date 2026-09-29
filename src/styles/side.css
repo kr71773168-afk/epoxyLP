@@ -1,10 +1,45 @@
-/* ---------- top ---------- */
-.top-indre { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4.25rem; }
+/* ---------- top og menu ---------- */
+.top { position: relative; z-index: 20; background: var(--bg); border-bottom: 1px solid var(--linje); }
+.top-indre { display: flex; align-items: center; gap: 1.25rem; min-height: 4.5rem; }
 .logo { font-size: 1.15rem; letter-spacing: -.01em; text-decoration: none; white-space: nowrap; }
 .logo b { font-weight: 640; }
-.top-tlf { display: inline-flex; align-items: baseline; gap: .5rem; text-decoration: none; white-space: nowrap; }
+.nav { margin-left: auto; }
+.nav-liste { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: .15rem; }
+.nav-link {
+  display: inline-flex; align-items: center; gap: .4rem; padding: .55rem .7rem; border: 0; background: none;
+  font-size: .98rem; color: var(--ink); text-decoration: none; cursor: pointer; white-space: nowrap;
+}
+.nav-link:hover, .nav-link[aria-expanded="true"] { background: var(--flade-2); }
+.nav-link.er-aktiv { text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--accent); text-underline-offset: .4em; }
+.nav-pil { width: .4rem; height: .4rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(45deg); }
+.nav-gruppe { position: relative; }
+.nav-under {
+  display: none; position: absolute; top: 100%; left: 0; z-index: 30; min-width: 13rem; margin: 0; padding: .35rem; list-style: none;
+  background: var(--flade); border: 1px solid var(--linje); box-shadow: var(--skygge);
+}
+.nav-gruppe:hover .nav-under, .nav-link[aria-expanded="true"] + .nav-under { display: block; }
+.nav-under a { display: block; padding: .55rem .75rem; text-decoration: none; }
+.nav-under a:hover, .nav-under a[aria-current="page"] { background: var(--flade-2); }
+.top-tlf { display: inline-flex; align-items: baseline; gap: .45rem; text-decoration: none; white-space: nowrap; }
 .top-tlf-label { font-size: var(--t-lille); color: var(--ink-2); }
 .tlf-nr { font-size: 1.05rem; font-weight: 520; font-variant-numeric: tabular-nums; }
+.top-cta { padding: .65rem 1rem; font-size: .95rem; }
+.menu-knap { display: none; padding: .5rem .9rem; border: 1px solid var(--linje-2); background: var(--flade); font-size: .95rem; cursor: pointer; }
+.mobilmenu { border-top: 1px solid var(--linje); }
+.mobilmenu-indre { padding-block: 1.25rem 2rem; }
+.mobilmenu-grupper { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1.25rem 2rem; margin: 1.5rem 0; }
+.mobilmenu-titel { font-size: .85rem; color: var(--ink-3); margin-bottom: .25rem; }
+.mobilmenu ul { list-style: none; margin: 0; padding: 0; }
+.mobilmenu li a { display: block; padding: .65rem 0; border-bottom: 1px solid var(--linje); font-size: 1.12rem; text-decoration: none; }
+.mobilmenu li a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; }
+.mobilmenu-tlf { font-size: 1.1rem; }
+@media (max-width: 1120px) {
+  .nav, .top-cta { display: none; }
+  .menu-knap { display: inline-block; }
+  .top-tlf { margin-left: auto; }
+}
+@media (min-width: 1121px) { .mobilmenu { display: none !important; } }
+@media (max-width: 420px) { .top-tlf-label { display: none; } }
 
 /* ---------- hero: tekst og video til venstre, beregneren til højre ---------- */
 .hero {
@@ -16,9 +51,11 @@
   padding-block: clamp(1.75rem, 4vw, 3.5rem) clamp(3rem, 7vw, 5.5rem);
 }
 .hero-tekst { grid-area: tekst; padding-top: clamp(0rem, 2vw, 1.5rem); }
-.quiz { grid-area: quiz; align-self: start; }
-.tillid { grid-area: tillid; }
-.hero-video { grid-area: video; }
+.hero-by, .hero-pris { grid-template-rows: auto auto 1fr; grid-template-areas: "tekst quiz" "tillid quiz" ". quiz"; }
+.hero-by h1, .hero-pris h1 { max-width: 16ch; }
+.hero .quiz { grid-area: quiz; align-self: start; }
+.hero .tillid { grid-area: tillid; }
+.hero .hero-video { grid-area: video; }
 
 .hero-over { color: var(--ink-2); margin-bottom: .9rem; }
 .hero h1 { font-size: var(--t-h1); max-width: 13ch; margin-bottom: 1.1rem; }
@@ -31,10 +68,10 @@
   background: var(--accent); color: var(--ink); font-size: .72rem; font-weight: 700;
 }
 
-.hero-video { margin: 0; }
-.hero-video video { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: var(--flade-2); }
-.hero-video figcaption { font-size: var(--t-lille); color: var(--ink-2); margin-top: .6rem; }
-.hero-video video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+.video { margin: 0; }
+.video video { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: var(--flade-2); }
+.video figcaption { font-size: var(--t-lille); color: var(--ink-2); margin-top: .6rem; }
+.video video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
 
 @media (max-width: 980px) {
   .hero {
@@ -42,6 +79,7 @@
     grid-template-rows: none;
     grid-template-areas: "tekst" "quiz" "tillid" "video";
   }
+  .hero-by, .hero-pris { grid-template-areas: "tekst" "quiz" "tillid"; }
   .hero h1 { max-width: 16ch; }
   .hero-sub { margin-bottom: 1.25rem; }
   .tillid { margin: 1.5rem 0; }
@@ -105,8 +143,16 @@
   .slut::before { background: linear-gradient(180deg, rgba(16, 18, 20, .82) 0%, rgba(16, 18, 20, .72) 100%); }
 }
 
-.fod { padding-block: 2rem 2.5rem; font-size: var(--t-lille); color: var(--ink-2); }
-.fod-indre p { margin: 0 0 .35rem; }
+.fod { border-top: 1px solid var(--linje); padding-block: clamp(2.5rem, 6vw, 4rem) 2rem; font-size: .95rem; color: var(--ink-2); }
+.fod-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(4, minmax(0, 1fr)); gap: 2rem; }
+.fod-firma p { margin: .8rem 0 0; }
+.fod-titel { font-weight: 560; color: var(--ink); margin-bottom: .6rem; }
+.fod ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
+.fod a { text-decoration: none; }
+.fod a:hover { text-decoration: underline; }
+.fod-bund { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--linje); font-size: var(--t-lille); }
+.fod-bund p { margin: 0; }
+@media (max-width: 1080px) { .fod-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fod-firma { grid-column: 1 / -1; } }
 @media (max-width: 900px) { .fod { padding-bottom: 5.5rem; } }
 
 /* ---------- bundbar på mobil, når beregneren er ude af syne ---------- */
@@ -137,3 +183,129 @@
 .tekstside { max-width: 44rem; padding-block: 2.5rem 5rem; }
 .tekstside h1 { font-size: var(--t-h2); margin-bottom: 1.5rem; }
 .tekstside h2 { font-size: 1.25rem; margin: 2rem 0 .5rem; }
+
+/* ---------- brødkrummer og sidetoppe ---------- */
+.brodkrummer { padding-top: 1.1rem; font-size: .88rem; color: var(--ink-3); }
+.brodkrummer ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .35rem; }
+.brodkrummer li + li::before { content: "/"; margin-right: .35rem; color: var(--linje-2); }
+.brodkrummer a { color: var(--ink-2); text-decoration: none; }
+.brodkrummer a:hover { text-decoration: underline; }
+
+.side-hero {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center;
+  padding-block: clamp(1.5rem, 4vw, 3rem) clamp(3rem, 7vw, 5rem);
+}
+.side-hero h1, .side-top h1 { font-size: var(--t-h1); max-width: 15ch; margin-bottom: 1rem; }
+.side-hero-billede { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; background: var(--flade-2); }
+.fra-pris { margin-bottom: 1.5rem; color: var(--ink-2); }
+.fra-pris strong { color: var(--ink); font-weight: 600; font-size: 1.15rem; }
+.side-hero-knapper { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+.pil-link { font-weight: 500; text-decoration: none; }
+.pil-link:hover { text-decoration: underline; }
+.side-top { padding-block: clamp(1.5rem, 4vw, 3rem) clamp(1.5rem, 4vw, 2.5rem); }
+.side-top .knap { margin-right: 1.25rem; }
+@media (max-width: 900px) {
+  .side-hero { grid-template-columns: minmax(0, 1fr); }
+  .side-hero-billede { aspect-ratio: 16 / 10; }
+}
+
+.sektion-hoved { display: grid; gap: .6rem; max-width: 46rem; margin-bottom: clamp(1.5rem, 4vw, 2.5rem); }
+.sektion-hoved .sektion-titel { margin-bottom: 0; }
+.sektion-hoved p { color: var(--ink-2); margin: 0; }
+.sektion-hoved-link { max-width: none; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .75rem 1.5rem; }
+
+/* ---------- kort med ydelser ---------- */
+.kort-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: .75rem; }
+.kort {
+  display: grid; grid-template-columns: 6.25rem minmax(0, 1fr); align-items: center; gap: 1rem; height: 100%;
+  padding: .6rem 1rem .6rem .6rem; background: var(--flade); border: 1px solid var(--linje); text-decoration: none;
+  transition: border-color .15s, box-shadow .2s;
+}
+.kort:hover { border-color: var(--ink); box-shadow: var(--skygge); }
+.kort-billede { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; background: var(--flade-2); }
+.kort-tekst { display: grid; gap: .15rem; }
+.kort-navn { font-size: 1.08rem; font-weight: 560; }
+.kort-navn span { display: inline-block; transition: transform .2s var(--ease); }
+.kort:hover .kort-navn span { transform: translateX(3px); }
+.kort-desk { font-size: .9rem; color: var(--ink-2); line-height: 1.4; }
+.kort-pris { font-size: .88rem; margin-top: .15rem; }
+
+/* ---------- fordele, afsnit og beregner på undersider ---------- */
+.fordele { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(1.25rem, 3vw, 2rem); }
+.fordele li { border-top: 2px solid var(--ink); padding-top: 1rem; }
+.fordele h3 { font-size: 1.15rem; margin-bottom: .45rem; }
+.fordele p { color: var(--ink-2); margin: 0; }
+@media (max-width: 980px) { .fordele { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .fordele { grid-template-columns: minmax(0, 1fr); } }
+
+.beregner-sektion { background: var(--flade-2); }
+.beregner-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 35rem); gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+.beregner-tekst p { color: var(--ink-2); max-width: 36ch; }
+@media (max-width: 980px) { .beregner-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.afsnit-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 5vw, 4rem); }
+.afsnit h2 { font-size: 1.5rem; margin-bottom: .8rem; }
+.afsnit p { color: var(--ink-2); max-width: 60ch; }
+.afsnit p strong { color: var(--ink); font-weight: 560; }
+@media (max-width: 860px) { .afsnit-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- referencer ---------- */
+.ref-sektion { padding-bottom: clamp(3rem, 7vw, 5rem); }
+.ref-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.25rem, 3vw, 2rem); }
+.ref-billede { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; margin-bottom: .9rem; background: var(--flade-2); }
+.ref-titel { font-size: 1.1rem; font-weight: 560; margin-bottom: .2rem; }
+.ref-meta { font-size: .9rem; color: var(--ink-2); }
+@media (max-width: 860px) { .ref-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .ref-grid { grid-template-columns: minmax(0, 1fr); } }
+.kladde-note { display: none; }
+.kladde .kladde-note { display: block; max-width: 46rem; padding: .6rem .8rem; background: var(--accent-svag); font-size: .92rem; }
+.anmeldelser p { color: var(--ink-2); }
+
+/* ---------- område og bysider ---------- */
+.omraade { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(1.5rem, 5vw, 4rem); align-items: start; }
+.omraade p { color: var(--ink-2); max-width: 40ch; }
+.omraade-liste { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: .5rem; }
+.omraade-liste a {
+  display: flex; justify-content: space-between; gap: .5rem; padding: .75rem .9rem; background: var(--flade); border: 1px solid var(--linje);
+  font-weight: 500; text-decoration: none; transition: border-color .15s;
+}
+.omraade-liste a::after { content: "→"; color: var(--ink-3); }
+.omraade-liste a:hover { border-color: var(--ink); }
+@media (max-width: 860px) { .omraade { grid-template-columns: minmax(0, 1fr); } }
+.by-fakta { list-style: none; margin: 0 0 1.5rem; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+.by-fakta li { padding: .35rem .7rem; background: var(--flade); border: 1px solid var(--linje); font-size: .92rem; }
+
+/* ---------- pris ---------- */
+.pris-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(1.5rem, 5vw, 4rem); align-items: start; }
+.pris-grid p { color: var(--ink-2); max-width: 40ch; }
+.tabel-ramme { overflow-x: auto; background: var(--flade); border: 1px solid var(--linje); }
+.pris-tabel { width: 100%; border-collapse: collapse; font-size: .97rem; }
+.pris-tabel th, .pris-tabel td { padding: .75rem 1rem; border-bottom: 1px solid var(--linje); text-align: left; }
+.pris-tabel thead th { background: var(--flade-2); color: var(--ink-2); font-size: .88rem; font-weight: 560; }
+.pris-tabel tbody th { font-weight: 500; }
+.pris-tabel tbody + tbody tr:first-child > * { border-top: 2px solid var(--ink); }
+.pris-tabel td { white-space: nowrap; }
+@media (max-width: 860px) { .pris-grid { grid-template-columns: minmax(0, 1fr); } }
+.eksempler { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr)); gap: .75rem; }
+.eksempler li { display: grid; gap: .15rem; padding: 1rem 1.1rem; background: var(--flade); border: 1px solid var(--linje); }
+.eks-navn { font-weight: 560; }
+.eks-meta { font-size: .88rem; color: var(--ink-2); }
+.eks-pris { margin-top: .5rem; font-size: 1.4rem; font-weight: 560; letter-spacing: -.02em; }
+.eks-moms { font-size: .85rem; color: var(--ink-3); }
+
+/* ---------- kontakt og om os ---------- */
+.kontakt {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 32rem); gap: clamp(2rem, 5vw, 4.5rem); align-items: start;
+  padding-block: clamp(1.5rem, 4vw, 3rem) clamp(3rem, 7vw, 5.5rem);
+}
+.kontakt h1 { font-size: var(--t-h1); margin-bottom: 1rem; }
+.kontakt-liste { margin: 1.5rem 0; border-top: 1px solid var(--ink); }
+.kontakt-liste div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 1rem; padding: .8rem 0; border-bottom: 1px solid var(--linje); }
+.kontakt-liste dt { color: var(--ink-2); }
+.kontakt-liste dd { margin: 0; }
+.kontakt-tlf { text-decoration: none; }
+.kontakt-tlf .tlf-nr { font-size: 1.4rem; }
+.kontakt-pris { color: var(--ink-2); }
+@media (max-width: 900px) { .kontakt { grid-template-columns: minmax(0, 1fr); } }
+.om-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+@media (max-width: 860px) { .om-grid { grid-template-columns: minmax(0, 1fr); } }

@@ -1,0 +1,41 @@
+---
+import Brodkrummer from '../components/Brodkrummer.astro';
+import Foto from '../components/Foto.astro';
+import Slut from '../components/Slut.astro';
+import { referencer } from '../data/referencer.js';
+import Side from '../layouts/Side.astro';
+---
+<Side
+  titel="Referencer · Epoxygulve, vi har lavet · Silkeborg Epoxy"
+  beskrivelse="Se epoxygulve, vi har lavet i garager, kældre, boliger og erhverv i Midtjylland. Med størrelse, overflade og sted."
+  slug="referencer"
+>
+  <Brodkrummer sti={[{ navn: 'Referencer', slug: 'referencer' }]} />
+
+  <section class="kolonne side-top" aria-labelledby="side-titel">
+    <h1 id="side-titel">Gulve, vi har lavet</h1>
+    <p class="hero-sub">Et udvalg af vores jobs med størrelse, overflade og sted.</p>
+    <p class="kladde-note">Billederne er fra kundens egen video. Teksterne er eksempler og skal skiftes til rigtige jobs før launch.</p>
+  </section>
+
+  <section class="kolonne ref-sektion" aria-label="Referencer">
+    <ul class="ref-grid">
+      {referencer.map((r, i) => (
+        <li class="ref">
+          <Foto navn={r.billede} alt={r.titel} class="ref-billede" sizes="(max-width: 760px) 100vw, 33vw" eager={i < 3} />
+          <p class="ref-titel" data-pladsholder>{r.titel}</p>
+          <p class="ref-meta" data-pladsholder>{r.sted} · {r.m2} m² · {r.overflade}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="sektion" aria-labelledby="anm-titel">
+    <div class="kolonne anmeldelser">
+      <h2 class="sektion-titel" id="anm-titel">Det siger kunderne</h2>
+      <p data-pladsholder>Her kommer anmeldelser fra Trustpilot eller Google, når de første er på plads.</p>
+    </div>
+  </section>
+
+  <Slut />
+</Side>

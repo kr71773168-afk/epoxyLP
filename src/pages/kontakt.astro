@@ -1,0 +1,75 @@
+---
+import Brodkrummer from '../components/Brodkrummer.astro';
+import { firma } from '../data/firma.js';
+import Side from '../layouts/Side.astro';
+import { link } from '../lib/link.js';
+import '../styles/quiz.css';
+---
+<Side
+  titel="Kontakt · Silkeborg Epoxy"
+  beskrivelse="Ring eller skriv til Silkeborg Epoxy. Vi kommer gratis ud, måler op og giver en fast pris på dit nye epoxygulv."
+  slug="kontakt"
+>
+  <Brodkrummer sti={[{ navn: 'Kontakt', slug: 'kontakt' }]} />
+
+  <section class="kolonne kontakt" aria-labelledby="side-titel">
+    <div class="kontakt-info">
+      <h1 id="side-titel">Kontakt</h1>
+      <p class="hero-sub">Ring, skriv eller send formularen. Vi svarer <span data-pladsholder>{firma.svartid}</span>.</p>
+      <dl class="kontakt-liste">
+        <div><dt>Telefon</dt><dd><a class="kontakt-tlf" href={`tel:${firma.telefonLink}`} data-telefon><span class="tlf-nr" data-pladsholder>{firma.telefon}</span></a></dd></div>
+        <div><dt>Mail</dt><dd><a href={`mailto:${firma.mail}`}><span data-pladsholder>{firma.mail}</span></a></dd></div>
+        <div><dt>Adresse</dt><dd><span data-pladsholder>{firma.adresse.vej}, {firma.adresse.postnr} {firma.adresse.by}</span></dd></div>
+        <div><dt>Åbent</dt><dd><span data-pladsholder>{firma.aabningstider}</span></dd></div>
+      </dl>
+      <p class="kontakt-pris">Vil du bare kende prisen? <a href={link('pris')}>Brug prisberegneren</a>. Det tager et minut.</p>
+    </div>
+
+    <div class="quiz kontakt-kort">
+      <form class="lead-form" id="kontakt-form" novalidate>
+        <h2 class="lead-titel">Skriv til os</h2>
+        <div class="felt">
+          <label for="kf-navn">Navn</label>
+          <input type="text" id="kf-navn" name="navn" autocomplete="name" required aria-describedby="kf-navn-fejl">
+          <p class="felt-fejl" id="kf-navn-fejl"></p>
+        </div>
+        <div class="felt-raekke">
+          <div class="felt">
+            <label for="kf-telefon">Telefon</label>
+            <input type="tel" id="kf-telefon" name="telefon" autocomplete="tel" inputmode="tel" required aria-describedby="kf-telefon-fejl">
+            <p class="felt-fejl" id="kf-telefon-fejl"></p>
+          </div>
+          <div class="felt">
+            <label for="kf-mail">Mail</label>
+            <input type="email" id="kf-mail" name="mail" autocomplete="email" required aria-describedby="kf-mail-fejl">
+            <p class="felt-fejl" id="kf-mail-fejl"></p>
+          </div>
+        </div>
+        <div class="felt">
+          <label for="kf-postnummer">Postnummer <span class="valgfrit">Valgfrit</span></label>
+          <input type="text" id="kf-postnummer" name="postnummer" autocomplete="postal-code" inputmode="numeric" maxlength="4">
+        </div>
+        <div class="felt">
+          <label for="kf-besked">Hvad drejer det sig om?</label>
+          <textarea id="kf-besked" name="besked" rows="4" placeholder="Fx rummet, størrelsen og hvornår det skal laves"></textarea>
+        </div>
+        <div class="honning" aria-hidden="true">
+          <label for="kf-firma">Firma</label>
+          <input type="text" id="kf-firma" name="firma" tabindex="-1" autocomplete="off">
+        </div>
+        <button type="submit" class="knap knap-stor knap-fuld" id="kf-send">Send <span aria-hidden="true">→</span></button>
+        <p class="form-fejl" id="kf-fejl" role="alert" hidden></p>
+        <p class="lead-note">Vi bruger kun dine oplysninger til at svare dig. <a href={link('privatliv')}>Privatlivspolitik</a></p>
+      </form>
+      <div class="tak" id="kf-tak" hidden>
+        <h2 class="tak-titel" id="kf-tak-titel" tabindex="-1">Tak. Vi vender tilbage <span data-pladsholder>{firma.svartid}</span>.</h2>
+        <p>Har du billeder af gulvet, så send dem gerne til <a href={`mailto:${firma.mail}`}><span data-pladsholder>{firma.mail}</span></a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { startKontakt } from '../kontakt-form.js';
+    startKontakt();
+  </script>
+</Side>

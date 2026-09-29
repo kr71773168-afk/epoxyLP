@@ -41,6 +41,12 @@ describe('validering', () => {
     expect(valider(lead({ type: 'kun-mail', kontakt: { mail: 'a@b.dk' } }))).toBeNull();
     expect(valider(lead({ type: 'noget-andet' }))).toMatch(/type/);
   });
+  it('tager imod kontaktformularen med samme krav som beregneren', () => {
+    const kontakt = { type: 'kontakt', kontakt: { navn: 'Mads', telefon: '22334455', mail: 'a@b.dk', besked: 'Garage' }, beregning: { postnummer: null } };
+    expect(valider(kontakt)).toBeNull();
+    expect(valider({ ...kontakt, kontakt: { navn: 'Mads', telefon: '123', mail: 'a@b.dk' } })).toMatch(/telefon/);
+    expect(leadScore(kontakt)).toBe('NORMAL');
+  });
 });
 
 describe('leadScore', () => {

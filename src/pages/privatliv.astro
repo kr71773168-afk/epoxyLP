@@ -1,0 +1,31 @@
+---
+import { firma } from '../data/firma.js';
+import Side from '../layouts/Side.astro';
+import { link } from '../lib/link.js';
+---
+<Side titel="Privatlivspolitik · Silkeborg Epoxy" beskrivelse="Sådan behandler Silkeborg Epoxy dine oplysninger, når du bruger prisberegneren eller kontaktformularen." slug="privatliv">
+  <div class="kolonne tekstside">
+    <h1>Privatlivspolitik</h1>
+    <p><span data-pladsholder>Denne tekst er en skabelon. Den skal gennemgås og tilpasses, før siden går live.</span></p>
+
+    <h2>Hvem er vi</h2>
+    <p>{firma.juridiskNavn}, CVR {firma.cvr}, <span data-pladsholder>{firma.adresse.vej}, {firma.adresse.postnr} {firma.adresse.by}</span>. Mail: <span data-pladsholder>{firma.mail}</span>.</p>
+
+    <h2>Hvad vi indsamler</h2>
+    <p>Når du bruger prisberegneren eller kontaktformularen og sender den, får vi dit navn, telefonnummer, mail, postnummer, dine svar i beregneren og en eventuel besked.</p>
+
+    <h2>Hvorfor</h2>
+    <p>Vi bruger oplysningerne til at kontakte dig om dit gulv, give dig et tilbud og planlægge arbejdet.</p>
+
+    <h2>Hvor længe</h2>
+    <p><span data-pladsholder>Vi sletter oplysningerne efter 12 måneder, hvis du ikke bliver kunde. Bliver du kunde, gemmer vi dem, så længe bogføringsloven kræver det.</span></p>
+
+    <h2 id="cookies">Cookies</h2>
+    <p>Siden virker uden cookies. Siger du ja, bruger vi Meta Pixel til at måle, om vores annoncer på Facebook og Instagram virker. Du kan ændre dit valg under “Cookie-indstillinger” nederst på siden.</p>
+
+    <h2>Dine rettigheder</h2>
+    <p>Du kan altid få indsigt i, rette eller slette dine oplysninger. Skriv til os. Du kan også klage til Datatilsynet.</p>
+
+    <p><a href={link()}>Til forsiden</a></p>
+  </div>
+</Side>

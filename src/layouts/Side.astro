@@ -1,0 +1,85 @@
+---
+import '@fontsource-variable/schibsted-grotesk';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/side.css';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { byer } from '../data/byer.js';
+import { firma } from '../data/firma.js';
+import { fil, link } from '../lib/link.js';
+
+interface Props {
+  titel: string;
+  beskrivelse: string;
+  slug?: string;
+  schema?: object[];
+}
+const { titel, beskrivelse, slug = '', schema = [] } = Astro.props;
+const kanonisk = new URL(slug ? `/${slug}/` : '/', Astro.site).href;
+
+// Firmaet som lokal virksomhed, så Google kan vise navn, telefon og område
+const virksomhed = {
+  '@context': 'https://schema.org',
+  '@type': 'HomeAndConstructionBusiness',
+  name: firma.navn,
+  legalName: firma.juridiskNavn,
+  url: new URL('/', Astro.site).href,
+  telephone: firma.telefonLink,
+  email: firma.mail,
+  vatID: `DK${firma.cvr}`,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: firma.adresse.vej,
+    postalCode: firma.adresse.postnr,
+    addressLocality: firma.adresse.by,
+    addressCountry: 'DK',
+  },
+  areaServed: byer.map((b) => ({ '@type': 'City', name: b.navn })),
+  priceRange: 'kr',
+};
+---
+<!doctype html>
+<html lang="da" class:list={[{ kladde: firma.kladde }]}>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>{titel}</title>
+    <meta name="description" content={beskrivelse}>
+    {firma.kladde && <meta name="robots" content="noindex, nofollow">}
+    <link rel="canonical" href={kanonisk}>
+    <meta name="theme-color" content="#F4F2EE">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="da_DK">
+    <meta property="og:site_name" content={firma.navn}>
+    <meta property="og:title" content={titel}>
+    <meta property="og:description" content={beskrivelse}>
+    <meta property="og:url" content={kanonisk}>
+    <link rel="icon" href={fil('favicon.svg')} type="image/svg+xml">
+    <script type="application/ld+json" set:html={JSON.stringify(virksomhed)} />
+    {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  </head>
+  <body>
+    <a class="spring" href="#indhold">Spring til indholdet</a>
+    <p class="kladde-bjaelke">Kladde · pladsholdere er markeret med gult · priser, tekster og AI-billeder er ikke kundens endnu</p>
+    <Header aktiv={slug} />
+    <main id="indhold">
+      <slot />
+    </main>
+    <Footer />
+
+    <div class="samtykke" id="samtykke" role="region" aria-labelledby="samtykke-titel" hidden>
+      <p class="samtykke-titel" id="samtykke-titel">Cookies</p>
+      <p>Vi vil gerne bruge cookies til at måle, om vores annoncer på Facebook og Instagram virker. Siden virker fint uden.</p>
+      <div class="samtykke-knapper">
+        <button type="button" class="knap knap-lys" data-samtykke="nej">Nej tak</button>
+        <button type="button" class="knap knap-lys" data-samtykke="ja">Ja tak</button>
+      </div>
+      <a class="samtykke-link" href={link('privatliv', '#cookies')}>Læs mere</a>
+    </div>
+
+    <script>
+      import '../scripts/side.js';
+    </script>
+  </body>
+</html>

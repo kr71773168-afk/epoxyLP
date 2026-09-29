@@ -1,0 +1,17 @@
+---
+import plakat from '../media/arbejde.jpg';
+import mp4 from '../media/arbejde.mp4?url';
+import webm from '../media/arbejde.webm?url';
+
+interface Props {
+  class?: string;
+}
+const { class: klasse } = Astro.props;
+---
+<figure class:list={['video', klasse]}>
+  <video poster={plakat.src} muted loop playsinline disablepictureinpicture preload="none" data-auto aria-label="Video fra et af vores jobs: vi lægger primer og kaster kvartssand på et gulv">
+    <source src={mp4} type="video/mp4">
+    <source src={webm} type="video/webm">
+  </video>
+  <figcaption>Fra et af vores jobs</figcaption>
+</figure>

@@ -1,13 +1,13 @@
 {
-  "name": "silkeborg-epoxy-lp",
+  "name": "silkeborg-epoxy",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.4.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "build:demo": "vite build --mode demo --base ./ --outDir dist-demo",
-    "preview": "vite preview",
+    "dev": "astro dev",
+    "build": "astro build",
+    "build:demo": "DEMO=1 VITE_DEMO=1 astro build && node scripts/flad-preview.mjs dist-demo",
+    "preview": "astro preview",
     "test": "vitest run"
   },
   "devDependencies": {
@@ -15,6 +15,8 @@
     "vitest": "^5.0.2"
   },
   "dependencies": {
-    "@fontsource-variable/schibsted-grotesk": "^5.3.0"
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/schibsted-grotesk": "^5.3.0",
+    "astro": "^7.3.5"
   }
 }

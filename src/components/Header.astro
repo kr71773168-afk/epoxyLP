@@ -1,0 +1,72 @@
+---
+import { firma } from '../data/firma.js';
+import { gulvtyper, privat } from '../data/ydelser.js';
+import { link } from '../lib/link.js';
+
+const { aktiv = '' } = Astro.props;
+const menu = [
+  { navn: 'Privat', punkter: privat },
+  { navn: 'Erhverv', slug: 'erhvervsgulve' },
+  { navn: 'Gulvtyper', punkter: gulvtyper },
+  { navn: 'Referencer', slug: 'referencer' },
+  { navn: 'Om os', slug: 'om-os' },
+  { navn: 'Kontakt', slug: 'kontakt' },
+];
+const nu = (slug) => (aktiv === slug ? 'page' : undefined);
+const gruppeAktiv = (punkter) => punkter.some((p) => p.slug === aktiv);
+---
+<header class="top">
+  <div class="kolonne top-indre">
+    <a class="logo" href={link()} aria-label={`${firma.navn}, til forsiden`}>Silkeborg <b>Epoxy</b></a>
+
+    <nav class="nav" aria-label="Hovedmenu">
+      <ul class="nav-liste">
+        {menu.map((m) => m.punkter ? (
+          <li class="nav-gruppe" data-nav-gruppe>
+            <button type="button" class:list={['nav-link', { 'er-aktiv': gruppeAktiv(m.punkter) }]} aria-expanded="false">
+              {m.navn}<span class="nav-pil" aria-hidden="true"></span>
+            </button>
+            <ul class="nav-under">
+              {m.punkter.map((p) => <li><a href={link(p.slug)} aria-current={nu(p.slug)}>{p.navn}</a></li>)}
+            </ul>
+          </li>
+        ) : (
+          <li><a class:list={['nav-link', { 'er-aktiv': aktiv === m.slug }]} href={link(m.slug)} aria-current={nu(m.slug)}>{m.navn}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <a class="top-tlf" href={`tel:${firma.telefonLink}`} data-telefon>
+      <span class="top-tlf-label">Ring</span>
+      <span class="tlf-nr" data-pladsholder>{firma.telefon}</span>
+    </a>
+    <a class="knap top-cta" href={link('pris')}>Beregn pris</a>
+    <button type="button" class="menu-knap" aria-expanded="false" aria-controls="mobilmenu">Menu</button>
+  </div>
+
+  <div class="mobilmenu" id="mobilmenu" hidden>
+    <div class="kolonne mobilmenu-indre">
+      <a class="knap knap-stor knap-fuld" href={link('pris')}>Beregn prisen på dit gulv <span aria-hidden="true">→</span></a>
+      <div class="mobilmenu-grupper">
+        <div>
+          <p class="mobilmenu-titel">Privat</p>
+          <ul>{privat.map((p) => <li><a href={link(p.slug)} aria-current={nu(p.slug)}>{p.navn}</a></li>)}</ul>
+        </div>
+        <div>
+          <p class="mobilmenu-titel">Gulvtyper</p>
+          <ul>{gulvtyper.map((p) => <li><a href={link(p.slug)} aria-current={nu(p.slug)}>{p.navn}</a></li>)}</ul>
+        </div>
+        <div>
+          <p class="mobilmenu-titel">Firmaet</p>
+          <ul>
+            <li><a href={link('erhvervsgulve')} aria-current={nu('erhvervsgulve')}>Erhverv</a></li>
+            <li><a href={link('referencer')} aria-current={nu('referencer')}>Referencer</a></li>
+            <li><a href={link('om-os')} aria-current={nu('om-os')}>Om os</a></li>
+            <li><a href={link('kontakt')} aria-current={nu('kontakt')}>Kontakt</a></li>
+          </ul>
+        </div>
+      </div>
+      <a class="mobilmenu-tlf" href={`tel:${firma.telefonLink}`} data-telefon>Ring <span data-pladsholder>{firma.telefon}</span></a>
+    </div>
+  </div>
+</header>

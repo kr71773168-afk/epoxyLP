@@ -1,0 +1,29 @@
+---
+/**
+ * Et foto fra src/media/foto i flere størrelser (webp). `navn` er filnavnet uden .jpg.
+ * Skift et billede ved at lægge en ny fil med samme navn i mappen.
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+  navn: string;
+  alt: string;
+  sizes?: string;
+  class?: string;
+  eager?: boolean;
+}
+const { navn, alt, sizes = '(max-width: 900px) 100vw, 50vw', class: klasse, eager = false } = Astro.props;
+const fotos = import.meta.glob<{ default: ImageMetadata }>('../media/foto/*.jpg', { eager: true });
+const fil = fotos[`../media/foto/${navn}.jpg`];
+if (!fil) throw new Error(`Foto mangler: src/media/foto/${navn}.jpg`);
+---
+<Image
+  src={fil.default}
+  alt={alt}
+  widths={[480, 800, 1200, 1600]}
+  sizes={sizes}
+  class={klasse}
+  loading={eager ? 'eager' : 'lazy'}
+  fetchpriority={eager ? 'high' : undefined}
+  decoding="async"
+/>

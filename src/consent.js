@@ -9,6 +9,9 @@ function gem(valg) {
   try { localStorage.setItem(NOEGLE, valg); } catch { /* privat browsing */ }
 }
 
+/** Den besøgendes valg: 'ja', 'nej' eller null (ikke spurgt / ingen pixel). */
+export const samtykkeStatus = () => (pixelKonfigureret() ? laes() : null);
+
 /**
  * Cookie-samtykke. Banneret vises kun, hvis der er noget at spørge om (en Pixel ID).
  * "Nej tak" og "Ja tak" er lige nemme at trykke på.

@@ -1,0 +1,35 @@
+---
+import cfg from '../calculator/pricing.config.js';
+import Foto from './Foto.astro';
+---
+<section class="sektion" aria-labelledby="forloeb-titel">
+  <div class="kolonne">
+    <h2 class="sektion-titel" id="forloeb-titel">Sådan foregår det</h2>
+    <ol class="forloeb">
+      <li>
+        <div class="forloeb-billede forloeb-pris" aria-hidden="true">
+          <div class="mini-pris">
+            <span>Din vejledende pris</span>
+            <strong>17.000–19.500 kr</strong>
+            <span>inkl. moms · ca. 505 kr/m²</span>
+          </div>
+        </div>
+        <span class="forloeb-nr" aria-hidden="true">1</span>
+        <h3>Se prisen her</h3>
+        <p>Seks spørgsmål, et minut. Du får et prisinterval med det samme.</p>
+      </li>
+      <li>
+        <Foto navn="beton" alt="Et betongulv, før vi går i gang" class="forloeb-billede" sizes="(max-width: 760px) 100vw, 33vw" />
+        <span class="forloeb-nr" aria-hidden="true">2</span>
+        <h3>Gratis besigtigelse</h3>
+        <p>Vi kommer ud, måler op og tjekker fugten i betonen. Så får du en fast pris på skrift.</p>
+      </li>
+      <li>
+        <Foto navn="haelder" alt="Vi hælder epoxy op til gulvet" class="forloeb-billede" sizes="(max-width: 760px) 100vw, 33vw" />
+        <span class="forloeb-nr" aria-hidden="true">3</span>
+        <h3>Vi lægger gulvet</h3>
+        <p><span data-pladsholder>{cfg.tid.arbejdsdage}</span>. <span data-pladsholder>{cfg.tid.gaaPaa}</span>. <span data-pladsholder>{cfg.tid.koerPaa}</span>.</p>
+      </li>
+    </ol>
+  </div>
+</section>

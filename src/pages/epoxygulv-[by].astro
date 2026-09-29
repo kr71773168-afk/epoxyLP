@@ -1,0 +1,95 @@
+---
+/** Én side pr. by i src/data/byer.js, fx /epoxygulv-aarhus/. */
+import { beregnPris } from '../calculator/engine.js';
+import cfg from '../calculator/pricing.config.js';
+import Beregner from '../components/Beregner.astro';
+import Brodkrummer from '../components/Brodkrummer.astro';
+import FAQ from '../components/FAQ.astro';
+import Forloeb from '../components/Forloeb.astro';
+import Slut from '../components/Slut.astro';
+import Tillid from '../components/Tillid.astro';
+import YdelsesKort from '../components/YdelsesKort.astro';
+import { byer, bySti } from '../data/byer.js';
+import { erhverv, privat } from '../data/ydelser.js';
+import Side from '../layouts/Side.astro';
+import { link } from '../lib/link.js';
+
+export function getStaticPaths() {
+  return byer.map((b) => ({ params: { by: b.slug }, props: { b } }));
+}
+
+const { b } = Astro.props;
+const sti = bySti(b);
+const fmt = (n) => Math.round(n).toLocaleString('da-DK');
+const erSilkeborg = b.km === 0;
+const andre = byer.filter((x) => x.slug !== b.slug);
+
+// Et typisk garagegulv regnet med samme motor som beregneren, så tallet altid passer
+const eksempel = beregnPris({ rum: 'garage', areal: 36, overflade: 'flakes', stand: 'paen', tilvalg: [], postnummer: '8600' }, cfg);
+const eksempelTekst = `${fmt(eksempel.lav)}–${fmt(eksempel.hoej)} kr`;
+
+const faq = [
+  {
+    spg: `Kører I ud til ${b.navn}?`,
+    svar: erSilkeborg
+      ? 'Ja, vi holder selv til i Silkeborg. Vi kommer ud i hele kommunen, og kørslen er med i prisen.'
+      : `Ja. ${b.navn} ligger cirka ${b.km} km fra Silkeborg, i vores område, så kørslen er med i prisen.`,
+  },
+  {
+    spg: `Hvad koster et epoxygulv i ${b.navn}?`,
+    svar: `Det samme som i resten af vores område. En dobbelt garage på 36 m² med flakes koster typisk ${eksempelTekst} inkl. moms. Brug beregneren for at se prisen på dit gulv.`,
+  },
+  {
+    spg: 'Hvordan får jeg en fast pris?',
+    svar: 'Send dine svar fra beregneren, så ringer vi og aftaler en gratis besigtigelse. Vi måler op, tjekker betonen og giver dig en fast pris på skrift.',
+  },
+];
+---
+<Side
+  titel={`Epoxygulv i ${b.navn} · Se prisen med det samme`}
+  beskrivelse={`Epoxygulv til garage, kælder, bolig og erhverv i ${b.navn} og omegn. Se prisen på dit gulv på et minut. Fast pris efter gratis besigtigelse.`}
+  slug={sti}
+>
+  <Brodkrummer sti={[{ navn: `Epoxygulv ${b.navn}`, slug: sti }]} />
+
+  <section class="kolonne hero hero-by" aria-labelledby="hero-titel">
+    <div class="hero-tekst">
+      <p class="hero-over">Epoxygulve i {b.navn} og omegn</p>
+      <h1 id="hero-titel">Epoxygulv i {b.navn}</h1>
+      <p class="hero-sub">{b.tekst}</p>
+      <ul class="by-fakta">
+        {erSilkeborg ? <li>Vi holder til i Silkeborg</li> : <li>Ca. {b.km} km fra Silkeborg</li>}
+        {!erSilkeborg && <li>Ca. {b.min} min i bil</li>}
+        <li>Kørsel med i prisen</li>
+      </ul>
+    </div>
+    <Beregner />
+    <Tillid />
+  </section>
+
+  <section class="sektion" aria-labelledby="ydelser-titel">
+    <div class="kolonne">
+      <div class="sektion-hoved">
+        <h2 class="sektion-titel" id="ydelser-titel">Det laver vi i {b.navn}</h2>
+        <p>Garager, kældre, boliger og erhverv. Se, hvad der passer til dit rum.</p>
+      </div>
+      <YdelsesKort ydelser={[...privat, ...erhverv]} />
+    </div>
+  </section>
+
+  <section class="sektion" aria-labelledby="omraade-titel">
+    <div class="kolonne omraade">
+      <div>
+        <h2 class="sektion-titel" id="omraade-titel">Vi kommer også i</h2>
+        <p>{b.omraader.join(', ')} og resten af området omkring {b.navn}.</p>
+      </div>
+      <ul class="omraade-liste">
+        {andre.map((x) => <li><a href={link(bySti(x))}>{x.navn}</a></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <Forloeb />
+  <FAQ items={faq} titel={`Spørgsmål fra ${b.navn}`} />
+  <Slut harBeregner />
+</Side>
