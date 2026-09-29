@@ -1,6 +1,6 @@
 # Silkeborg Epoxy · landingpage med prisberegner
 
-**Status:** Plan v1, 29.09.2026. Ingen kode endnu.
+**Status:** Første udkast af siden er bygget (v0.1, 29.09.2026). Se [README.md](README.md) for opsætning, pladsholdere og tjekliste før launch.
 **Priser i dette dokument** er markedsniveau eller pladsholdere. De skal erstattes af kundens egne tal før noget går live.
 **Visuel version med skitser** (hero-refleksion, beregner, snit, gummiskraber): https://claude.ai/artifact/EtPejGYeD86SAgKEQwpe81
 

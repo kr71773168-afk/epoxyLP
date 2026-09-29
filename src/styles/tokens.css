@@ -1,0 +1,55 @@
+/*
+ * "Fugefri": siden er bygget som et epoxygulv. Én flade uden kasser, helt plan,
+ * ét blankt lag. Farverne er materialerne: betongrå, antracit og signalgul.
+ * Signalgul bruges kun på det, man trykker på.
+ */
+:root {
+  color-scheme: light;
+
+  --bg: #E5E6E2;           /* beton, i familie med RAL 7035 */
+  --flade: #D7D9D4;        /* valgt tilstand, prøveflader */
+  --ink: #24282B;          /* antracit, i familie med RAL 7016 */
+  --ink-2: #5C6266;        /* grafit, sekundær tekst */
+  --linje: rgba(36, 40, 43, .22);
+  --linje-svag: rgba(36, 40, 43, .1);
+  --signal: #F0B400;       /* signalgul, i familie med RAL 1003 */
+  --signal-ink: #24282B;
+  --glans: rgba(255, 255, 255, .75);
+  --fejl: #A1361F;
+
+  --moerk: #1F2225;        /* mørk flade til afslutningen */
+  --moerk-ink: #E4E5E1;
+  --moerk-ink-2: #A3A9AC;
+  --moerk-linje: rgba(228, 229, 225, .2);
+
+  --gulv-top: #DADCD7;
+  --gulv-bund: #C9CCC6;
+
+  /* materialer i snittet og før/efter */
+  --mat-beton: #8E918C;
+  --mat-tilslag: #6E716C;
+  --mat-tilslag-lys: #A9ACA6;
+  --mat-slib: #C4C7C1;
+  --mat-spartel: #B9AE95;
+  --mat-primer: #C98F2A;
+  --mat-top: rgba(255, 255, 255, .42);
+  --mat-sand: #D8CFB8;
+  --mat-blad: #1B1D1F;
+  --mat-skaft: #A9AFB3;
+
+  --f-display: "Archivo Variable", "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-tekst: "Archivo Variable", "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --t-hero: clamp(2rem, 5.4vw, 4.5rem);
+  --t-h2: clamp(1.7rem, 3.3vw, 2.7rem);
+  --t-h3: 1.25rem;
+  --t-tekst: 1.0625rem;
+  --t-lille: .9375rem;
+  --t-label: .75rem;
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --maks: 1200px;
+  --rail: 10.5rem;
+  --flyd: cubic-bezier(.22, .8, .26, 1);
+}

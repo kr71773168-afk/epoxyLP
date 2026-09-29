@@ -1,0 +1,469 @@
+<!doctype html>
+<!-- "kladde" markerer pladsholdere med gult. Fjern klassen ved launch. -->
+<html lang="da" class="kladde">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Epoxygulv i Silkeborg · Se prisen på 60 sekunder · Silkeborg Epoxy</title>
+  <meta name="description" content="Se hvad dit nye epoxygulv koster på 60 sekunder. Garage, kælder, bolig og erhverv i Silkeborg og 60 km omkring. Fast pris efter gratis besigtigelse.">
+  <!-- KLADDE: fjernes ved launch -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#E5E6E2">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="da_DK">
+  <meta property="og:title" content="Hvad koster dit nye gulv? Se det på 60 sekunder">
+  <meta property="og:description" content="Epoxygulve til garage, kælder, bolig og erhverv. Silkeborg og 60 km omkring.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+  <a class="spring" href="#beregner">Spring til prisberegneren</a>
+  <p class="kladde-bjaelke mono">Kladde · pladsholdere er markeret med gult · priserne er ikke kundens endnu</p>
+
+  <header class="topbar">
+    <div class="kolonne topbar-indre">
+      <a class="ordmaerke" href="#top" aria-label="Silkeborg Epoxy, til toppen af siden">Silkeborg <span>Epoxy</span></a>
+      <a class="topbar-tlf" href="tel:+4500000000" data-telefon>
+        <span class="label">Ring</span>
+        <span class="tlf-nr" data-pladsholder>00 00 00 00</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="top" aria-labelledby="hero-titel">
+      <div class="kolonne">
+        <p class="label hero-eyebrow">Epoxygulve · Silkeborg og 60 km omkring</p>
+        <h1 class="hero-titel" id="hero-titel">
+          <span class="hero-linje" data-hero="linje1">Hvad koster dit nye gulv?</span>
+          <span class="hero-linje hero-linje-2" data-hero="linje2">Se det på 60 sekunder.</span>
+        </h1>
+      </div>
+      <div class="gulv" aria-hidden="true">
+        <div class="kolonne">
+          <p class="spejl">
+            <span class="hero-linje" data-hero="linje1">Hvad koster dit nye gulv?</span>
+            <span class="hero-linje hero-linje-2" data-hero="linje2">Se det på 60 sekunder.</span>
+          </p>
+        </div>
+      </div>
+      <div class="kolonne hero-under">
+        <p class="hero-tekst">Du skal ikke vente på et tilbud for at få en idé om prisen. Svar på seks korte spørgsmål, så ser du prisen med det samme. Vil du have en fast pris, kommer vi gratis ud og kigger på gulvet.</p>
+        <div class="hero-start" role="group" aria-labelledby="hero-start-titel">
+          <p class="label" id="hero-start-titel">Start her · Hvad skal have nyt gulv?</p>
+          <div class="hero-valg" id="hero-valg"></div>
+        </div>
+        <p class="hero-tillid mono">
+          <span>Fast pris efter besigtigelse</span>
+          <span data-pladsholder>5 års garanti</span>
+          <span>60 km omkring Silkeborg</span>
+        </p>
+      </div>
+    </section>
+
+    <section class="sektion beregner-sektion" id="beregner" aria-labelledby="beregner-titel">
+      <div class="kolonne sektion-grid">
+        <p class="label">Prisberegner</p>
+        <div class="sektion-hoved">
+          <h2 id="beregner-titel">Seks spørgsmål. Prisen sætter sig undervejs.</h2>
+          <p class="sektion-intro">Intervallet bliver smallere for hvert svar. Du skal ikke give os dit nummer for at se prisen.</p>
+        </div>
+
+        <div class="beregner" id="beregner-app">
+          <form class="trin-omraade" id="beregner-form" novalidate>
+            <ol class="trin-liste">
+              <li class="trin aktiv" data-trin="rum">
+                <div class="trin-hoved">
+                  <span class="trin-nr" aria-hidden="true">1</span>
+                  <h3 class="trin-titel" id="trin-rum-titel">Hvad skal have nyt gulv?</h3>
+                  <button type="button" class="trin-ret" data-ret="rum" aria-describedby="trin-rum-titel" hidden><span class="trin-svar"></span><span class="trin-ret-tekst">Ret</span></button>
+                </div>
+                <fieldset class="trin-krop" aria-labelledby="trin-rum-titel">
+                  <div class="valg" data-valg="rum"></div>
+                  <p class="trin-hint" role="status"></p>
+                  <div class="trin-fod"><button type="submit" class="naeste">Næste</button></div>
+                </fieldset>
+              </li>
+
+              <li class="trin kommende" data-trin="areal">
+                <div class="trin-hoved">
+                  <span class="trin-nr" aria-hidden="true">2</span>
+                  <h3 class="trin-titel" id="trin-areal-titel">Hvor stort er gulvet?</h3>
+                  <button type="button" class="trin-ret" data-ret="areal" aria-describedby="trin-areal-titel" hidden><span class="trin-svar"></span><span class="trin-ret-tekst">Ret</span></button>
+                </div>
+                <fieldset class="trin-krop" aria-labelledby="trin-areal-titel" hidden>
+                  <div class="areal">
+                    <label class="vh" for="areal-tal">Areal i kvadratmeter</label>
+                    <input class="areal-tal" type="number" id="areal-tal" inputmode="numeric" min="5" max="2000" step="1" value="36">
+                    <span class="areal-enhed" aria-hidden="true">m²</span>
+                  </div>
+                  <input class="lineal-input" type="range" id="areal-lineal" min="10" max="250" step="1" value="36" aria-label="Areal i kvadratmeter, træk for at justere">
+                  <div class="lineal" aria-hidden="true">
+                    <span style="--v:10">10</span><span style="--v:50">50</span><span style="--v:100">100</span><span style="--v:150">150</span><span style="--v:200">200</span><span style="--v:250">250</span>
+                  </div>
+                  <div class="genveje">
+                    <button type="button" class="tekstknap" data-m2="18">Enkelt garage · ca. 18 m²</button>
+                    <button type="button" class="tekstknap" data-m2="36">Dobbelt garage · ca. 36 m²</button>
+                    <button type="button" class="tekstknap" id="maal-knap" aria-expanded="false" aria-controls="maal">Regn det ud</button>
+                  </div>
+                  <div class="maal" id="maal" hidden>
+                    <label for="maal-l"><span class="label">Længde</span><input type="number" id="maal-l" inputmode="decimal" min="0" step="0.1" placeholder="6"> <span aria-hidden="true">m</span></label>
+                    <span class="maal-gange" aria-hidden="true">×</span>
+                    <label for="maal-b"><span class="label">Bredde</span><input type="number" id="maal-b" inputmode="decimal" min="0" step="0.1" placeholder="6"> <span aria-hidden="true">m</span></label>
+                  </div>
+                  <p class="trin-hint" role="status"></p>
+                  <div class="trin-fod"><button type="submit" class="naeste">Næste</button></div>
+                </fieldset>
+              </li>
+
+              <li class="trin kommende" data-trin="overflade">
+                <div class="trin-hoved">
+                  <span class="trin-nr" aria-hidden="true">3</span>
+                  <h3 class="trin-titel" id="trin-overflade-titel">Hvilken overflade vil du have?</h3>
+                  <button type="button" class="trin-ret" data-ret="overflade" aria-describedby="trin-overflade-titel" hidden><span class="trin-svar"></span><span class="trin-ret-tekst">Ret</span></button>
+                </div>
+                <fieldset class="trin-krop" aria-labelledby="trin-overflade-titel" hidden>
+                  <div class="valg" data-valg="overflade"></div>
+                  <p class="trin-hint" role="status"></p>
+                  <div class="trin-fod"><button type="submit" class="naeste">Næste</button></div>
+                </fieldset>
+              </li>
+
+              <li class="trin kommende" data-trin="stand">
+                <div class="trin-hoved">
+                  <span class="trin-nr" aria-hidden="true">4</span>
+                  <h3 class="trin-titel" id="trin-stand-titel">Hvordan ser gulvet ud i dag?</h3>
+                  <button type="button" class="trin-ret" data-ret="stand" aria-describedby="trin-stand-titel" hidden><span class="trin-svar"></span><span class="trin-ret-tekst">Ret</span></button>
+                </div>
+                <fieldset class="trin-krop" aria-labelledby="trin-stand-titel" hidden>
+                  <div class="valg" data-valg="stand"></div>
+                  <p class="trin-hint" role="status"></p>
+                  <div class="trin-fod"><button type="submit" class="naeste">Næste</button></div>
+                </fieldset>
+              </li>
+
+              <li class="trin kommende" data-trin="tilvalg">
+                <div class="trin-hoved">
+                  <span class="trin-nr" aria-hidden="true">5</span>
+                  <h3 class="trin-titel" id="trin-tilvalg-titel">Vil du have tilvalg?</h3>
+                  <button type="button" class="trin-ret" data-ret="tilvalg" aria-describedby="trin-tilvalg-titel" hidden><span class="trin-svar"></span><span class="trin-ret-tekst">Ret</span></button>
+                </div>
+                <fieldset class="trin-krop" aria-labelledby="trin-tilvalg-titel" hidden>
+                  <div class="valg" data-valg="tilvalg"></div>
+                  <p class="trin-hint" role="status"></p>
+                  <div class="trin-fod"><button type="submit" class="naeste" id="tilvalg-naeste">Ingen tilvalg</button></div>
+                </fieldset>
+              </li>
+
+              <li class="trin kommende" data-trin="postnummer">
+                <div class="trin-hoved">
+                  <span class="trin-nr" aria-hidden="true">6</span>
+                  <h3 class="trin-titel" id="trin-postnummer-titel">Hvor ligger gulvet?</h3>
+                  <button type="button" class="trin-ret" data-ret="postnummer" aria-describedby="trin-postnummer-titel" hidden><span class="trin-svar"></span><span class="trin-ret-tekst">Ret</span></button>
+                </div>
+                <fieldset class="trin-krop" aria-labelledby="trin-postnummer-titel" hidden>
+                  <div class="felt felt-kort">
+                    <label class="label" for="postnummer">Postnummer</label>
+                    <input type="text" id="postnummer" inputmode="numeric" autocomplete="postal-code" maxlength="4" pattern="[0-9]{4}" aria-describedby="postnummer-info">
+                  </div>
+                  <p class="postnummer-info" id="postnummer-info" role="status"></p>
+                  <p class="trin-hint" role="status"></p>
+                  <div class="trin-fod"><button type="submit" class="naeste">Se resultatet</button></div>
+                </fieldset>
+              </li>
+            </ol>
+          </form>
+
+          <aside class="prisbord" id="prisbord" aria-labelledby="prisbord-titel">
+            <h3 class="vh" id="prisbord-titel" tabindex="-1">Din pris</h3>
+            <p class="label"><span>Vejledende pris</span> · <span id="pb-moms">inkl. moms</span></p>
+            <p class="pb-pris tom" id="pb-pris" aria-live="polite" aria-atomic="true">–</p>
+            <svg class="pb-linje" viewBox="0 0 600 28" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14 L600 14"/></svg>
+            <div class="pb-meta mono"><span id="pb-spred"></span><span id="pb-prm2"></span><span id="pb-vater" hidden>I vater</span></div>
+            <p class="pb-status" id="pb-status">Prisen vises, når vi kender størrelse og overflade.</p>
+            <div class="pb-handling">
+              <button type="button" class="cta" id="pb-cta">Få fast pris · gratis besigtigelse <span aria-hidden="true">→</span></button>
+              <p class="pb-note">Vejledende pris. Du får en fast pris efter gratis besigtigelse.</p>
+            </div>
+
+            <figure class="snit">
+              <svg id="snit" viewBox="0 0 640 200" role="img" aria-label="Snit gennem gulvet med de lag, du har valgt">
+                <defs>
+                  <linearGradient id="metal-grad" x1="0" y1="0" x2="1" y2=".35">
+                    <stop offset="0" style="stop-color: var(--m2)"/>
+                    <stop offset=".16" style="stop-color: var(--m1)"/>
+                    <stop offset=".3" style="stop-color: var(--m3)"/>
+                    <stop offset=".47" style="stop-color: var(--m4)"/>
+                    <stop offset=".63" style="stop-color: var(--m1)"/>
+                    <stop offset=".8" style="stop-color: var(--m2)"/>
+                    <stop offset="1" style="stop-color: var(--m3)"/>
+                  </linearGradient>
+                </defs>
+                <rect class="vaeg" x="600.5" y="8" width="40" height="120"/>
+                <rect class="beton" x="0" y="128" width="640" height="72"/>
+                <g class="tilslag" id="snit-tilslag"></g>
+                <path class="slib" id="snit-slib" d="M0 127 L600 127"/>
+                <path id="snit-revne" data-tilstand="maaske" d="M174 128 L184 146 L189 164 L193 147 L204 128 Z"/>
+                <g id="snit-lag">
+                  <rect class="primer" x="0" y="120" width="600" height="6"/>
+                  <rect class="grundlag" x="0" y="98" width="600" height="22"/>
+                  <rect id="snit-metallic" x="0" y="98" width="600" height="22" fill="url(#metal-grad)"/>
+                  <g id="snit-flakes"></g>
+                  <rect class="toplak" x="0" y="90" width="600" height="8"/>
+                  <path class="toplak-glans" d="M0 90.6 L560 90.6"/>
+                  <g id="snit-sand"></g>
+                  <g id="snit-hulkehl" data-tilstand="maaske">
+                    <path class="hk-fyld" d="M560 90 A34 34 0 0 0 594 56 L594 18 L600 18 L600 90 Z"/>
+                    <path class="hk-glans" d="M560 90.6 A33.4 33.4 0 0 0 593.4 56 L593.4 18"/>
+                  </g>
+                </g>
+              </svg>
+              <figcaption class="label">Snit gennem gulvet · ikke målfast</figcaption>
+            </figure>
+
+            <div class="pb-farver" role="group" aria-labelledby="pb-farver-titel">
+              <p class="label" id="pb-farver-titel">Prøv en farve · ændrer ikke prisen</p>
+              <div class="valg valg-inline valg-farve" data-valg="farve"></div>
+            </div>
+
+            <details class="pb-lag">
+              <summary class="mono">Lagene i dit gulv</summary>
+              <ul class="lag-liste" id="lag-liste"></ul>
+            </details>
+
+            <dl class="grupper">
+              <div><dt>Gulvsystem</dt><dd id="g-system-d">–</dd><dd class="v" id="g-system-v"></dd></div>
+              <div><dt>Forbehandling</dt><dd id="g-forb-d">–</dd><dd class="v" id="g-forb-v"></dd></div>
+              <div><dt>Tilvalg</dt><dd id="g-tilv-d">–</dd><dd class="v" id="g-tilv-v"></dd></div>
+            </dl>
+
+            <p class="pb-tid mono" id="pb-tid"></p>
+          </aside>
+
+          <div class="lead-omraade" id="lead" hidden>
+            <form class="lead-form" id="lead-form" novalidate>
+              <h3 class="lead-titel" id="lead-titel" tabindex="-1">Få en fast pris</h3>
+              <p class="lead-intro">Vi kommer gratis ud, måler op og tjekker fugt i betonen. Bagefter får du en fast pris på skrift.</p>
+              <div class="felt">
+                <label class="label" for="lf-navn">Navn</label>
+                <input type="text" id="lf-navn" name="navn" autocomplete="name" required aria-describedby="lf-navn-fejl">
+                <p class="felt-fejl" id="lf-navn-fejl"></p>
+              </div>
+              <div class="felt-raekke">
+                <div class="felt">
+                  <label class="label" for="lf-telefon">Telefon</label>
+                  <input type="tel" id="lf-telefon" name="telefon" autocomplete="tel" inputmode="tel" required aria-describedby="lf-telefon-fejl">
+                  <p class="felt-fejl" id="lf-telefon-fejl"></p>
+                </div>
+                <div class="felt">
+                  <label class="label" for="lf-mail">Mail</label>
+                  <input type="email" id="lf-mail" name="mail" autocomplete="email" required aria-describedby="lf-mail-fejl">
+                  <p class="felt-fejl" id="lf-mail-fejl"></p>
+                </div>
+              </div>
+              <fieldset class="felt felt-valg">
+                <legend class="label">Hvornår skal gulvet laves?</legend>
+                <div class="valg valg-inline" data-valg="hvornaar">
+                  <label class="opt" for="lf-hv-hurtigst"><input type="radio" name="hvornaar" id="lf-hv-hurtigst" value="hurtigst"><span class="ind" aria-hidden="true"></span><span class="opt-navn">Hurtigst muligt</span></label>
+                  <label class="opt" for="lf-hv-1-3"><input type="radio" name="hvornaar" id="lf-hv-1-3" value="1-3-mdr"><span class="ind" aria-hidden="true"></span><span class="opt-navn">Inden for 1-3 måneder</span></label>
+                  <label class="opt" for="lf-hv-senere"><input type="radio" name="hvornaar" id="lf-hv-senere" value="senere"><span class="ind" aria-hidden="true"></span><span class="opt-navn">Senere</span></label>
+                  <label class="opt" for="lf-hv-undersoeger"><input type="radio" name="hvornaar" id="lf-hv-undersoeger" value="undersoeger"><span class="ind" aria-hidden="true"></span><span class="opt-navn">Jeg undersøger bare</span></label>
+                </div>
+              </fieldset>
+              <div class="felt">
+                <label class="label" for="lf-besked">Andet, vi skal vide? · valgfrit</label>
+                <textarea id="lf-besked" name="besked" rows="3" placeholder="Fx adgang, afløb i gulvet eller om der ligger fliser"></textarea>
+              </div>
+              <div class="honning" aria-hidden="true">
+                <label for="lf-firma">Firma</label>
+                <input type="text" id="lf-firma" name="firma" tabindex="-1" autocomplete="off">
+              </div>
+              <button type="submit" class="cta" id="lf-send">Send og få fast pris <span aria-hidden="true">→</span></button>
+              <p class="form-fejl" id="lf-fejl" role="alert" hidden></p>
+              <p class="lead-note">Vi bruger kun dine oplysninger til at kontakte dig om dit gulv. <a href="/privatliv.html">Privatlivspolitik</a></p>
+            </form>
+
+            <div class="kun-mail" id="kun-mail">
+              <button type="button" class="tekstknap" id="km-aabn" aria-expanded="false" aria-controls="km-form">Ikke klar endnu? Få beregningen på mail</button>
+              <form class="km-form" id="km-form" novalidate hidden>
+                <div class="felt">
+                  <label class="label" for="km-mail">Mail</label>
+                  <input type="email" id="km-mail" name="mail" autocomplete="email" required aria-describedby="km-mail-fejl">
+                  <p class="felt-fejl" id="km-mail-fejl"></p>
+                </div>
+                <button type="submit" class="knap-moerk" id="km-send">Send beregningen</button>
+                <p class="km-tak" id="km-tak" role="status" hidden></p>
+              </form>
+            </div>
+
+            <div class="tak" id="tak" hidden>
+              <p class="label">Modtaget</p>
+              <h3 class="tak-titel" id="tak-titel" tabindex="-1"></h3>
+              <dl class="tak-resume" id="tak-resume"></dl>
+              <p>Send gerne 2-3 billeder af gulvet til <a href="mailto:kontakt@example.dk" data-pladsholder>kontakt@example.dk</a>. Så kan vi give en mere præcis pris allerede i telefonen.</p>
+              <details class="demo-data" id="demo-data" hidden>
+                <summary class="mono">Demo · intet er sendt · se data, der ville blive sendt</summary>
+                <pre id="demo-data-pre"></pre>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="kolonne"><div class="niveau" aria-hidden="true"><svg viewBox="0 0 1000 20" preserveAspectRatio="none"><path d="M0 10 L1000 10"/></svg></div></div>
+
+    <section class="sektion" id="foer-efter" aria-labelledby="fe-titel">
+      <div class="kolonne sektion-grid">
+        <p class="label">Før og efter</p>
+        <div class="sektion-indhold">
+          <h2 id="fe-titel">Træk det nye gulv hen over det gamle.</h2>
+          <div class="foerefter" data-foerefter>
+            <!-- Pladsholdere. Skift til <img class="fe-foer"> og <img class="fe-efter"> med rigtige billeder taget fra samme vinkel. -->
+            <canvas class="fe-foer" aria-hidden="true"></canvas>
+            <canvas class="fe-efter" aria-hidden="true"></canvas>
+            <span class="fe-tag fe-tag-efter">EFTER</span>
+            <span class="fe-tag fe-tag-foer">FØR</span>
+            <div class="skraber" aria-hidden="true"><span class="skaft"></span><span class="blad"></span><span class="greb"></span></div>
+            <input class="vh" type="range" min="0" max="100" value="58" aria-label="Flyt gummiskraberen mellem før og efter">
+          </div>
+          <p class="fe-tekst mono"><span data-pladsholder>Dobbeltgarage · Them · Flakes · 38 m²</span></p>
+          <p class="note kladde-note">Billederne er genererede pladsholdere. De skiftes til rigtige før/efter-billeder fra jeres jobs.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="kolonne"><div class="niveau" aria-hidden="true"><svg viewBox="0 0 1000 20" preserveAspectRatio="none"><path d="M0 10 L1000 10"/></svg></div></div>
+
+    <section class="sektion" id="datablad" aria-labelledby="db-titel">
+      <div class="kolonne sektion-grid">
+        <p class="label">Datablad</p>
+        <div class="sektion-indhold">
+          <h2 id="db-titel">Det kan gulvet.</h2>
+          <dl class="datablad">
+            <div><dt>Tåler</dt><dd>Bil, olie, vejsalt og rengøringsmidler</dd></div>
+            <div><dt>Rengøring</dt><dd>Fugefri overflade. Gulvskraber og vand</dd></div>
+            <div><dt>Skridsikring</dt><dd>Kvartssand i toplaget efter behov</dd></div>
+            <div><dt>Levetid</dt><dd><span data-pladsholder>15 år eller mere ved normalt brug</span></dd></div>
+            <div><dt>Tid</dt><dd><span data-pladsholder>2-3 arbejdsdage</span></dd></div>
+            <div><dt>Garanti</dt><dd><span data-pladsholder>5 år</span></dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <div class="kolonne"><div class="niveau" aria-hidden="true"><svg viewBox="0 0 1000 20" preserveAspectRatio="none"><path d="M0 10 L1000 10"/></svg></div></div>
+
+    <section class="sektion" id="forloeb" aria-labelledby="fl-titel">
+      <div class="kolonne sektion-grid">
+        <p class="label">Forløb</p>
+        <div class="sektion-indhold">
+          <h2 id="fl-titel">Fra besigtigelse til bil på gulvet.</h2>
+          <ol class="tidslinje">
+            <li><span class="label">Før start</span><span class="tl-navn">Besigtigelse</span><span class="tl-desk">Vi måler op, tjekker fugt og giver en fast pris</span></li>
+            <li><span class="label">Dag 1</span><span class="tl-navn">Slibning og primer</span><span class="tl-desk">Betonen slibes, revner repareres</span></li>
+            <li><span class="label">Dag 2</span><span class="tl-navn">Grundlag</span><span class="tl-desk">Epoxy og evt. flakes</span></li>
+            <li><span class="label">Dag 3</span><span class="tl-navn">Toplak</span><span class="tl-desk">Blank og slidstærk</span></li>
+            <li><span class="label">Dag 4</span><span class="tl-navn">Gå på det</span><span class="tl-desk">24 timer efter toplak</span></li>
+            <li><span class="label">Dag 10</span><span class="tl-navn">Kør bil på det</span><span class="tl-desk">Gulvet er hærdet helt</span></li>
+          </ol>
+          <p class="note kladde-note">Tiderne er typiske for epoxy. Kunden bekræfter sine egne.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="kolonne"><div class="niveau" aria-hidden="true"><svg viewBox="0 0 1000 20" preserveAspectRatio="none"><path d="M0 10 L1000 10"/></svg></div></div>
+
+    <section class="sektion" id="ejer" aria-labelledby="ejer-titel">
+      <div class="kolonne sektion-grid">
+        <p class="label">Hvem kommer ud</p>
+        <div class="sektion-indhold ejer">
+          <figure class="ejer-foto">
+            <div class="foto-pladsholder mono">Foto af ejeren</div>
+          </figure>
+          <div class="ejer-tekst">
+            <h2 id="ejer-titel">Det er mig, der kommer ud til dig.</h2>
+            <p><span data-pladsholder>Jeg hedder [navn] og står bag Silkeborg Epoxy.</span> Jeg måler selv op, og jeg er der, når gulvet bliver lagt. Du har mit nummer fra første dag, så du skal ikke ringe ind til et callcenter.</p>
+            <p class="signatur mono"><span data-pladsholder>[Navn]</span> · ejer</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="kolonne"><div class="niveau" aria-hidden="true"><svg viewBox="0 0 1000 20" preserveAspectRatio="none"><path d="M0 10 L1000 10"/></svg></div></div>
+
+    <section class="sektion" id="spoergsmaal" aria-labelledby="faq-titel">
+      <div class="kolonne sektion-grid">
+        <p class="label">Spørgsmål</p>
+        <div class="sektion-indhold">
+          <h2 id="faq-titel">Det bliver vi tit spurgt om.</h2>
+          <div class="faq">
+            <details>
+              <summary>Hvor lang tid tager det?</summary>
+              <p>Et almindeligt garagegulv tager 2-3 arbejdsdage. Du kan gå på det efter 24 timer og køre bil på det efter cirka 7 døgn.</p>
+            </details>
+            <details>
+              <summary>Kan jeg køre bil på det?</summary>
+              <p>Ja. Epoxy tåler bil, olie og vejsalt. Vent bare, til gulvet er helt hærdet, så holder det meget længere.</p>
+            </details>
+            <details>
+              <summary>Hvad hvis mit gulv har revner?</summary>
+              <p>Revner og huller bliver slebet op og repareret, før vi lægger epoxy. Vælg “Revner og huller” i beregneren, så er det med i prisen.</p>
+            </details>
+            <details>
+              <summary>Hvad med fugt i betonen?</summary>
+              <p>Vi måler fugt ved besigtigelsen. Er betonen for fugtig, skal der en fugtspærre på først. Det får du at vide, før du siger ja.</p>
+            </details>
+            <details>
+              <summary>Er prisen fast?</summary>
+              <p>Beregneren giver en vejledende pris. Når vi har set gulvet, får du en fast pris på skrift, og den ændrer sig ikke undervejs.</p>
+            </details>
+            <details>
+              <summary>Kører I ud til mig?</summary>
+              <p>Vi kører i Silkeborg og cirka 60 km omkring. Bor du længere væk, så skriv alligevel. Så aftaler vi kørslen.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="afslutning" aria-labelledby="afslut-titel">
+      <div class="kolonne afslutning-indre">
+        <h2 id="afslut-titel">Se hvad dit gulv koster.</h2>
+        <p>Det tager et minut, og du skal ikke give os dit nummer for at se prisen.</p>
+        <div class="afslutning-knapper">
+          <a class="cta" href="#beregner" id="afslut-cta">Beregn din pris <span aria-hidden="true">→</span></a>
+          <a class="afslutning-tlf" href="tel:+4500000000" data-telefon>Eller ring <span data-pladsholder>00 00 00 00</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="fod">
+    <div class="kolonne fod-indre mono">
+      <p>Silkeborg Epoxygulve ApS · CVR 46299752 · <span data-pladsholder>Hjejlevej 12, 8600 Silkeborg</span></p>
+      <p><a href="tel:+4500000000" data-telefon data-pladsholder>00 00 00 00</a> · <a href="mailto:kontakt@example.dk" data-pladsholder>kontakt@example.dk</a></p>
+      <p><a href="/privatliv.html">Privatlivspolitik</a><span data-cookie-indstillinger> · <button type="button" class="tekstknap">Cookie-indstillinger</button></span></p>
+    </div>
+  </footer>
+
+  <div class="bundbar" id="bundbar" hidden>
+    <button type="button" class="bb-knap" id="bb-knap" aria-controls="prisbord">
+      <span class="bb-label mono">Din pris</span>
+      <span class="bb-pris" id="bb-pris">–</span>
+      <svg class="bb-linje" viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true"><path d="M0 8 L200 8"/></svg>
+      <span class="bb-spred mono" id="bb-spred"></span>
+    </button>
+  </div>
+
+  <div class="samtykke" id="samtykke" role="region" aria-labelledby="samtykke-titel" hidden>
+    <p class="label" id="samtykke-titel">Cookies</p>
+    <p>Vi vil gerne bruge cookies til at måle, om vores annoncer på Facebook og Instagram virker. Siden virker fint uden.</p>
+    <div class="samtykke-knapper">
+      <button type="button" class="knap-lys" data-samtykke="nej">Nej tak</button>
+      <button type="button" class="knap-lys" data-samtykke="ja">Ja tak</button>
+    </div>
+    <a class="samtykke-link" href="/privatliv.html#cookies">Læs mere</a>
+  </div>
+</body>
+</html>
