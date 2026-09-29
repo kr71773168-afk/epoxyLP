@@ -1,5 +1,6 @@
 ---
 import '@fontsource-variable/schibsted-grotesk';
+import skrift from '@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-normal.woff2?url';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/side.css';
@@ -35,6 +36,7 @@ const virksomhed = {
     addressLocality: firma.adresse.by,
     addressCountry: 'DK',
   },
+  image: new URL('/og.jpg', Astro.site).href,
   areaServed: byer.map((b) => ({ '@type': 'City', name: b.navn })),
   priceRange: 'kr',
 };
@@ -45,6 +47,7 @@ const virksomhed = {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>{titel}</title>
+    <link rel="preload" href={skrift} as="font" type="font/woff2" crossorigin>
     <meta name="description" content={beskrivelse}>
     {firma.kladde && <meta name="robots" content="noindex, nofollow">}
     <link rel="canonical" href={kanonisk}>
@@ -55,7 +58,14 @@ const virksomhed = {
     <meta property="og:title" content={titel}>
     <meta property="og:description" content={beskrivelse}>
     <meta property="og:url" content={kanonisk}>
+    <meta property="og:image" content={new URL('/og.jpg', Astro.site).href}>
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Silkeborg Epoxy: Se prisen på dit epoxygulv">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href={fil('favicon.svg')} type="image/svg+xml">
+    <link rel="icon" href={fil('favicon-32.png')} sizes="32x32" type="image/png">
+    <link rel="apple-touch-icon" href={fil('apple-touch-icon.png')}>
     <script type="application/ld+json" set:html={JSON.stringify(virksomhed)} />
     {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
   </head>

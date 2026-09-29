@@ -8,7 +8,8 @@ export default defineConfig({
   site: 'https://silkeborgepoxy.dk', // PLADSHOLDER: kundens rigtige domæne
   outDir: demo ? './dist-demo' : './dist',
   // Preview: artifact-tjenesten tillader ikke mapper, der starter med _, så _astro hedder filer
-  build: { format: demo ? 'file' : 'directory', assets: demo ? 'filer' : '_astro' },
+  // CSS lægges direkte i siden, så den ikke blokerer visningen (ca. 8 kB gzip pr. side)
+  build: { format: demo ? 'file' : 'directory', assets: demo ? 'filer' : '_astro', inlineStylesheets: 'always' },
   integrations: demo ? [] : [sitemap()],
   devToolbar: { enabled: false },
   vite: {

@@ -4,13 +4,16 @@ import cfg from '../calculator/pricing.config.js';
 import Beregner from '../components/Beregner.astro';
 import Brodkrummer from '../components/Brodkrummer.astro';
 import FAQ from '../components/FAQ.astro';
+import Farver from '../components/Farver.astro';
 import Foto from '../components/Foto.astro';
 import Slut from '../components/Slut.astro';
 import Tillid from '../components/Tillid.astro';
 import YdelsesKort from '../components/YdelsesKort.astro';
 import { firma } from '../data/firma.js';
+import { guide } from '../data/viden.js';
 import { ydelse, ydelser } from '../data/ydelser.js';
 import Side from '../layouts/Side.astro';
+import { link } from '../lib/link.js';
 
 export function getStaticPaths() {
   return ydelser.map((y) => ({ params: { ydelse: y.slug }, props: { y } }));
@@ -19,6 +22,7 @@ export function getStaticPaths() {
 const { y } = Astro.props;
 const gruppe = { privat: 'Privat', erhverv: 'Erhverv', gulvtype: 'Gulvtyper' }[y.gruppe];
 const relaterede = y.relaterede.map(ydelse).filter(Boolean);
+const laesOgsaa = (y.guides ?? []).map(guide).filter(Boolean);
 const fmt = (n) => Math.round(n).toLocaleString('da-DK');
 const erhverv = Boolean(cfg.rum[y.rum]?.erhverv);
 const moms = erhverv ? 1 : 1 + cfg.moms;
@@ -81,12 +85,22 @@ const service = {
 
   <section class="sektion" aria-label={`Mere om ${y.navn.toLowerCase()}`}>
     <div class="kolonne afsnit-grid">
-      {y.afsnit.map((a) => (
+      {y.farver ? (
+        <div class="afsnit-stak">
+          {y.afsnit.map((a) => (
+            <div class="afsnit">
+              <h2>{a.titel}</h2>
+              <p>{a.tekst}</p>
+            </div>
+          ))}
+        </div>
+      ) : y.afsnit.map((a) => (
         <div class="afsnit">
           <h2>{a.titel}</h2>
           <p>{a.tekst}</p>
         </div>
       ))}
+      {y.farver && <Farver titel={y.farveTitel} farver={y.farver} />}
     </div>
   </section>
 
@@ -96,6 +110,12 @@ const service = {
     <div class="kolonne">
       <h2 class="sektion-titel" id="se-ogsaa">Se også</h2>
       <YdelsesKort ydelser={relaterede} />
+      {laesOgsaa.length > 0 && (
+        <div class="laes-ogsaa">
+          <p class="laes-ogsaa-titel">Guides</p>
+          <ul>{laesOgsaa.map((g) => <li><a class="pil-link" href={link(g.slug)}>{g.h1} <span aria-hidden="true">→</span></a></li>)}</ul>
+        </div>
+      )}
     </div>
   </section>
 

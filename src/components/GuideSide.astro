@@ -1,0 +1,109 @@
+---
+/**
+ * En guide fra src/data/viden.js som hel side: tekst, prisbox i siden, beregneren og relaterede ydelser.
+ * Bruges af de små sidefiler i src/pages (fx epoxy-eller-gulvmaling.astro).
+ */
+import { firma } from '../data/firma.js';
+import { guide, guides, laesetid, opdateret } from '../data/viden.js';
+import { ydelse } from '../data/ydelser.js';
+import Side from '../layouts/Side.astro';
+import { link } from '../lib/link.js';
+import Beregner from './Beregner.astro';
+import Brodkrummer from './Brodkrummer.astro';
+import Foto from './Foto.astro';
+import Slut from './Slut.astro';
+import Tillid from './Tillid.astro';
+import YdelsesKort from './YdelsesKort.astro';
+
+interface Props {
+  slug: string;
+}
+const g = guide(Astro.props.slug);
+if (!g) throw new Error(`Guide mangler: ${Astro.props.slug}`);
+const andre = guides.filter((x) => x.slug !== g.slug);
+const relaterede = g.relaterede.map(ydelse).filter(Boolean);
+const minutter = laesetid(g);
+
+const artikel = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: g.h1,
+  description: g.beskrivelse,
+  inLanguage: 'da-DK',
+  datePublished: opdateret,
+  dateModified: opdateret,
+  mainEntityOfPage: new URL(`/${g.slug}/`, Astro.site).href,
+  author: { '@type': 'Organization', name: firma.navn, url: new URL('/', Astro.site).href },
+  publisher: { '@type': 'Organization', name: firma.navn },
+};
+---
+<Side titel={`${g.titel} · ${firma.navn}`} beskrivelse={g.beskrivelse} slug={g.slug} schema={[artikel]}>
+  <Brodkrummer sti={[{ navn: 'Viden', slug: 'viden' }, { navn: g.h1, slug: g.slug }]} />
+
+  <article>
+    <header class="kolonne side-hero guide-hero">
+      <div class="side-hero-tekst">
+        <p class="hero-over">Viden · {minutter} min. at læse</p>
+        <h1 id="side-titel">{g.h1}</h1>
+        <p class="hero-sub">{g.intro}</p>
+        <a class="knap knap-stor" href="#pris">Se prisen på dit gulv <span aria-hidden="true">→</span></a>
+      </div>
+      <Foto navn={g.billede} alt="" class="side-hero-billede" eager />
+    </header>
+
+    <div class="sektion">
+      <div class="kolonne guide-krop">
+        <div class="guide-tekst">
+          {g.afsnit.map((a) => (
+            <section>
+              <h2>{a.titel}</h2>
+              {a.tekst?.map((p) => <p set:html={p} />)}
+              {a.punkter && <ul>{a.punkter.map((p) => <li set:html={p} />)}</ul>}
+              {a.tabel && (
+                <div class="tabel-ramme">
+                  <table class="pris-tabel guide-tabel">
+                    <thead><tr>{a.tabel.hoved.map((h, i) => (i === 0 ? <td /> : <th scope="col">{h}</th>))}</tr></thead>
+                    <tbody>{a.tabel.raekker.map((r) => <tr><th scope="row">{r[0]}</th>{r.slice(1).map((c) => <td>{c}</td>)}</tr>)}</tbody>
+                  </table>
+                </div>
+              )}
+              {a.efter && <p set:html={a.efter} />}
+            </section>
+          ))}
+        </div>
+
+        <aside class="guide-side" aria-label="Pris og flere guides">
+          <div class="guide-cta">
+            <p class="guide-cta-titel">Hvad koster dit gulv?</p>
+            <p>Svar på seks spørgsmål, så ser du en vejledende pris med det samme.</p>
+            <a class="knap knap-fuld" href="#pris">Beregn prisen <span aria-hidden="true">→</span></a>
+          </div>
+          <nav class="guide-flere" aria-label="Flere guides">
+            <p class="guide-flere-titel">Flere guides</p>
+            <ul>{andre.map((x) => <li><a href={link(x.slug)}>{x.h1}</a></li>)}</ul>
+          </nav>
+        </aside>
+      </div>
+    </div>
+  </article>
+
+  <section class="sektion beregner-sektion" id="pris" aria-labelledby="pris-titel">
+    <div class="kolonne beregner-grid">
+      <div class="beregner-tekst">
+        <h2 class="sektion-titel" id="pris-titel">Se prisen på dit gulv</h2>
+        <p>Svar på {g.rum ? 'fem spørgsmål, rummet er valgt' : 'seks spørgsmål'}. Så ser du en vejledende pris med det samme, og du skal ikke give os dit nummer for at se den.</p>
+        <Tillid />
+      </div>
+      <Beregner rum={g.rum} />
+    </div>
+  </section>
+
+  <section class="sektion" aria-labelledby="se-ogsaa">
+    <div class="kolonne">
+      <h2 class="sektion-titel" id="se-ogsaa">Se også</h2>
+      <YdelsesKort ydelser={relaterede} />
+    </div>
+  </section>
+
+  <Slut harBeregner />
+</Side>

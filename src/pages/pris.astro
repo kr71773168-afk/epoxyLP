@@ -65,17 +65,17 @@ const faq = [
           <thead><tr><th scope="col">Overflade</th><th scope="col">Privat, inkl. moms</th><th scope="col">Erhverv, ekskl. moms</th></tr></thead>
           <tbody>
             {Object.values(cfg.overflader).map((o) => (
-              <tr><th scope="row">{o.navn}</th><td data-pladsholder>fra {kr(o.prisPrM2)}/m²</td><td data-pladsholder>fra {kr(o.prisPrM2, false)}/m²</td></tr>
+              <tr><th scope="row">{o.navn}</th><td><span data-pladsholder>fra {kr(o.prisPrM2)}/m²</span></td><td><span data-pladsholder>fra {kr(o.prisPrM2, false)}/m²</span></td></tr>
             ))}
           </tbody>
           <tbody>
-            <tr><th scope="row">Opstart pr. opgave</th><td data-pladsholder>{kr(cfg.opstart)}</td><td data-pladsholder>{kr(cfg.opstart, false)}</td></tr>
-            <tr><th scope="row">Minimumspris</th><td data-pladsholder>{kr(cfg.minimumspris)}</td><td data-pladsholder>{kr(cfg.minimumspris, false)}</td></tr>
+            <tr><th scope="row">Opstart pr. opgave</th><td><span data-pladsholder>{kr(cfg.opstart)}</span></td><td><span data-pladsholder>{kr(cfg.opstart, false)}</span></td></tr>
+            <tr><th scope="row">Minimumspris</th><td><span data-pladsholder>{kr(cfg.minimumspris)}</span></td><td><span data-pladsholder>{kr(cfg.minimumspris, false)}</span></td></tr>
             {Object.values(cfg.stand).filter((s) => s.prisPrM2 > 0).map((s) => (
-              <tr><th scope="row">{s.navn}</th><td data-pladsholder>+ {kr(s.prisPrM2)}/m²</td><td data-pladsholder>+ {kr(s.prisPrM2, false)}/m²</td></tr>
+              <tr><th scope="row">{s.navn}</th><td><span data-pladsholder>+ {kr(s.prisPrM2)}/m²</span></td><td><span data-pladsholder>+ {kr(s.prisPrM2, false)}/m²</span></td></tr>
             ))}
             {Object.values(cfg.tilvalg).map((t) => (
-              <tr><th scope="row">{t.navn}</th><td data-pladsholder>+ {kr(t.pris)}/{t.type === 'lbm' ? 'm' : 'm²'}</td><td data-pladsholder>+ {kr(t.pris, false)}/{t.type === 'lbm' ? 'm' : 'm²'}</td></tr>
+              <tr><th scope="row">{t.navn}</th><td><span data-pladsholder>+ {kr(t.pris)}/{t.type === 'lbm' ? 'm' : 'm²'}</span></td><td><span data-pladsholder>+ {kr(t.pris, false)}/{t.type === 'lbm' ? 'm' : 'm²'}</span></td></tr>
             ))}
           </tbody>
         </table>
@@ -94,7 +94,7 @@ const faq = [
           <li>
             <span class="eks-navn">{e.navn}</span>
             <span class="eks-meta">{e.areal} m² · {cfg.overflader[e.overflade].navn.toLowerCase()}</span>
-            <span class="eks-pris" data-pladsholder>{e.pris}</span>
+            <span class="eks-pris"><span data-pladsholder>{e.pris}</span></span>
             <span class="eks-moms">{e.moms}</span>
           </li>
         ))}

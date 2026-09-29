@@ -4,14 +4,41 @@
  * `rum` eller `overflade` vælger et svar på forhånd, fx rum="garage" på siden om garagegulve.
  */
 import '../styles/quiz.css';
+import { estimerLbm, tilvalgPris } from '../calculator/engine.js';
+import cfg from '../calculator/pricing.config.js';
 import { firma } from '../data/firma.js';
 import { link } from '../lib/link.js';
+import Raekke from './Raekke.astro';
 
 interface Props {
   rum?: string;
   overflade?: string;
 }
 const { rum, overflade } = Astro.props;
+
+// Valgene bygges fra config. Billederne ligger i src/media/valg og hedder "gruppe-nøgle.webp", fx rum-garage.webp.
+const billeder = import.meta.glob<string>('../media/valg/*.webp', { eager: true, query: '?url', import: 'default' });
+const billede = (navn: string) => {
+  const fil = billeder[`../media/valg/${navn}.webp`];
+  if (!fil) throw new Error(`Billede til beregneren mangler: src/media/valg/${navn}.webp`);
+  return fil;
+};
+const fmt = (n: number) => Math.round(n).toLocaleString('da-DK');
+// Startteksterne er private priser inkl. moms og standardarealet. quiz.js retter dem, når der svares.
+const moms = 1 + cfg.moms;
+const standardAreal = 36;
+const lbm = estimerLbm(standardAreal, undefined, cfg);
+const valgRum = Object.entries(cfg.rum).map(([k, r]) => ({ vaerdi: k, titel: r.navn, desk: r.beskrivelse, billede: billede(`rum-${k}`) }));
+const valgOverflade = Object.entries(cfg.overflader).map(([k, o]) => ({
+  vaerdi: k, titel: o.navn, desk: o.beskrivelse, billede: billede(`overflade-${k}`), pris: `fra ${fmt(o.prisPrM2 * moms)} kr/m²`,
+}));
+const valgStand = [
+  ...Object.entries(cfg.stand).map(([k, st]) => ({ vaerdi: k, titel: st.navn, desk: st.beskrivelse, billede: billede(`stand-${k}`) })),
+  { vaerdi: 'vedikke', titel: 'Ved ikke', desk: 'Vi kigger på det, når vi kommer ud', billede: billede('stand-vedikke') },
+];
+const valgTilvalg = Object.entries(cfg.tilvalg).map(([k, t]) => ({
+  vaerdi: k, titel: t.navn, desk: t.beskrivelse, billede: billede(`tilvalg-${k}`), tilvalgPris: `+ ca. ${fmt(tilvalgPris(t, standardAreal, lbm) * moms)} kr`,
+}));
 ---
 <section class="quiz" id="beregner" aria-label="Prisberegner" data-rum={rum} data-overflade={overflade}>
   <div class="quiz-hoved">
@@ -23,7 +50,7 @@ const { rum, overflade } = Astro.props;
   <form class="quiz-form" id="quiz-form" novalidate>
     <div class="spg" data-trin="rum">
       <h2 class="spg-titel" id="spg-rum" tabindex="-1">Hvad skal have nyt gulv?</h2>
-      <div class="raekker" role="radiogroup" aria-labelledby="spg-rum" data-valg="rum"></div>
+      <div class="raekker" role="radiogroup" aria-labelledby="spg-rum" data-valg="rum">{valgRum.map((v) => <Raekke navn="rum" {...v} />)}</div>
       <p class="spg-hint" aria-live="polite"></p>
       <div class="spg-fod" hidden><button type="submit" class="knap">Næste <span aria-hidden="true">→</span></button></div>
     </div>
@@ -55,14 +82,14 @@ const { rum, overflade } = Astro.props;
 
     <div class="spg" data-trin="overflade" hidden>
       <h2 class="spg-titel" id="spg-overflade" tabindex="-1">Hvilken overflade vil du have?</h2>
-      <div class="raekker" role="radiogroup" aria-labelledby="spg-overflade" data-valg="overflade"></div>
+      <div class="raekker" role="radiogroup" aria-labelledby="spg-overflade" data-valg="overflade">{valgOverflade.map((v) => <Raekke navn="overflade" {...v} />)}</div>
       <p class="spg-hint" aria-live="polite"></p>
       <div class="spg-fod" hidden><button type="submit" class="knap">Næste <span aria-hidden="true">→</span></button></div>
     </div>
 
     <div class="spg" data-trin="stand" hidden>
       <h2 class="spg-titel" id="spg-stand" tabindex="-1">Hvordan ser gulvet ud i dag?</h2>
-      <div class="raekker" role="radiogroup" aria-labelledby="spg-stand" data-valg="stand"></div>
+      <div class="raekker" role="radiogroup" aria-labelledby="spg-stand" data-valg="stand">{valgStand.map((v) => <Raekke navn="stand" {...v} />)}</div>
       <p class="spg-hint" aria-live="polite"></p>
       <div class="spg-fod" hidden><button type="submit" class="knap">Næste <span aria-hidden="true">→</span></button></div>
     </div>
@@ -70,7 +97,7 @@ const { rum, overflade } = Astro.props;
     <div class="spg" data-trin="tilvalg" hidden>
       <h2 class="spg-titel" id="spg-tilvalg" tabindex="-1">Skal der noget med?</h2>
       <p class="spg-hjaelp">Vælg begge, én eller ingen.</p>
-      <div class="raekker" role="group" aria-labelledby="spg-tilvalg" data-valg="tilvalg"></div>
+      <div class="raekker" role="group" aria-labelledby="spg-tilvalg" data-valg="tilvalg">{valgTilvalg.map((v) => <Raekke type="checkbox" navn="tilvalg" {...v} />)}</div>
       <p class="spg-hint" aria-live="polite"></p>
       <div class="spg-fod"><button type="submit" class="knap" id="tilvalg-naeste">Videre uden tilvalg <span aria-hidden="true">→</span></button></div>
     </div>

@@ -9,10 +9,20 @@ import Video from '../components/Video.astro';
 import YdelsesKort from '../components/YdelsesKort.astro';
 import { byer, bySti } from '../data/byer.js';
 import { faq } from '../data/faq.js';
+import { firma } from '../data/firma.js';
 import { referencer } from '../data/referencer.js';
+import { guides, laesetid } from '../data/viden.js';
 import { erhverv, gulvtyper, privat } from '../data/ydelser.js';
 import Side from '../layouts/Side.astro';
 import { link } from '../lib/link.js';
+
+// Det, der adskiller firmaet fra de fleste gulvfirmaer. Garantien er en pladsholder i firma.js.
+const loefter = [
+  { titel: 'Prisen står på siden', tekst: 'De fleste gulvfirmaer skriver “ring for pris”. Her ser du en vejledende pris på et minut, før du taler med nogen.' },
+  { titel: 'Ejeren kommer selv', tekst: 'Du taler med den, der lægger gulvet. Fra første besøg til sidste lag.' },
+  { titel: 'Fast pris på skrift', tekst: 'Efter den gratis besigtigelse får du en fast pris. Den ændrer sig ikke undervejs.' },
+  { titel: firma.garanti, tekst: 'Vi står inde for gulvet. Sker der noget, der skyldes vores arbejde, kommer vi og udbedrer det.', pladsholder: true },
+];
 ---
 <Side
   titel="Epoxygulve i Silkeborg · Se prisen på 60 sekunder · Silkeborg Epoxy"
@@ -49,6 +59,24 @@ import { link } from '../lib/link.js';
     </div>
   </section>
 
+  <section class="sektion loefter-sektion" aria-labelledby="loefter-titel">
+    <div class="kolonne">
+      <div class="sektion-hoved">
+        <h2 class="sektion-titel" id="loefter-titel">Derfor vælger folk os</h2>
+        <p>Et lille, lokalt firma med få og enkle regler.</p>
+      </div>
+      <ol class="loefter">
+        {loefter.map((l, i) => (
+          <li>
+            <span class="loefte-nr" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{l.pladsholder ? <span data-pladsholder>{l.titel}</span> : l.titel}</h3>
+            <p>{l.tekst}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
   <Forloeb />
 
   <section class="sektion" aria-labelledby="ref-titel">
@@ -77,6 +105,26 @@ import { link } from '../lib/link.js';
       </div>
       <ul class="omraade-liste">
         {byer.map((b) => <li><a href={link(bySti(b))}>{b.navn}</a></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sektion" aria-labelledby="viden-titel">
+    <div class="kolonne">
+      <div class="sektion-hoved sektion-hoved-link">
+        <h2 class="sektion-titel" id="viden-titel">Godt at vide før du beslutter dig</h2>
+        <a class="pil-link" href={link('viden')}>Alle guides <span aria-hidden="true">→</span></a>
+      </div>
+      <ul class="guide-teaser">
+        {guides.slice(0, 3).map((g) => (
+          <li>
+            <a href={link(g.slug)}>
+              <Foto navn={g.billede} alt="" class="guide-teaser-billede" sizes="(max-width: 760px) 100vw, 33vw" />
+              <span class="guide-kort-meta">{laesetid(g)} min. at læse</span>
+              <span class="guide-teaser-titel">{g.h1}</span>
+            </a>
+          </li>
+        ))}
       </ul>
     </div>
   </section>

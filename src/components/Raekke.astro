@@ -1,0 +1,25 @@
+---
+/**
+ * Et valg i beregneren som række med et lille billede. Hele rækken kan trykkes på.
+ * Renderes på serveren, så beregneren står færdig, før JavaScript kører (ingen hop i layoutet).
+ * `pris` og `tilvalgPris` er startteksten. quiz.js opdaterer dem, når rummet eller arealet skifter.
+ */
+interface Props {
+  type?: 'radio' | 'checkbox';
+  navn: string;
+  vaerdi: string;
+  titel: string;
+  desk?: string;
+  billede: string;
+  pris?: string;
+  tilvalgPris?: string;
+}
+const { type = 'radio', navn, vaerdi, titel, desk, billede, pris, tilvalgPris } = Astro.props;
+const id = `${navn}-${vaerdi}`;
+---
+<label class="raekke" for={id}>
+  <input type={type} name={navn} id={id} value={vaerdi}>
+  <img class="raekke-billede" src={billede} alt="" width="200" height="150" decoding="async">
+  <span class="raekke-tekst"><span class="raekke-navn">{titel}</span>{desk && <span class="raekke-desk">{desk}</span>}<span class="raekke-meta">{pris !== undefined && <span data-pris-m2={vaerdi}>{pris}</span>}{pris !== undefined && <span class="anb" data-anb={vaerdi} hidden></span>}{tilvalgPris !== undefined && <span data-tilvalg-pris={vaerdi}>{tilvalgPris}</span>}</span></span>
+  <span class="raekke-tjek" aria-hidden="true"></span>
+</label>

@@ -1,10 +1,10 @@
 # Silkeborg Epoxy · hjemmeside med prisberegner
 
-Udkast v0.4: komplet hjemmeside i [Astro](https://astro.build) med 22 statiske sider. Prisberegneren stiller ét spørgsmål ad gangen og ligger på forsiden, prissiden, alle ydelser og alle bysider. Leads går gennem en Netlify-funktion til Zapier/Make og Meta CAPI. Baggrund og research står i [PLAN.md](PLAN.md).
+Udkast v0.5: komplet hjemmeside i [Astro](https://astro.build) med 28 statiske sider, heraf 5 guides under Viden. Prisberegneren stiller ét spørgsmål ad gangen og ligger på forsiden, prissiden, alle ydelser, alle bysider og alle guides. Leads går gennem en Netlify-funktion til Zapier/Make og Meta CAPI. Baggrund og research står i [PLAN.md](PLAN.md).
 
 **Alle priser er pladsholdere.** Siden kører i "kladde"-tilstand: tekster og tal, der skal bekræftes af kunden, er markeret med gult, og alle sider har `noindex`.
 
-**Billederne er pladsholdere.** I beregneren er ni billeder AI-genererede (Canva) og fire stillbilleder fra kundens egen video. Fotoene på resten af siden er stillbilleder fra videoen. De skal skiftes til kundens egne billeder af færdige gulve før launch.
+**Billederne er pladsholdere.** I beregneren er ni billeder AI-genererede (Canva) og fire stillbilleder fra kundens egen video. Fotoene på siderne er stillbilleder fra videoen og renderede gulve (`gulv-*.jpg`, se [Gulvbilleder](#gulvbilleder)). Farveprøverne på gulvtypesiderne er også renderede. Det hele skal skiftes til kundens egne billeder og farvekort før launch.
 
 ## Kom i gang
 
@@ -26,9 +26,10 @@ I `npm run dev` er `VITE_DEMO=1` slået til (`.env.development`). Tak-skærmen v
 | Pris og prisguide `/pris/` | `src/pages/pris.astro` |
 | Ydelser `/garagegulv/`, `/kaeldergulv/`, `/gulv-i-boligen/`, `/erhvervsgulve/`, `/ensfarvet-epoxy/`, `/flakesgulv/`, `/metallic-epoxy/` | `src/pages/[ydelse].astro` + `src/data/ydelser.js` |
 | Bysider `/epoxygulv-silkeborg/`, `/epoxygulv-aarhus/` osv. | `src/pages/epoxygulv-[by].astro` + `src/data/byer.js` |
+| Viden `/viden/` og guides fx `/epoxy-eller-gulvmaling/` | `src/pages/viden.astro`, `src/components/GuideSide.astro` + `src/data/viden.js` |
 | Referencer, Om os, Kontakt, Privatliv, 404 | `src/pages/*.astro` |
 
-En ny ydelse eller by er en ny post i data-filen. Siden, menuen, footeren og sitemap følger med.
+En ny ydelse eller by er en ny post i data-filen. Siden, menuen, footeren og sitemap følger med. En ny guide er en post i `src/data/viden.js` plus en sidefil på tre linjer i `src/pages/` (kopiér en af de eksisterende).
 
 ## Her retter du
 
@@ -40,10 +41,13 @@ En ny ydelse eller by er en ny post i data-filen. Siden, menuen, footeren og sit
 | Tekster, fordele og spørgsmål pr. ydelse | `src/data/ydelser.js` |
 | Byer, afstande og lokale tekster | `src/data/byer.js` |
 | Generelle spørgsmål | `src/data/faq.js` |
+| Guides (tekster, tabel, billede) | `src/data/viden.js` |
+| Farveprøver på gulvtypesiderne | `farver` i `src/data/ydelser.js` + billeder i `src/media/farver/` |
+| "Derfor vælger folk os" på forsiden | `loefter` øverst i `src/pages/index.astro` |
 | Referencer | `src/data/referencer.js` (pladsholdere) |
 | Domæne | `astro.config.mjs` (`site`) og `public/robots.txt` |
 | Billeder i beregneren | `src/media/valg/`, fx `rum-garage.webp`. Samme navn, 4:3 |
-| Fotos på siderne | `src/media/foto/`. Læg en ny fil med samme navn, så laver Astro selv de mindre størrelser |
+| Fotos på siderne | `src/media/foto/`. Læg en ny fil med samme navn, så laver Astro selv de mindre størrelser. Hvilket foto en side bruger, står i data-filerne (`billede`) |
 | Videoen | `src/media/arbejde.mp4`, `arbejde.webm` og stillbilledet `arbejde.jpg`, se herunder |
 | Farver, typografi, afstande | `src/styles/tokens.css` |
 
@@ -61,13 +65,43 @@ ffmpeg -i nyt-klip.mov -frames:v 1 -vf "scale=1280:-2" -q:v 5 src/media/arbejde.
 
 Stillbilledet skal være første billede i klippet, så der ikke er et hop, når videoen starter.
 
+### Gulvbilleder
+
+Nærbillederne af færdige gulve (`src/media/foto/gulv-*.jpg`) og farveprøverne (`src/media/farver/`) er renderet med `scripts/gulvbilleder/`: et gulv i perspektiv med klar toplak, spejlinger af rummet og dybdeskarphed. Farverne og kameraet står i `scener.json`. Samme scene giver altid samme billede.
+
+```sh
+npm i -D playwright && npx playwright install chromium   # én gang
+node scripts/gulvbilleder/render.mjs                        # alle (ca. 15 min)
+node scripts/gulvbilleder/render.mjs flakes-graa            # kun én
+```
+
+Brug det til at lave farveprøver med kundens egne farver, indtil der er rigtige fotos. Så er der ikke brug for det mere.
+
 ## SEO
 
 - Egen titel og beskrivelse på hver side, canonical-URL og Open Graph.
-- Strukturerede data: virksomheden som lokal virksomhed med område (alle sider), `Service` på ydelserne, `FAQPage` og `BreadcrumbList`.
+- Strukturerede data: virksomheden som lokal virksomhed med område (alle sider), `Service` på ydelserne, `Article` på guiderne, `FAQPage` og `BreadcrumbList`.
+- Delingsbillede til Facebook, LinkedIn og Google (`public/og.jpg`, 1200×630) og ikoner til browser og iPhone.
+- Guiderne svarer på det, folk søger på før de køber ("epoxy eller maling", "gulvvarme", "fliser"), og linker til ydelserne og beregneren.
 - `sitemap-index.xml` bygges automatisk, og `robots.txt` peger på den.
 - Bysiderne har hver deres afstand, køretid, nærområder og lokale tekst, så de ikke er kopier med et nyt bynavn.
 - Så længe `kladde: true` står i `src/data/firma.js`, har alle sider `noindex`.
+
+## Hastighed
+
+Lighthouse (29.09.2026, produktionsbyg, mobil med simuleret 4G):
+
+| Side | Hastighed | Tilgængelighed | Best practices | SEO |
+|---|---|---|---|---|
+| Forside | 99 | 100 | 100 | 100 |
+| Garagegulv | 98 | 100 | 100 | 100 |
+| Pris | 99 | 100 | 100 | 100 |
+| Guide | 98 | 100 | 100 | 100 |
+| Epoxygulv Aarhus | 99 | 100 | 100 | 100 |
+
+Desktop: 100 på forsiden. Ingen layout-hop (CLS 0). SEO er målt uden kladde-tilstand. Med `kladde: true` giver `noindex` med vilje 69.
+
+Det, der holder siden hurtig: CSS ligger direkte i HTML'en, skrifttypen hentes først (preload), billederne laves i flere størrelser som webp, og beregnerens valg bygges på serveren, så intet hopper, når JavaScript starter.
 
 ## URL-parametre
 
@@ -109,6 +143,8 @@ Browserens tilbage-knap går ét spørgsmål tilbage i beregneren, så folk i Fa
 - [ ] Ejerens navn, historie og foto på Om os
 - [ ] Kundens egne fotos i stedet for AI-billederne i `src/media/valg/` og videostillbillederne i `src/media/foto/`
 - [ ] Rigtige referencer i `src/data/referencer.js` og anmeldelser fra Trustpilot eller Google
+- [ ] Kundens farvekort: farver og blandinger i `src/data/ydelser.js` (`farver`) og prøver i `src/media/farver/`
+- [ ] Guiderne læst igennem af ejeren, især levetid, garanti og gulvvarme i `src/data/viden.js`
 - [ ] Zone (kommuner) og bysidernes afstande bekræftet
 - [ ] Privatlivspolitik gennemgået
 - [ ] Domæne i `astro.config.mjs` og `public/robots.txt`

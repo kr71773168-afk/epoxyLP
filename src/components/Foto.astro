@@ -21,6 +21,7 @@ if (!fil) throw new Error(`Foto mangler: src/media/foto/${navn}.jpg`);
   src={fil.default}
   alt={alt}
   widths={[480, 800, 1200, 1600]}
+  quality={70}
   sizes={sizes}
   class={klasse}
   loading={eager ? 'eager' : 'lazy'}

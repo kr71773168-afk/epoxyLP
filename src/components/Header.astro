@@ -1,18 +1,22 @@
 ---
 import { firma } from '../data/firma.js';
+import { guides } from '../data/viden.js';
 import { gulvtyper, privat } from '../data/ydelser.js';
 import { link } from '../lib/link.js';
 
-const { aktiv = '' } = Astro.props;
+const { aktiv: side = '' } = Astro.props;
+// Guides hører under Viden i menuen
+const aktiv = guides.some((g) => g.slug === side) ? 'viden' : side;
 const menu = [
   { navn: 'Privat', punkter: privat },
   { navn: 'Erhverv', slug: 'erhvervsgulve' },
   { navn: 'Gulvtyper', punkter: gulvtyper },
   { navn: 'Referencer', slug: 'referencer' },
+  { navn: 'Viden', slug: 'viden' },
   { navn: 'Om os', slug: 'om-os' },
   { navn: 'Kontakt', slug: 'kontakt' },
 ];
-const nu = (slug) => (aktiv === slug ? 'page' : undefined);
+const nu = (slug) => (side === slug ? 'page' : undefined);
 const gruppeAktiv = (punkter) => punkter.some((p) => p.slug === aktiv);
 ---
 <header class="top">
@@ -61,6 +65,7 @@ const gruppeAktiv = (punkter) => punkter.some((p) => p.slug === aktiv);
           <ul>
             <li><a href={link('erhvervsgulve')} aria-current={nu('erhvervsgulve')}>Erhverv</a></li>
             <li><a href={link('referencer')} aria-current={nu('referencer')}>Referencer</a></li>
+            <li><a href={link('viden')} aria-current={nu('viden')}>Viden og guides</a></li>
             <li><a href={link('om-os')} aria-current={nu('om-os')}>Om os</a></li>
             <li><a href={link('kontakt')} aria-current={nu('kontakt')}>Kontakt</a></li>
           </ul>

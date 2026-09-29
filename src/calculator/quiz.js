@@ -3,10 +3,6 @@ import { TRIN, beregnPris, estimerLbm, tilvalgPris, tommeSvar } from './engine.j
 import { forvarmPostnumre, slaaOpPostnummer } from './postnumre.js';
 import { track } from '../tracking.js';
 
-// Billederne til valgene ligger i src/media/valg og hedder "gruppe-nøgle.webp", fx rum-garage.webp.
-const billeder = import.meta.glob('../media/valg/*.webp', { eager: true, query: '?url', import: 'default' });
-const billede = (navn) => billeder[`../media/valg/${navn}.webp`] ?? '';
-
 const fmt = (n) => Math.round(n).toLocaleString('da-DK');
 const spaend = ([a, b]) => (Math.round(a) === Math.round(b) ? `${fmt(a)} kr` : `${fmt(a)}–${fmt(b)} kr`);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -20,17 +16,6 @@ const OVERSKRIFTER = {
 };
 
 const RADIO = ['rum', 'overflade', 'stand'];
-
-/** Et valg som række med et lille billede. Hele rækken kan trykkes på. */
-function raekke({ type = 'radio', navn, vaerdi, titel, desk = '', meta = '', billedeNavn }) {
-  const id = `${navn}-${vaerdi}`;
-  return `<label class="raekke" for="${id}">
-    <input type="${type}" name="${navn}" id="${id}" value="${esc(vaerdi)}">
-    <img class="raekke-billede" src="${billede(billedeNavn)}" alt="" width="200" height="150" decoding="async">
-    <span class="raekke-tekst"><span class="raekke-navn">${esc(titel)}</span>${desk ? `<span class="raekke-desk">${esc(desk)}</span>` : ''}<span class="raekke-meta">${meta}</span></span>
-    <span class="raekke-tjek" aria-hidden="true"></span>
-  </label>`;
-}
 
 /**
  * Prisberegneren som en lille app: ét spørgsmål ad gangen og prisen til sidst.
@@ -59,23 +44,7 @@ export function startQuiz() {
   let arealRoert = false;
   let prisTekst = '';
 
-  /* ---------- valgene bygges fra config ---------- */
-  $('[data-valg="rum"]').innerHTML = Object.entries(cfg.rum)
-    .map(([k, r]) => raekke({ navn: 'rum', vaerdi: k, titel: r.navn, desk: r.beskrivelse, billedeNavn: `rum-${k}` })).join('');
-  $('[data-valg="overflade"]').innerHTML = Object.entries(cfg.overflader)
-    .map(([k, o]) => raekke({
-      navn: 'overflade', vaerdi: k, titel: o.navn, desk: o.beskrivelse, billedeNavn: `overflade-${k}`,
-      meta: `<span data-pris-m2="${k}"></span><span class="anb" data-anb="${k}" hidden></span>`,
-    })).join('');
-  $('[data-valg="stand"]').innerHTML = [
-    ...Object.entries(cfg.stand).map(([k, s]) => raekke({ navn: 'stand', vaerdi: k, titel: s.navn, desk: s.beskrivelse, billedeNavn: `stand-${k}` })),
-    raekke({ navn: 'stand', vaerdi: 'vedikke', titel: 'Ved ikke', desk: 'Vi kigger på det, når vi kommer ud', billedeNavn: 'stand-vedikke' }),
-  ].join('');
-  $('[data-valg="tilvalg"]').innerHTML = Object.entries(cfg.tilvalg)
-    .map(([k, t]) => raekke({
-      type: 'checkbox', navn: 'tilvalg', vaerdi: k, titel: t.navn, desk: t.beskrivelse, billedeNavn: `tilvalg-${k}`,
-      meta: `<span data-tilvalg-pris="${k}"></span>`,
-    })).join('');
+  // Valgene (rækkerne) renderes på serveren i Beregner.astro
 
   const hint = (t, tekst) => {
     const el = $(`.spg[data-trin="${t}"] .spg-hint`);

@@ -1,0 +1,401 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c"></canvas>
+<script>
+// Renderer til pladsholder-fotos af epoxygulve: gulvplan i perspektiv med klar toplak,
+// refleksioner af et simpelt rum, dybdeskarphed og filmkorn. render.mjs kalder window.render(scene).
+const VS = `#version 300 es
+in vec2 p; void main(){ gl_Position = vec4(p,0.,1.); }`;
+
+const FS = `#version 300 es
+precision highp float;
+out vec4 o;
+uniform vec2 res;
+uniform vec4 tile;          // x0,y0,w,h i fuld opløsning
+uniform int mode;           // 0 ensfarvet, 1 flakes, 2 metallic
+uniform int env;            // 0 garage/hal, 1 bolig
+uniform int topdown;        // 1 = set lige oppefra (farveprøve)
+uniform float camH, pitch, fov, aperture, yaw;
+uniform vec3 base;          // grundfarve (lineær)
+uniform vec3 c1, c2, c3, c4, c5; // flakes-farver / metallic-toner
+uniform vec4 vaegt;         // sandsynligheder for c1..c4 (c5 = resten)
+uniform float flakeMm, rough, seed, skala, lysStyrke, eksponering;
+uniform int samples;
+uniform int inventar;
+
+const float PI = 3.14159265;
+
+uint hsh(uint x){ x ^= x >> 16; x *= 0x7feb352dU; x ^= x >> 15; x *= 0x846ca68bU; x ^= x >> 16; return x; }
+float h1(vec2 p){ uvec2 q = uvec2(ivec2(floor(p)) + 32768); return float(hsh(q.x ^ hsh(q.y ^ uint(seed*1000.)))) / 4294967295.; }
+vec4 h4(vec2 p){ uvec2 q = uvec2(ivec2(floor(p)) + 32768); uint a = hsh(q.x ^ hsh(q.y ^ uint(seed*1000.)));
+  uint b = hsh(a); uint c = hsh(b); uint d = hsh(c);
+  return vec4(float(a),float(b),float(c),float(d)) / 4294967295.; }
+
+// Tilfældige tal pr. sample
+uint rng;
+float rnd(){ rng = hsh(rng); return float(rng) / 4294967295.; }
+
+// Glat værdistøj + fbm
+float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f);
+  return mix(mix(h1(i), h1(i+vec2(1,0)), f.x), mix(h1(i+vec2(0,1)), h1(i+vec2(1,1)), f.x), f.y); }
+float fbm(vec2 p){ float a = .5, s = 0.; mat2 m = mat2(1.6,1.2,-1.2,1.6);
+  for(int i=0;i<6;i++){ s += a*vn(p); p = m*p; a *= .5; } return s; }
+
+// ---------- Flakes ----------
+// Hver celle har tre chips med uregelmæssig kant. Den øverste chip, der dækker punktet, vinder.
+vec3 flakes(vec2 p, out float kant){
+  float s = flakeMm * .001;
+  vec2 g = p / s;
+  vec2 ci = floor(g);
+  float bedst = -1.; vec3 farve = base; kant = 0.;
+  for(int j=-1;j<=1;j++) for(int i=-1;i<=1;i++){
+    vec2 c = ci + vec2(i,j);
+    for(int k=0;k<3;k++){
+      vec4 r = h4(c*3.1 + float(k)*17.3);
+      vec4 r2 = h4(c*5.7 + float(k)*9.1 + 3.);
+      vec2 midt = c + r.xy;
+      float st = .45 + .55*r.z;              // størrelse
+      float rot = r.w * 6.2831;
+      vec2 d = g - midt;
+      d = mat2(cos(rot), -sin(rot), sin(rot), cos(rot)) * d;
+      d.x *= .75 + .5*r2.x;                 // aflange chips
+      float a = atan(d.y, d.x) / 6.2831 + .5;
+      // radius som stykvis lineær funktion af vinklen (6 hjørner)
+      float fa = a * 6.;
+      float i0 = floor(fa);
+      float ra = .55 + .45*h1(c*7.3 + vec2(i0, float(k)));
+      float rb = .55 + .45*h1(c*7.3 + vec2(mod(i0+1., 6.), float(k)));
+      float rad = st * mix(ra, rb, fract(fa)) * .95;
+      float l = length(d);
+      if(l < rad){
+        float z = r2.y;
+        if(z > bedst){
+          bedst = z;
+          float u = r2.z;
+          vec3 f = u < vaegt.x ? c1 : u < vaegt.x+vaegt.y ? c2 : u < vaegt.x+vaegt.y+vaegt.z ? c3 : u < vaegt.x+vaegt.y+vaegt.z+vaegt.w ? c4 : c5;
+          f *= .9 + .2*r2.w;                // lidt variation pr. chip
+          farve = f;
+          kant = smoothstep(rad*.8, rad, l);
+        }
+      }
+    }
+  }
+  return farve;
+}
+
+// ---------- Metallic ----------
+float mfbm(vec2 p){ return fbm(p); }
+vec3 metallic(vec2 p, out vec2 grad, out float lace){
+  p *= skala;
+  vec2 q = vec2(mfbm(p), mfbm(p + vec2(5.2, 1.3)));
+  vec2 r = vec2(mfbm(p + 3.5*q + vec2(1.7, 9.2)), mfbm(p + 3.5*q + vec2(8.3, 2.8)));
+  float f = mfbm(p + 3.8*r);
+  // gradient til glans
+  float e = .004;
+  float fx = mfbm(p + vec2(e,0.) + 3.8*r) - f;
+  float fy = mfbm(p + vec2(0.,e) + 3.8*r) - f;
+  grad = vec2(fx, fy) / e;
+  // blonder: tynde lyse årer, hvor mønsteret skifter
+  float v = abs(fract(f*3.2 + length(r)*.8) - .5);
+  lace = smoothstep(.06, .0, v) * smoothstep(.35, .6, length(q));
+  float t = smoothstep(.3, .75, f);
+  vec3 col = mix(c1, c2, t);
+  col = mix(col, c3, smoothstep(.5, .9, length(r)) * .85);
+  col = mix(col, c5, smoothstep(.55, .8, q.x) * smoothstep(.4, .7, f) * .6);
+  col = mix(col, c4, lace * .9);
+  // fine glimmer i pigmentet
+  col *= .92 + .16*vn(p*180.);
+  return col;
+}
+
+// ---------- Rummet, der spejler sig i gulvet ----------
+// Udsigt gennem port/vinduer: himmel, træer og huse langt væk
+vec3 ude(vec3 d){
+  float y = d.y;
+  vec3 sky = mix(vec3(1.35,1.42,1.55), vec3(.95,1.05,1.3), clamp(y*1.6, 0., 1.));
+  float az = atan(d.x, d.z);
+  float trae = .10 + .07*fbm(vec2(az*9., 1.)) + .05*vn(vec2(az*40., 2.));
+  vec3 c = sky;
+  if(y < trae) c = mix(vec3(.10,.14,.09), vec3(.22,.27,.18), fbm(vec2(az*30., y*40.)));
+  float hus = step(abs(az - .25), .18) * step(y, .075);
+  c = mix(c, vec3(.55,.5,.47), hus);
+  if(y < .02) c = vec3(.42,.42,.43);
+  return c;
+}
+
+// Kasser i rummet (reoler, skabe, køkkenø). Returnerer afstand eller 1e9
+float kasse(vec3 ro, vec3 rd, vec3 lo, vec3 hi, out vec3 n){
+  vec3 inv = 1. / rd;
+  vec3 t0 = (lo - ro) * inv, t1 = (hi - ro) * inv;
+  vec3 tmin = min(t0, t1), tmax = max(t0, t1);
+  float tn = max(max(tmin.x, tmin.y), tmin.z);
+  float tf = min(min(tmax.x, tmax.y), tmax.z);
+  if(tn > tf || tf < 0.) return 1e9;
+  n = tn == tmin.x ? vec3(-sign(rd.x),0,0) : tn == tmin.y ? vec3(0,-sign(rd.y),0) : vec3(0,0,-sign(rd.z));
+  return tn;
+}
+
+vec3 rum(vec3 ro, vec3 rd, bool lamper){
+  float H = env == 0 ? 2.7 : env == 1 ? 2.6 : 2.3;
+  float W = env == 0 ? 3.2 : env == 1 ? 3.8 : 2.8;
+  float zB = env == 0 ? 8.5 : env == 1 ? 7.5 : 6.2;
+  float zF = -2.5;
+  float t = 1e9; int hit = -1;
+  if(rd.y > 0.){ float tt = (H - ro.y)/rd.y; if(tt < t){ t = tt; hit = 0; } }
+  if(rd.z > 0.){ float tt = (zB - ro.z)/rd.z; if(tt < t){ t = tt; hit = 1; } }
+  if(rd.z < 0.){ float tt = (zF - ro.z)/rd.z; if(tt < t){ t = tt; hit = 4; } }
+  if(rd.x > 0.){ float tt = (W - ro.x)/rd.x; if(tt < t){ t = tt; hit = 2; } }
+  if(rd.x < 0.){ float tt = (-W - ro.x)/rd.x; if(tt < t){ t = tt; hit = 3; } }
+  // Møbler og inventar
+  vec3 kn; float tk; int kid = -1; vec3 knB = vec3(0.);
+  if(inventar == 0){
+  } else if(env == 0){
+    tk = kasse(ro, rd, vec3(-W, 0., 5.6), vec3(-W+.45, 1.95, 7.6), kn); if(tk < t){ t = tk; kid = 0; knB = kn; }   // reol
+    tk = kasse(ro, rd, vec3(W-.55, 0., 6.2), vec3(W, .95, 7.9), kn); if(tk < t){ t = tk; kid = 1; knB = kn; }       // værktøjsskab
+    tk = kasse(ro, rd, vec3(W-.6, .95, 6.3), vec3(W, 1.05, 7.8), kn); if(tk < t){ t = tk; kid = 2; knB = kn; }      // bordplade
+  } else if(env == 2){
+    tk = kasse(ro, rd, vec3(.7, 0., 5.55), vec3(1.32, .86, 6.2), kn); if(tk < t){ t = tk; kid = 6; knB = kn; }      // vaskemaskine
+    tk = kasse(ro, rd, vec3(1.36, 0., 5.55), vec3(1.98, .86, 6.2), kn); if(tk < t){ t = tk; kid = 6; knB = kn; }     // tørretumbler
+    tk = kasse(ro, rd, vec3(-W, 0., 3.8), vec3(-W+.4, 1.8, 5.4), kn); if(tk < t){ t = tk; kid = 7; knB = kn; }       // reol
+  } else {
+    tk = kasse(ro, rd, vec3(-2.4, 0., 5.0), vec3(-.6, .92, 5.95), kn); if(tk < t){ t = tk; kid = 3; knB = kn; }     // køkkenø
+    tk = kasse(ro, rd, vec3(-2.45, .92, 4.95), vec3(-.55, .96, 6.0), kn); if(tk < t){ t = tk; kid = 4; knB = kn; }  // bordplade
+    tk = kasse(ro, rd, vec3(1.3, 0., 6.0), vec3(3.3, .42, 6.9), kn); if(tk < t){ t = tk; kid = 5; knB = kn; }       // sofa
+    tk = kasse(ro, rd, vec3(1.3, .42, 6.65), vec3(3.3, .85, 6.9), kn); if(tk < t){ t = tk; kid = 5; knB = kn; }     // ryglæn
+  }
+  vec3 p = ro + rd*t;
+  vec3 vaeg = env == 0 ? vec3(.40,.40,.41) : env == 1 ? vec3(.66,.62,.56) : vec3(.5,.5,.49);
+  if(kid >= 0){
+    float lys = .55 + .45*max(knB.z * -1., 0.) + .2*knB.y;
+    if(kid == 0){ float hylde = step(.9, fract(p.y*2.2)); vec3 c = mix(vec3(.10,.10,.11), vec3(.35,.3,.25), step(.5, vn(p.zy*6.))*.6); return mix(c, vec3(.5), hylde) * lys; }
+    if(kid == 1) return vec3(.06,.07,.08) * lys * (.8 + .2*step(.03, abs(fract(p.y*5.) - .5)));
+    if(kid == 2) return vec3(.35,.27,.18) * lys;
+    if(kid == 3) return vec3(.12,.12,.13) * lys * (.85 + .15*step(.02, abs(fract(p.x*1.6) - .5)));
+    if(kid == 4) return vec3(.85,.84,.82) * lys;
+    if(kid == 5) return vec3(.36,.38,.36) * lys;
+    if(kid == 6){ float dor = smoothstep(.2, .19, length(vec2(p.x - (p.x < 1.34 ? 1.01 : 1.67), p.y - .45))); return mix(vec3(.82,.82,.8), vec3(.18,.2,.22), dor*.8) * lys; }
+    if(kid == 7){ float hylde = step(.9, fract(p.y*2.4)); return mix(vec3(.3,.26,.2), vec3(.62,.6,.56), hylde) * lys; }
+  }
+  if(hit == 0){
+    vec3 c = vaeg * .5;
+    if(!lamper){
+      c += env == 0 ? vec3(.35) : vec3(.3,.28,.25);
+    } else if(env == 2){
+      // to plafonder i loftet
+      for(int i=0;i<2;i++){
+        vec2 lp = vec2(-.3, 1.6 + float(i)*2.6);
+        float l = length(p.xz - lp);
+        c += vec3(1.,.95,.86) * lysStyrke * smoothstep(.2, .18, l);
+        c += vec3(.3,.28,.24) * exp(-l*3.);
+      }
+    } else if(env == 0){
+      // lysstofrør i to rækker
+      for(int i=-1;i<=1;i+=2){
+        float x = float(i)*1.15;
+        float inX = smoothstep(.07, .055, abs(p.x - x));
+        float seg = fract((p.z + .3)/1.9);
+        float inZ = smoothstep(.0, .01, seg) * smoothstep(.72, .71, seg);
+        c += vec3(1.,1.,1.03) * lysStyrke * inX * inZ;
+        c += vec3(.22) * exp(-abs(p.x-x)*5.) * inZ;
+      }
+    } else {
+      // spots
+      vec2 g = vec2(p.x + .7, p.z) / vec2(1.4, 1.6);
+      vec2 f = fract(g) - .5;
+      float l = length(f*vec2(1.4,1.6));
+      c += vec3(1.,.9,.76) * lysStyrke * smoothstep(.05,.04,l);
+      c += vec3(.28,.25,.2) * exp(-l*9.);
+    }
+    return c;
+  }
+  if(hit == 1){
+    vec3 c = vaeg * (.8 + .2*vn(p.xy*3.));
+    if(env == 2){
+      // lille kældervindue højt oppe
+      float vin = step(abs(p.x + 1.0), .6) * step(abs(p.y - 1.85), .25);
+      c = mix(c, ude(normalize(rd + vec3(0., .25, 0.))) * 2.2, vin);
+      float karm = step(abs(p.x + 1.0), .66) * step(abs(p.y - 1.85), .31) * (1. - vin);
+      c = mix(c, vec3(.85), karm);
+    } else if(env == 0){
+      // åben port med dagslys
+      float port = step(abs(p.x - .2), 1.3) * step(p.y, 2.15);
+      c = mix(c, ude(rd) * 2.1, port);
+      float karm = step(p.y, 2.32) * step(2.15, p.y) * step(abs(p.x - .2), 1.42);
+      c = mix(c, vec3(.16), karm);
+      // lille vindue i væggen
+      float vin = step(abs(p.x + 2.2), .45) * step(abs(p.y - 1.55), .35);
+      c = mix(c, ude(rd) * 1.6, vin);
+    } else {
+      // store vinduespartier med sprosser
+      float vin = step(abs(p.x - .2), 3.1) * step(.1, p.y) * step(p.y, 2.3);
+      float spros = step(abs(fract((p.x + 2.9)/1.55) - .5), .475) * step(abs(p.y - 1.2), 1.07);
+      c = mix(c, ude(rd) * 2.5, vin * spros);
+      c = mix(c, vec3(.06), vin * (1.-spros));
+    }
+    return c;
+  }
+  if(hit == 2 || hit == 3){
+    vec3 c = vaeg * (.7 + .3*smoothstep(0., 2.5, p.y));
+    if(env == 1 && hit == 2){
+      float vin = step(abs(p.z - 3.4), 1.0) * step(.8, p.y) * step(p.y, 2.2);
+      c = mix(c, ude(rd)*1.9, vin);
+    }
+    if(env == 0 && hit == 2){
+      float dor = step(abs(p.z - 2.5), .45) * step(p.y, 2.05);
+      c = mix(c, vec3(.5,.48,.45), dor);
+    }
+    return c;
+  }
+  return vaeg * .3;
+}
+
+vec3 aces(vec3 x){ return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14), 0., 1.); }
+
+void main(){
+  vec2 px = gl_FragCoord.xy;
+  rng = hsh(uint(px.x) * 1973U + uint(px.y) * 9277U + 26699U);
+  vec3 acc = vec3(0.);
+  float asp = res.x / res.y;
+
+  // Kamera
+  float cp = cos(pitch), sp = sin(pitch);
+  vec3 fwd = normalize(vec3(sin(yaw)*cp, -sp, cos(yaw)*cp));
+  vec3 right = normalize(cross(fwd, vec3(0,1,0)));
+  vec3 up = cross(right, fwd);
+  vec3 cam = vec3(0., camH, 0.);
+  float tf = tan(fov*.5);
+  float fokus = camH / sp;
+
+  for(int s=0; s<64; s++){
+    if(s >= samples) break;
+    vec2 j = vec2(rnd(), rnd());
+    vec2 uv = ((px + j) / res) * 2. - 1.;
+    vec3 ro, rd;
+    if(topdown == 1){
+      // lige oppefra: ortografisk, 1 enhed = skala meter
+      vec2 q = uv * vec2(asp, 1.) * .5 * camH;
+      ro = vec3(q.x, 1., q.y);
+      rd = normalize(vec3(.08*uv.x, -1., .05 + .08*uv.y));
+    } else {
+      rd = normalize(fwd + uv.x*tf*asp*right + uv.y*tf*up);
+      // dybdeskarphed
+      vec3 fp = cam + rd * (fokus / dot(rd, fwd));
+      float ang = rnd()*6.2831, rr = sqrt(rnd()) * aperture;
+      ro = cam + (right*cos(ang) + up*sin(ang)) * rr;
+      rd = normalize(fp - ro);
+    }
+    if(rd.y >= 0.){ acc += vec3(0.); continue; }
+    float t = -ro.y / rd.y;
+    vec3 P = ro + rd*t;
+    vec2 fp2 = P.xz;
+
+    // Materiale
+    vec3 alb; vec3 n = vec3(0,1,0);
+    float kant = 0.; float glans = 0.; vec2 grad = vec2(0.); float lace = 0.;
+    if(mode == 1){
+      alb = flakes(fp2, kant);
+      alb *= 1. - .35*kant;
+    } else if(mode == 2){
+      alb = metallic(fp2, grad, lace);
+    } else {
+      float rull = vn(vec2(fp2.x*1.2, fp2.y*9.)) - .5;          // svage rulleretninger
+      float plet = fbm(fp2*1.7 + 2.) - .5;
+      alb = base * (1. + .05*plet + .025*rull) * (.985 + .03*vn(fp2*400.));
+      float stoev = step(.9985, h1(fp2*900.));                    // enkelte støvkorn
+      alb = mix(alb, vec3(.9), stoev*.5);
+    }
+    // Toplakkens "appelsinhud": let bølget normal
+    float ob = .0035 + (mode == 1 ? .004 : 0.);
+    vec2 on = vec2(vn(fp2*38.) - .5, vn(fp2*38. + 7.) - .5) * ob * 6.;
+    on += vec2(vn(fp2*160.) - .5, vn(fp2*160. + 3.) - .5) * ob * 2.;
+    n = normalize(vec3(on.x, 1., on.y));
+    // ruhed: jitter normalen
+    float rr0 = rough * (.55 + .9*fbm(fp2*1.3 + 4.));
+    vec2 rj = vec2(rnd()-.5, rnd()-.5) * rr0;
+    vec3 nr = normalize(n + vec3(rj.x, 0., rj.y));
+
+    vec3 v = -rd;
+    float cosT = max(dot(nr, v), 0.);
+    float F = .045 + (1. - .045) * pow(1. - cosT, 5.);
+    vec3 R = reflect(rd, nr);
+    vec3 refl = rum(P + nr*.001, R, true);
+
+    // Diffust lys på gulvet: dagslys fra porten/vinduet og loftslys
+    float E;
+    if(topdown == 1){
+      E = .95 + .1*vn(fp2*2.);
+    } else if(env == 2){
+      E = .62 + .3*exp(-pow(length(P.xz - vec2(-.3, 1.6)), 2.)*.35);
+    } else if(env == 0){
+      E = .55 + .5*smoothstep(1., 8., P.z) + .25*exp(-pow(abs(abs(P.x) - 1.15), 2.)*.8);
+    } else {
+      E = .7 + .6*smoothstep(1., 7., P.z);
+    }
+    vec3 diff = alb * E * eksponering;
+
+    // Metallic: pigmentet glimter afhængigt af retning
+    if(mode == 2){
+      vec3 mn = normalize(vec3(-grad.x*.02, 1., -grad.y*.02));
+      vec3 R2 = reflect(rd, mn);
+      vec3 env2 = min(rum(P + mn*.001, normalize(R2 + vec3(rnd()-.5, 0., rnd()-.5)*.22), false), vec3(1.6));
+      diff = mix(diff, alb * env2 * .95, .42);
+      diff += alb * lace * .15;
+    }
+    vec3 col = diff * (1. - F) + refl * F * 1.15;
+    acc += col;
+  }
+  vec3 c = acc / float(samples);
+  // vignet og tonemapping
+  vec2 uv0 = (px / res) * 2. - 1.;
+  if(topdown == 0) c *= 1. - .22*pow(length(uv0*vec2(.85,1.)), 2.4);
+  c = aces(c * 1.05);
+  c = pow(c, vec3(1./2.2));
+  // korn
+  float korn = (h1(px*1.37 + 11.) - .5) * .018;
+  c += korn;
+  o = vec4(c, 1.);
+}`;
+
+async function render(S){
+  const c = document.getElementById('c');
+  c.width = S.w; c.height = S.h;
+  const gl = c.getContext('webgl2', { preserveDrawingBuffer: true, antialias: false });
+  const sh = (t, s) => { const x = gl.createShader(t); gl.shaderSource(x, s); gl.compileShader(x); if (!gl.getShaderParameter(x, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(x)); return x; };
+  const pr = gl.createProgram();
+  gl.attachShader(pr, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS));
+  gl.linkProgram(pr); if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr));
+  gl.useProgram(pr);
+  const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const l = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, 2, gl.FLOAT, false, 0, 0);
+  const U = (n) => gl.getUniformLocation(pr, n);
+  const lin = (hex) => { const v = parseInt(hex.slice(1), 16); return [(v>>16)&255, (v>>8)&255, v&255].map((x) => Math.pow(x/255, 2.2)); };
+  gl.uniform2f(U('res'), S.w, S.h);
+  gl.uniform1i(U('mode'), S.mode); gl.uniform1i(U('env'), S.env ?? 0); gl.uniform1i(U('topdown'), S.topdown ? 1 : 0);
+  gl.uniform1f(U('camH'), S.camH ?? .9); gl.uniform1f(U('pitch'), (S.pitch ?? 28) * Math.PI/180);
+  gl.uniform1f(U('fov'), (S.fov ?? 42) * Math.PI/180); gl.uniform1f(U('aperture'), S.aperture ?? .006);
+  gl.uniform1f(U('yaw'), (S.yaw ?? 0) * Math.PI/180);
+  gl.uniform3fv(U('base'), lin(S.base ?? '#9a9c9c'));
+  const cs = S.farver ?? ['#333333','#777777','#bbbbbb','#eeeeee','#555555'];
+  ['c1','c2','c3','c4','c5'].forEach((n, i) => gl.uniform3fv(U(n), lin(cs[i] ?? cs[0])));
+  gl.uniform4fv(U('vaegt'), S.vaegt ?? [.2,.2,.2,.2]);
+  gl.uniform1f(U('flakeMm'), S.flakeMm ?? 5); gl.uniform1f(U('rough'), S.rough ?? .03);
+  gl.uniform1f(U('seed'), S.seed ?? 1); gl.uniform1f(U('skala'), S.skala ?? 1.2);
+  gl.uniform1f(U('lysStyrke'), S.lys ?? 7); gl.uniform1f(U('eksponering'), S.eks ?? 1);
+  gl.uniform1i(U('samples'), S.samples ?? 24);
+  gl.uniform1i(U('inventar'), S.inventar === false ? 0 : 1);
+  // Render i vandrette striber, så ingen enkelt tegning tager for lang tid
+  const stribe = S.stribe ?? 64;
+  const tU = U('tile');
+  for (let y = 0; y < S.h; y += stribe) {
+    const h = Math.min(stribe, S.h - y);
+    gl.viewport(0, y, S.w, h);
+    gl.uniform4f(tU, 0, y, S.w, h);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    gl.finish();
+    await new Promise((r) => setTimeout(r, 0));
+  }
+  return c.toDataURL('image/png');
+}
+window.render = render;
+</script></body></html>
