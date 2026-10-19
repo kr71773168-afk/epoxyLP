@@ -1,7 +1,7 @@
 /**
  * Renderer billederne til gulvkataloget (/gulvtyper/) med WebGL i headless Chromium.
  * Scenerne står i scener.json: materiale (mode 0 ensfarvet, 1 flakes, 3 color quartz, 4 PU, 5 stentæppe), farver og kamera.
- * Skriver src/media/katalog/<navn>.jpg og en rund farveprøve i src/media/katalog/proeve/<navn>.jpg.
+ * Skriver src/media/katalog/<navn>.jpg, en rund farveprøve i proeve/<navn>.jpg og et bredt udsnit af overfladen i flade/<navn>.jpg.
  *
  *   node scripts/katalog/render.mjs                    # alle
  *   node scripts/katalog/render.mjs sten-carrara       # kun én (kommasepareret for flere)
@@ -30,14 +30,18 @@ for (const [navn, scene] of Object.entries(scener)) {
 }
 await browser.close();
 
-/** Gemmer billedet og skærer en prøve ud nederst til højre, hvor overfladen er skarp og fri for refleksstriberne. */
+/** Gemmer billedet og skærer prøven og fladen ud nederst til højre, hvor overfladen er skarp og fri for refleksstriberne. */
 export async function gem(png, navn) {
   const ud = her('../../src/media/katalog/');
   fs.mkdirSync(`${ud}proeve`, { recursive: true });
+  fs.mkdirSync(`${ud}flade`, { recursive: true });
   const b = sharp(png);
   const { width: w, height: h } = await b.metadata();
   await b.clone().jpeg({ quality: 86, mozjpeg: true }).toFile(`${ud}${navn}.jpg`);
   const s = Math.round(h * 0.3);
   await b.clone().extract({ left: Math.round(w * 0.8 - s / 2), top: h - s - Math.round(h * 0.04), width: s, height: s })
     .resize(192, 192).jpeg({ quality: 84, mozjpeg: true }).toFile(`${ud}proeve/${navn}.jpg`);
+  const fw = Math.round(w * 0.4), fh = Math.round(fw * 0.45);
+  await b.clone().extract({ left: w - fw, top: h - fh, width: fw, height: fh })
+    .jpeg({ quality: 86, mozjpeg: true }).toFile(`${ud}flade/${navn}.jpg`);
 }

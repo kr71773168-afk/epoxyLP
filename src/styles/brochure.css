@@ -1,0 +1,201 @@
+/* ---------- gulvkataloget som brochure (/gulvtyper/) ----------
+   Siden har sin egen palet (mørkegrøn og salviegrøn som brochuren) uanset stilart. Skriften følger stilarten. */
+:root.selvstaendig[data-stil] {
+  --bg: #EEF1EF;
+  --flade: #FFFFFF;
+  --flade-2: #E3E8E5;
+  --ink: #1B2522;
+  --ink-2: #4C5753;
+  --ink-3: #5B6662;
+  --linje: #DCE2DF;
+  --linje-2: #C2CBC7;
+  --primaer: #1D2925;
+  --primaer-hover: #2C3B36;
+  --primaer-ink: #FFFFFF;
+  --accent: #4A6758;
+  --accent-hover: #3E5A4C;
+  --accent-ink: #FFFFFF;
+  --accent-svag: #DCE7E1;
+  --accent-deko: #6F9282;
+  --noegleord: #3E5E50;
+  --sekundaer: #FFFFFF;
+  --sekundaer-ink: #1B2522;
+  --sekundaer-linje: #C2CBC7;
+  --moerk: #17211E;
+  --moerk-ink: #EEF2EF;
+  --moerk-ink-2: rgba(238, 242, 239, .76);
+  --moerk-linje: rgba(238, 242, 239, .16);
+  --kort-bg: #F3F5F4;
+}
+
+.bro-kolonne, .selvstaendig .top .kolonne { max-width: 1440px; margin-inline: auto; padding-inline: var(--gutter); }
+
+/* ---------- toppen ---------- */
+.bro-hero { position: relative; isolation: isolate; overflow: hidden; background: var(--moerk); color: var(--moerk-ink); }
+.bro-hero-billede { position: absolute; z-index: -2; top: 0; right: 0; width: min(66%, 1100px); height: 100%; object-fit: cover; object-position: 30% 60%; }
+.bro-hero::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(90deg, var(--moerk) 32%, rgba(23, 33, 30, .78) 52%, rgba(23, 33, 30, .12) 100%);
+}
+.bro-hero-indre { position: relative; padding-block: clamp(3rem, 7vw, 5.5rem) clamp(6.5rem, 10vw, 8.5rem); }
+.bro-hero h1 {
+  color: #fff; font-size: clamp(2.9rem, 7.4vw, 6rem); font-weight: 800; line-height: .94; letter-spacing: -.015em;
+  text-transform: uppercase; text-wrap: initial;
+}
+.bro-tag {
+  position: absolute; top: clamp(2.4rem, 5vw, 3.6rem); right: var(--gutter); margin: 0;
+  font-size: .78rem; font-weight: 700; letter-spacing: .28em; line-height: 2; text-transform: uppercase; color: var(--moerk-ink-2);
+}
+.bro-hero-tekst { max-width: 50ch; margin: 1.4rem 0 0; font-size: clamp(1.02rem, 1.35vw, 1.18rem); color: var(--moerk-ink-2); }
+.bro-hop { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1.8rem; }
+.bro-hop a {
+  padding: .5rem .95rem; border: 1px solid var(--moerk-linje); border-radius: 999px; background: rgba(255, 255, 255, .06);
+  color: var(--moerk-ink); font-size: .9rem; font-weight: 600; text-decoration: none; transition: background-color .2s, border-color .2s;
+}
+.bro-hop a:hover { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .3); }
+
+/* ---------- kortene ---------- */
+.bro-kort-ramme { position: relative; margin-top: clamp(-5.5rem, -7vw, -3.5rem); }
+.bro-kort-liste {
+  list-style: none; margin: 0; padding: .7rem; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .7rem;
+  background: var(--flade); border-radius: 18px; box-shadow: 0 34px 70px -46px rgba(10, 20, 16, .55);
+}
+.bro-kort {
+  position: relative; display: flex; flex-direction: column; height: 100%; overflow: hidden;
+  background: var(--kort-bg); border-radius: 12px; scroll-margin-top: calc(var(--header-h) + 1rem);
+}
+.bro-foto { position: relative; aspect-ratio: 1 / 1; background: var(--flade-2); }
+.bro-foto img { width: 100%; height: 100%; object-fit: cover; }
+.bro-foto::after { content: ''; position: absolute; inset: auto 0 0; height: 45%; background: linear-gradient(180deg, rgba(243, 245, 244, 0), var(--kort-bg)); }
+
+.bro-flade {
+  position: relative; z-index: 1; display: block; margin: -30% .6rem 0; padding: 0; aspect-ratio: 2.2 / 1; overflow: hidden;
+  border: 3px solid #fff; border-radius: 10px; background: var(--flade-2); cursor: zoom-in;
+  box-shadow: 0 14px 26px -16px rgba(10, 20, 16, .6);
+}
+.bro-flade img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
+.bro-flade:hover img { transform: scale(1.05); }
+.bro-flade img.er-ny { animation: bro-ind .4s var(--ease); }
+@keyframes bro-ind { from { opacity: 0; } to { opacity: 1; } }
+.bro-flade-tekst {
+  position: absolute; right: .4rem; bottom: .4rem; display: inline-flex; align-items: center; gap: .3rem; padding: .3rem .55rem;
+  border-radius: 999px; background: rgba(23, 33, 30, .78); color: #fff; font-size: .74rem; font-weight: 600; line-height: 1;
+  opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s;
+}
+.bro-flade-tekst .streg-ikon { width: .8rem; height: .8rem; }
+.bro-flade:hover .bro-flade-tekst, .bro-flade:focus-visible .bro-flade-tekst { opacity: 1; transform: none; }
+@media (hover: none) { .bro-flade-tekst { opacity: 1; transform: none; } }
+
+.bro-krop { flex: 1; display: flex; flex-direction: column; padding: 1.15rem 1.1rem 1.25rem; }
+.bro-krop h2 { font-size: clamp(1.25rem, 1.45vw, 1.5rem); line-height: 1.12; letter-spacing: -.02em; text-transform: none; min-height: 2.24em; }
+.bro-farver { margin: .8rem 0 1rem; }
+.bro-proever { display: flex; flex-wrap: wrap; gap: .45rem; }
+.bro-proeve {
+  width: 2.1rem; height: 2.1rem; padding: 0; overflow: hidden; border: 0; border-radius: 50%; cursor: pointer; background: var(--flade-2);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12); transition: transform .2s var(--ease), box-shadow .2s;
+}
+.bro-proeve img { width: 100%; height: 100%; object-fit: cover; }
+.bro-proeve:hover { transform: scale(1.08); }
+.bro-proeve[aria-checked="true"] { box-shadow: 0 0 0 2px var(--kort-bg), 0 0 0 4px var(--accent); }
+.bro-proeve:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+.bro-farvenavn { margin: .55rem 0 0; font-size: .84rem; color: var(--ink-3); }
+.bro-farvenavn b { color: var(--ink); }
+.bro-tekst { margin: 0 0 1.1rem; font-size: .95rem; line-height: 1.55; color: var(--ink-2); }
+.bro-fordele { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+.bro-fordele li { display: flex; align-items: center; gap: .65rem; font-size: .92rem; line-height: 1.3; }
+.bro-ikon {
+  flex: none; display: grid; place-items: center; width: 2.15rem; height: 2.15rem;
+  border: 1.5px solid var(--accent-deko); border-radius: 50%; color: var(--accent);
+}
+.bro-ikon .streg-ikon { width: 1.05rem; height: 1.05rem; }
+
+.bro-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin: 0 .6rem .6rem; padding: .9rem 1rem;
+  border-radius: 10px; background: var(--accent); color: var(--accent-ink); font-size: .92rem; font-weight: 600; line-height: 1.3;
+  text-decoration: none; transition: background-color .2s;
+}
+.bro-cta:hover { background: var(--primaer); }
+.bro-cta .streg-ikon { flex: none; width: 1.1rem; height: 1.1rem; transition: transform .25s var(--ease); }
+.bro-cta:hover .streg-ikon { transform: translateX(3px); }
+
+.bro-note { max-width: 72ch; margin: 1.5rem auto 0; font-size: .86rem; color: var(--ink-3); text-align: center; }
+
+/* ---------- afslutning ---------- */
+.bro-slut { margin-top: clamp(3rem, 6vw, 4.5rem); padding-block: clamp(2.5rem, 5vw, 3.5rem); background: var(--accent-svag); }
+.bro-slut-indre { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem 3rem; }
+.bro-slut h2 { font-size: clamp(1.6rem, 2.6vw, 2.2rem); }
+.bro-slut p { margin: .6rem 0 0; max-width: 56ch; color: var(--ink-2); }
+.bro-slut-knapper { display: flex; flex-wrap: wrap; gap: .6rem; }
+.bro-slut .knap-hvid { border-color: var(--linje-2); color: var(--ink); }
+.bro-slut .knap-hvid:hover { color: var(--ink); box-shadow: none; border-color: var(--ink); }
+
+.bro-loefter { background: var(--moerk); color: var(--moerk-ink); }
+.bro-loefter-liste { list-style: none; margin-block: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding-block: clamp(1.8rem, 3.5vw, 2.5rem); }
+.bro-loefter-liste li { display: flex; align-items: center; gap: 1rem; padding: .3rem clamp(1rem, 2.5vw, 2rem); }
+.bro-loefter-liste li + li { border-left: 1px solid var(--moerk-linje); }
+.bro-loefter-liste li:first-child { padding-left: 0; }
+.bro-loefte-ikon { flex: none; width: 2.3rem; height: 2.3rem; color: var(--moerk-ink); stroke-width: 1.4; }
+.bro-loefter-liste p { margin: 0; display: grid; gap: .2rem; }
+.bro-loefter-liste b { font-size: .8rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+.bro-loefter-liste span { font-size: .9rem; color: var(--moerk-ink-2); }
+
+.bro-fod { background: #101815; color: rgba(238, 242, 239, .62); font-size: .86rem; }
+.bro-fod-indre { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 2rem; padding-block: 1.2rem calc(1.2rem + env(safe-area-inset-bottom)); }
+.bro-fod p { margin: 0; }
+.bro-fod a { color: inherit; text-decoration-color: rgba(238, 242, 239, .3); }
+.bro-fod a:hover { color: #fff; }
+
+/* ---------- den store visning ---------- */
+.bro-stor {
+  width: min(1100px, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); padding: 0; overflow: auto;
+  border: 0; border-radius: 16px; background: var(--flade); color: var(--ink); box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .6);
+}
+.bro-stor::backdrop { background: rgba(8, 14, 12, .74); }
+.bro-stor[open] { animation: bro-ind .25s var(--ease); }
+html:has(.bro-stor[open]) { overflow: hidden; }
+.bro-stor-hoved { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.25rem; }
+.bro-stor-hoved h2 { font-size: clamp(1.3rem, 2.2vw, 1.7rem); text-transform: none; }
+.bro-stor-hoved .bro-farvenavn { margin-top: .3rem; }
+.bro-luk {
+  flex: none; display: grid; place-items: center; width: 2.6rem; height: 2.6rem; padding: 0; border: 1px solid var(--linje-2);
+  border-radius: 50%; background: var(--flade); font-size: 1.6rem; line-height: 1; cursor: pointer;
+}
+.bro-luk:hover { border-color: var(--ink); }
+.bro-stor-billede { position: relative; aspect-ratio: 16 / 10; background: var(--flade-2); }
+.bro-stor-billede img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.bro-stor-fod { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem 1.25rem; }
+.bro-stor-fod .bro-proeve { width: 2.6rem; height: 2.6rem; }
+.bro-stor-fod .bro-proeve[aria-checked="true"] { box-shadow: 0 0 0 2px var(--flade), 0 0 0 4px var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .bro-flade img, .bro-flade img.er-ny, .bro-stor[open] { animation: none; transition: none; }
+}
+
+/* ---------- mindre skærme ---------- */
+@media (max-width: 1240px) {
+  .bro-kort-liste { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .bro-krop h2 { min-height: 0; }
+  .bro-loefter-liste { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1.25rem; }
+  .bro-loefter-liste li:nth-child(3) { border-left: 0; padding-left: 0; }
+}
+@media (max-width: 860px) {
+  .bro-kort-liste { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bro-tag { display: none; }
+}
+@media (max-width: 760px) {
+  .bro-hero-billede { width: 100%; object-position: 60% 60%; }
+  .bro-hero::before { background: linear-gradient(180deg, rgba(23, 33, 30, .78) 0%, rgba(23, 33, 30, .9) 60%, var(--moerk) 100%); }
+}
+@media (max-width: 600px) {
+  .bro-kort-liste { grid-template-columns: minmax(0, 1fr); padding: .5rem; gap: .5rem; border-radius: 14px; }
+  .bro-kort-ramme { padding-inline: .5rem; }
+  .bro-foto { aspect-ratio: 16 / 11; }
+  .bro-flade { margin-top: -22%; }
+  .bro-proeve { width: 2.5rem; height: 2.5rem; }
+  .bro-loefter-liste { grid-template-columns: minmax(0, 1fr); }
+  .bro-loefter-liste li, .bro-loefter-liste li:nth-child(3) { border-left: 0; padding-left: 0; }
+  /* på mobil glider den store visning op fra bunden */
+  .bro-stor { width: 100%; max-width: none; max-height: 100dvh; margin: auto 0 0; border-radius: 16px 16px 0 0; padding-bottom: env(safe-area-inset-bottom); }
+  .bro-stor-billede { aspect-ratio: 4 / 3; }
+  .bro-slut-knapper .knap { width: 100%; justify-content: center; }
+}

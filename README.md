@@ -37,7 +37,7 @@ I `npm run dev` er `VITE_DEMO=1` slået til (`.env.development`). Tak-skærmen v
 | Ydelser `/garagegulv/`, `/kaeldergulv/`, `/gulv-i-boligen/`, `/erhvervsgulve/`, `/ensfarvet-epoxy/`, `/flakesgulv/`, `/metallic-epoxy/` | `src/pages/[ydelse].astro` + `src/data/ydelser.js` |
 | Bysider `/epoxygulv-silkeborg/`, `/epoxygulv-aarhus/` osv. | `src/pages/epoxygulv-[by].astro` + `src/data/byer.js` |
 | Viden `/viden/` og guides fx `/epoxy-eller-gulvmaling/` | `src/pages/viden.astro`, `src/components/GuideSide.astro` + `src/data/viden.js` |
-| Gulvkatalog `/gulvtyper/` (fem gulvtyper med farveprøver) | `src/pages/gulvtyper.astro` + `src/data/katalog.js` |
+| Gulvkatalog `/gulvtyper/`: interaktiv brochure, en side for sig selv uden menuen | `src/pages/gulvtyper.astro` + `src/data/katalog.js` + `src/styles/brochure.css` |
 | Referencer, Om os, Kontakt, Privatliv, 404 | `src/pages/*.astro` |
 
 En ny ydelse eller by er en ny post i data-filen. Siden, menuen, footeren og sitemap følger med. En ny guide er en post i `src/data/viden.js` plus en sidefil på tre linjer i `src/pages/` (kopiér en af de eksisterende).
@@ -59,7 +59,7 @@ En ny ydelse eller by er en ny post i data-filen. Siden, menuen, footeren og sit
 | Billeder i beregneren | `src/media/valg/`, fx `rum-garage.webp`. Samme navn, 4:3 |
 | Fotos på siderne | `src/media/foto/`. Læg en ny fil med samme navn, så laver Astro selv de mindre størrelser. Referencernes fotos står i `src/data/referencer.js` |
 | Videoen | `src/media/arbejde.mp4`, `arbejde.webm` og stillbilledet `arbejde.jpg`, se herunder |
-| Gulvkataloget: gulvtyper, tekster, farver og RAL-koder | `src/data/katalog.js`. Billeder i `src/media/katalog/<type>-<farve>.jpg` (16:10) og prøver i `src/media/katalog/proeve/` (kvadrat). Se herunder |
+| Gulvkataloget: tekster, fordele, grøn bjælke, farver og RAL-koder | `src/data/katalog.js`. Se herunder |
 | Farver, skrift og former pr. stilart | `src/styles/tokens.css` (A, B og C hver for sig) |
 | Toppen med video eller foto, flueben og beregneren | `src/components/Hero.astro` |
 
@@ -67,9 +67,19 @@ Beregneren er testet, så intervallet altid dækker prisen for enhver måde at s
 
 ### Gulvkataloget
 
-Billederne på `/gulvtyper/` er renderede visualiseringer af overfladerne (WebGL i `scripts/katalog/`), fordi der ikke var rigtige fotos. Siden skriver det selv nederst. Skift dem til fotos af rigtige gulve eller leverandørens farvekort med de samme filnavne. Et foto skal være 1600×1000 eller større, og prøven et kvadrat på mindst 192 px. En ny farve er en linje i `src/data/katalog.js` plus to billeder. Mangler et billede, stopper bygget med en fejl, der siger hvilket.
+`/gulvtyper/` er bygget som en brochure og står for sig selv: en smal top med logo, telefon og "Beregn pris" i stedet for menuen (`selvstaendig` i `src/layouts/Side.astro`), og sin egen grønne palet i `src/styles/brochure.css`. Et kort pr. gulvtype. Et tryk på en farve skifter overfladen på kortet, og et tryk på overfladen viser gulvet i stort.
 
-Nye renderinger: `PLAYWRIGHT=/sti/til/playwright/index.mjs node scripts/katalog/render.mjs pu-sand` (scenerne står i `scripts/katalog/scener.json`, ca. 1 minut pr. billede).
+| Billede | Fil | Størrelse |
+|---|---|---|
+| Toppen (tom hal) | `src/media/brochure/hero.jpg` | mindst 1600 px bred |
+| Fotoet øverst på kortet | `src/media/brochure/scene-<type>.jpg` | kvadrat, mindst 700 px |
+| Overfladen på kortet | `src/media/katalog/flade/<type>-<farve>.jpg` | 2,2:1 |
+| Den store visning | `src/media/katalog/<type>-<farve>.jpg` | 1600×1000 |
+| Den runde prøve | `src/media/katalog/proeve/<type>-<farve>.jpg` | kvadrat, mindst 192 px |
+
+Fotoene i toppen og på kortene er klippet ud af brochure-udkastet (ca. 340 px, så de er lidt bløde på skarpe skærme). Overfladerne er renderede visualiseringer (WebGL i `scripts/katalog/`). Skift begge til rigtige fotos med de samme filnavne. Mangler et billede, stopper bygget med en fejl, der siger hvilket.
+
+Nye renderinger: `PLAYWRIGHT=/sti/til/playwright/index.mjs node scripts/katalog/render.mjs pu-sand` (scenerne står i `scripts/katalog/scener.json`, ca. 1 minut pr. billede). Scriptet laver selv prøven og overfladen.
 
 ### Video
 
@@ -167,7 +177,7 @@ Det, siden gør for at få flest mulige til at se prisen og skrive sig op:
 - [ ] Kundens egne fotos i stedet for AI-billederne i `src/media/valg/` og videostillbillederne i `src/media/foto/`
 - [ ] Rigtige referencer i `src/data/referencer.js` og anmeldelser fra Trustpilot eller Google
 - [ ] Kundens farvekort og fotos af færdige gulve pr. overflade, så gulvtypesiderne kan vise dem
-- [ ] Gulvkataloget: de renderede billeder i `src/media/katalog/` skiftet til fotos, og farverne i `src/data/katalog.js` rettet til dem, firmaet faktisk tilbyder
+- [ ] Gulvkataloget: fotos i `src/media/brochure/` og overflader i `src/media/katalog/` skiftet til rigtige billeder, og farver og fordele i `src/data/katalog.js` rettet til det, firmaet faktisk tilbyder
 - [ ] Guiderne læst igennem af ejeren, især levetid, garanti og gulvvarme i `src/data/viden.js`
 - [ ] Zone (kommuner) og bysidernes afstande bekræftet
 - [ ] Privatlivspolitik gennemgået
