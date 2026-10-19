@@ -1,0 +1,209 @@
+/* Gulvkataloget som brochure. Én bevidst lys palet med mørkegrønne bånd (som brochure-udkastet), ingen mørk tilstand.
+   Layout: mørk top med hallen, fem kort i et hvidt panel der ligger hen over toppen, kontakt, løfter, bund. */
+:root {
+  --groen-moerk: #17211E;
+  --groen: #4A6758;
+  --groen-hover: #3B5548;
+  --groen-lys: #DCE7E1;
+  --salvie: #6F9282;
+  --bg: #EEF1EF;
+  --kort: #F3F5F4;
+  --hvid: #FFFFFF;
+  --ink: #1B2522;
+  --ink-2: #4C5753;
+  --ink-3: #5B6662;
+  --linje: #C2CBC7;
+  --lys-ink: #EEF2EF;
+  --lys-ink-2: rgba(238, 242, 239, .76);
+  --lys-linje: rgba(238, 242, 239, .16);
+  --f: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --gutter: max(clamp(16px, 4vw, 40px), env(safe-area-inset-left, 0px));
+  --gutter-h: max(clamp(16px, 4vw, 40px), env(safe-area-inset-right, 0px));
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f); font-size: 16px; font-weight: 450; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body::before { content: ''; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--hvid); }
+img, svg { display: block; max-width: 100%; }
+h1, h2 { margin: 0; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; text-wrap: balance; }
+p { margin: 0; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--salvie); outline-offset: 3px; }
+[hidden] { display: none !important; }
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+.kol { max-width: 1440px; margin-inline: auto; padding-left: var(--gutter); padding-right: var(--gutter-h); }
+.ik { width: 1.1rem; height: 1.1rem; flex: none; }
+
+.knap {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .8rem 1.35rem; border: 0; border-radius: 999px;
+  font-weight: 700; font-size: .98rem; line-height: 1.2; text-decoration: none; cursor: pointer; transition: background-color .2s;
+}
+.knap-groen { background: var(--groen); color: #fff; }
+.knap-groen:hover { background: var(--groen-hover); }
+
+/* ---------- top ---------- */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--hvid); border-bottom: 1px solid #DCE2DF; }
+.top-indre { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4.25rem; }
+.logo { display: inline-flex; align-items: center; gap: .6rem; font-size: 1.22rem; font-weight: 700; letter-spacing: -.02em; text-decoration: none; }
+.logo b { font-weight: 800; }
+.logo-maerke { width: 2.1rem; height: 2.1rem; }
+.top-knap { padding: .65rem 1.15rem; font-size: .95rem; }
+
+/* ---------- hero ---------- */
+.hero { position: relative; isolation: isolate; overflow: hidden; background: var(--groen-moerk); color: var(--lys-ink); }
+.hero-billede { position: absolute; z-index: -2; top: 0; right: 0; width: min(66%, 1100px); max-width: none; height: 100%; object-fit: cover; object-position: 30% 60%; }
+.hero::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, var(--groen-moerk) 32%, rgba(23, 33, 30, .78) 52%, rgba(23, 33, 30, .12) 100%); }
+.hero-indre { position: relative; padding-block: clamp(3rem, 7vw, 5.5rem) clamp(6.5rem, 10vw, 8.5rem); }
+.hero h1 { color: #fff; font-size: clamp(2.9rem, 7.4vw, 6rem); line-height: .94; letter-spacing: -.015em; text-transform: uppercase; text-wrap: initial; }
+.tag {
+  position: absolute; top: clamp(2.4rem, 5vw, 3.6rem); right: var(--gutter-h);
+  font-size: .78rem; font-weight: 700; letter-spacing: .28em; line-height: 2; text-transform: uppercase; color: var(--lys-ink-2);
+}
+.hero-tekst { max-width: 50ch; margin-top: 1.4rem; font-size: clamp(1.02rem, 1.35vw, 1.18rem); color: var(--lys-ink-2); }
+.hop { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1.8rem; }
+.hop a {
+  padding: .5rem .95rem; border: 1px solid var(--lys-linje); border-radius: 999px; background: rgba(255, 255, 255, .06);
+  font-size: .9rem; font-weight: 600; text-decoration: none; transition: background-color .2s, border-color .2s;
+}
+.hop a:hover { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .3); }
+
+/* ---------- kortene ---------- */
+.kort-ramme { position: relative; margin-top: clamp(-5.5rem, -7vw, -3.5rem); }
+.kort-liste {
+  list-style: none; margin: 0; padding: .7rem; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .7rem;
+  background: var(--hvid); border-radius: 18px; box-shadow: 0 34px 70px -46px rgba(10, 20, 16, .55);
+}
+.kort { position: relative; display: flex; flex-direction: column; height: 100%; overflow: hidden; background: var(--kort); border-radius: 12px; scroll-margin-top: 5.5rem; }
+.foto { position: relative; aspect-ratio: 1 / 1; background: #E3E8E5; }
+.foto img { width: 100%; height: 100%; object-fit: cover; }
+.foto::after { content: ''; position: absolute; inset: auto 0 0; height: 45%; background: linear-gradient(180deg, rgba(243, 245, 244, 0), var(--kort)); }
+
+.flade {
+  position: relative; z-index: 1; display: block; margin: -30% .6rem 0; padding: 0; aspect-ratio: 2.2 / 1; max-width: 100%; overflow: hidden;
+  border: 3px solid #fff; border-radius: 10px; background: #E3E8E5; cursor: zoom-in; box-shadow: 0 14px 26px -16px rgba(10, 20, 16, .6);
+}
+.flade img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
+.flade:hover img { transform: scale(1.05); }
+.flade img.er-ny { animation: ind .4s var(--ease); }
+@keyframes ind { from { opacity: 0; } to { opacity: 1; } }
+.flade-tekst {
+  position: absolute; right: .4rem; bottom: .4rem; display: inline-flex; align-items: center; gap: .3rem; padding: .3rem .55rem;
+  border-radius: 999px; background: rgba(23, 33, 30, .78); color: #fff; font-size: .74rem; font-weight: 600; line-height: 1;
+  opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s;
+}
+.flade-tekst .ik { width: .8rem; height: .8rem; }
+.flade:hover .flade-tekst, .flade:focus-visible .flade-tekst { opacity: 1; transform: none; }
+@media (hover: none) { .flade-tekst { opacity: 1; transform: none; } }
+
+.krop { flex: 1; display: flex; flex-direction: column; padding: 1.15rem 1.1rem 1.25rem; }
+.krop h2 { font-size: clamp(1.25rem, 1.45vw, 1.5rem); line-height: 1.12; min-height: 2.24em; }
+.farver { margin: .8rem 0 1rem; }
+.proever { display: flex; flex-wrap: wrap; gap: .45rem; }
+.proeve {
+  width: 2.1rem; height: 2.1rem; padding: 0; overflow: hidden; border: 0; border-radius: 50%; cursor: pointer; background: #E3E8E5;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12); transition: transform .2s var(--ease), box-shadow .2s;
+}
+.proeve img { width: 100%; height: 100%; object-fit: cover; }
+.proeve:hover { transform: scale(1.08); }
+.proeve[aria-checked="true"] { box-shadow: 0 0 0 2px var(--kort), 0 0 0 4px var(--groen); }
+.proeve:focus-visible { outline: 2px solid var(--groen); outline-offset: 5px; }
+.farvenavn { margin-top: .55rem; font-size: .84rem; color: var(--ink-3); }
+.farvenavn b { color: var(--ink); }
+.tekst { margin-bottom: 1.1rem; font-size: .95rem; line-height: 1.55; color: var(--ink-2); }
+.fordele { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+.fordele li { display: flex; align-items: center; gap: .65rem; font-size: .92rem; line-height: 1.3; }
+.fordel-ikon { flex: none; display: grid; place-items: center; width: 2.15rem; height: 2.15rem; border: 1.5px solid var(--salvie); border-radius: 50%; color: var(--groen); }
+.fordel-ikon .ik { width: 1.05rem; height: 1.05rem; }
+
+.bjaelke {
+  display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin: 0 .6rem .6rem; padding: .9rem 1rem;
+  border-radius: 10px; background: var(--groen); color: #fff; font-size: .92rem; font-weight: 600; line-height: 1.3; text-decoration: none; transition: background-color .2s;
+}
+.bjaelke:hover { background: var(--groen-moerk); }
+.bjaelke .ik { transition: transform .25s var(--ease); }
+.bjaelke:hover .ik { transform: translateX(3px); }
+
+.note { max-width: 72ch; margin: 1.5rem auto 0; font-size: .86rem; color: var(--ink-3); text-align: center; }
+
+/* ---------- kontakt ---------- */
+.kontakt { margin-top: clamp(3rem, 6vw, 4.5rem); padding-block: clamp(2.5rem, 5vw, 3.5rem); background: var(--groen-lys); scroll-margin-top: 4.5rem; }
+.kontakt-indre { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.75rem 3rem; }
+.kontakt-tekst { flex: 1 1 22rem; min-width: 0; }
+.kontakt h2 { font-size: clamp(1.6rem, 2.6vw, 2.2rem); }
+.kontakt-tekst p { margin-top: .6rem; max-width: 56ch; color: var(--ink-2); }
+.kontakt-felter { display: grid; gap: .6rem; flex: 0 1 26rem; min-width: 0; }
+.kontakt-felt { display: flex; align-items: center; gap: .85rem; padding: .8rem .9rem; background: var(--hvid); border-radius: 12px; }
+.kontakt-felt > div { flex: 1; min-width: 0; }
+.kontakt-ikon { flex: none; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--groen); color: #fff; }
+.kontakt-label { display: block; font-size: .8rem; color: var(--ink-3); }
+.kontakt-vaerdi { display: block; font-size: 1.12rem; font-weight: 700; text-decoration: none; overflow-wrap: anywhere; user-select: all; }
+.kopier { flex: none; padding: .45rem .8rem; border: 1px solid var(--linje); border-radius: 999px; background: var(--hvid); font-size: .82rem; font-weight: 600; cursor: pointer; }
+.kopier:hover { border-color: var(--ink); }
+
+/* ---------- løfter og bund ---------- */
+.loefter { background: var(--groen-moerk); color: var(--lys-ink); }
+.loefter-liste { list-style: none; margin-block: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding-block: clamp(1.8rem, 3.5vw, 2.5rem); }
+.loefter-liste li { display: flex; align-items: center; gap: 1rem; padding: .3rem clamp(1rem, 2.5vw, 2rem); }
+.loefter-liste li + li { border-left: 1px solid var(--lys-linje); }
+.loefter-liste li:first-child { padding-left: 0; }
+.loefte-ikon { width: 2.3rem; height: 2.3rem; stroke-width: 1.4; }
+.loefter-liste p { display: grid; gap: .2rem; }
+.loefter-liste b { font-size: .8rem; letter-spacing: .2em; text-transform: uppercase; }
+.loefter-liste span { font-size: .9rem; color: var(--lys-ink-2); }
+.fod { background: #101815; color: rgba(238, 242, 239, .62); font-size: .86rem; }
+.fod-indre { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 2rem; padding-block: 1.2rem; }
+
+/* ---------- den store visning ---------- */
+.stor {
+  width: min(1100px, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); padding: 0; overflow: auto;
+  border: 0; border-radius: 16px; background: var(--hvid); color: var(--ink); box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .6);
+}
+.stor::backdrop { background: rgba(8, 14, 12, .74); }
+.stor[open] { animation: ind .25s var(--ease); }
+html:has(.stor[open]) { overflow: hidden; }
+.stor-hoved { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.25rem; }
+.stor-hoved h2 { font-size: clamp(1.3rem, 2.2vw, 1.7rem); }
+.stor-hoved .farvenavn { margin-top: .3rem; }
+.luk { flex: none; display: grid; place-items: center; width: 2.6rem; height: 2.6rem; padding: 0; border: 1px solid var(--linje); border-radius: 50%; background: var(--hvid); font-size: 1.6rem; line-height: 1; cursor: pointer; }
+.luk:hover { border-color: var(--ink); }
+.stor-billede { position: relative; aspect-ratio: 16 / 10; max-width: 100%; background: #E3E8E5; }
+.stor-billede img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.stor-fod { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem 1.25rem; }
+.stor-fod .proeve { width: 2.6rem; height: 2.6rem; }
+.stor-fod .proeve[aria-checked="true"] { box-shadow: 0 0 0 2px var(--hvid), 0 0 0 4px var(--groen); }
+
+@media (prefers-reduced-motion: reduce) {
+  .flade img, .flade img.er-ny, .stor[open] { animation: none; transition: none; }
+}
+
+/* ---------- mindre skærme ---------- */
+@media (max-width: 1240px) {
+  .kort-liste { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .krop h2 { min-height: 0; }
+  .loefter-liste { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1.25rem; }
+  .loefter-liste li:nth-child(3) { border-left: 0; padding-left: 0; }
+}
+@media (max-width: 860px) {
+  .kort-liste { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tag { display: none; }
+}
+@media (max-width: 760px) {
+  .hero-billede { width: 100%; object-position: 60% 60%; }
+  .hero::before { background: linear-gradient(180deg, rgba(23, 33, 30, .78) 0%, rgba(23, 33, 30, .9) 60%, var(--groen-moerk) 100%); }
+}
+@media (max-width: 600px) {
+  .kort-liste { grid-template-columns: minmax(0, 1fr); padding: .5rem; gap: .5rem; border-radius: 14px; }
+  .foto { aspect-ratio: 16 / 11; }
+  .flade { margin-top: -22%; }
+  .proeve { width: 2.5rem; height: 2.5rem; }
+  .loefter-liste { grid-template-columns: minmax(0, 1fr); }
+  .loefter-liste li, .loefter-liste li:nth-child(3) { border-left: 0; padding-left: 0; }
+  /* på mobil glider den store visning op fra bunden */
+  .stor { width: 100%; max-width: none; max-height: 100dvh; margin: auto 0 0; border-radius: 16px 16px 0 0; padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .stor-billede { aspect-ratio: 4 / 3; }
+  .logo { font-size: 1.08rem; }
+}

@@ -1,10 +1,10 @@
 /**
- * Renderer billederne til gulvkataloget (/gulvtyper/) med WebGL i headless Chromium.
+ * Renderer overfladerne til gulvkataloget (katalog/) med WebGL i headless Chromium.
  * Scenerne står i scener.json: materiale (mode 0 ensfarvet, 1 flakes, 3 color quartz, 4 PU, 5 stentæppe), farver og kamera.
- * Skriver src/media/katalog/<navn>.jpg, en rund farveprøve i proeve/<navn>.jpg og et bredt udsnit af overfladen i flade/<navn>.jpg.
+ * Skriver katalog/billeder/overflader/<navn>.jpg, en rund farveprøve i proeve/<navn>.jpg og et bredt udsnit af overfladen i flade/<navn>.jpg.
  *
- *   node scripts/katalog/render.mjs                    # alle
- *   node scripts/katalog/render.mjs sten-carrara       # kun én (kommasepareret for flere)
+ *   node katalog/render/render.mjs                    # alle
+ *   node katalog/render/render.mjs sten-carrara       # kun én (kommasepareret for flere)
  *
  * Kræver Playwright med Chromium (PLAYWRIGHT=/sti/til/playwright/index.mjs). Et billede i 1600x1000 tager ca. 1 minut.
  * Billederne er pladsholdere: skift dem til kundens egne fotos med samme filnavne, når de er klar.
@@ -32,7 +32,7 @@ await browser.close();
 
 /** Gemmer billedet og skærer prøven og fladen ud nederst til højre, hvor overfladen er skarp og fri for refleksstriberne. */
 export async function gem(png, navn) {
-  const ud = her('../../src/media/katalog/');
+  const ud = her('../billeder/overflader/');
   fs.mkdirSync(`${ud}proeve`, { recursive: true });
   fs.mkdirSync(`${ud}flade`, { recursive: true });
   const b = sharp(png);

@@ -12,8 +12,6 @@ import '../styles/base.css';
 import '../styles/side.css';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import Ikon from '../components/Ikon.astro';
-import Logo from '../components/Logo.astro';
 import { byer } from '../data/byer.js';
 import { firma } from '../data/firma.js';
 import { fil, link } from '../lib/link.js';
@@ -23,10 +21,8 @@ interface Props {
   beskrivelse: string;
   slug?: string;
   schema?: object[];
-  /** En side for sig selv (fx gulvkataloget): en smal top med logo, telefon og "Beregn pris" i stedet for menuen. Siden giver selv sin bund i slot="fod". */
-  selvstaendig?: boolean;
 }
-const { titel, beskrivelse, slug = '', schema = [], selvstaendig = false } = Astro.props;
+const { titel, beskrivelse, slug = '', schema = [] } = Astro.props;
 // Skriften til sidens stilart hentes med det samme. I kladden vælger scriptet i <head> skriften til den valgte stil.
 const alleSkrifter = { A: [redHatDisplay, redHatText], B: [lexend], C: [manrope] };
 const skrifter = alleSkrifter[firma.stil] ?? alleSkrifter.C;
@@ -55,7 +51,7 @@ const virksomhed = {
 };
 ---
 <!doctype html>
-<html lang="da" data-stil={firma.stil} class:list={[{ kladde: firma.kladde, selvstaendig }]}>
+<html lang="da" data-stil={firma.stil} class:list={[{ kladde: firma.kladde }]}>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -103,23 +99,11 @@ const virksomhed = {
   </head>
   <body>
     <a class="spring" href="#indhold">Spring til indholdet</a>
-    {selvstaendig ? (
-      <header class="top top-smal">
-        <div class="kolonne top-indre">
-          <Logo />
-          <div class="top-knapper">
-            <a class="knap knap-lys top-tlf" href={`tel:${firma.telefonLink}`} data-telefon aria-label={`Ring ${firma.telefon}`}>
-              <Ikon navn="tlf" /><span class="tlf-nr" data-pladsholder>{firma.telefon}</span>
-            </a>
-            <a class="knap knap-accent top-cta" href={link('pris')}>Beregn pris</a>
-          </div>
-        </div>
-      </header>
-    ) : <Header aktiv={slug} />}
+    <Header aktiv={slug} />
     <main id="indhold">
       <slot />
     </main>
-    {selvstaendig ? <slot name="fod" /> : <Footer />}
+    <Footer />
 
     <div class="samtykke" id="samtykke" role="region" aria-labelledby="samtykke-titel" hidden>
       <p class="samtykke-titel" id="samtykke-titel">Cookies</p>

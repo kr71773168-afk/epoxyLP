@@ -1,10 +1,11 @@
 /**
- * Gulvkataloget (/gulvtyper/), bygget som en brochure: et kort pr. gulvtype.
- * - scene: fotoet øverst på kortet, src/media/brochure/scene-<slug>.jpg
- * - farverne: overfladen i src/media/katalog/flade/<slug>-<farve>.jpg, den store visning i src/media/katalog/<slug>-<farve>.jpg
- *   og den runde prøve i src/media/katalog/proeve/. Overfladerne er visualiseringer (scripts/katalog), farverne er eksempler.
- * - fordele: fire linjer med ikon (navnene står i src/lib/ikoner.js)
- * - cta: den grønne bjælke nederst på kortet og siden, den linker til
+ * Gulvkataloget: en selvstændig side (ikke en del af hjemmesiden), bygget som en brochure med et kort pr. gulvtype.
+ * Bygges med `node katalog/byg.mjs` til katalog/dist/.
+ * - fotoet øverst på kortet: billeder/fotos/scene-<slug>.jpg
+ * - farverne: overfladen i billeder/overflader/flade/<slug>-<farve>.jpg, den store visning i billeder/overflader/<slug>-<farve>.jpg
+ *   og den runde prøve i billeder/overflader/proeve/. Overfladerne er visualiseringer (render/), farverne er eksempler.
+ * - fordele: fire linjer med ikon (navnene står i ikoner.js)
+ * - bjaelke: teksten i den grønne bjælke nederst på kortet. Den fører ned til kontakt.
  * Skift til kundens egne fotos og farvekort, når de er klar: samme filnavne, eller nye farver her.
  */
 export const katalog = [
@@ -18,7 +19,7 @@ export const katalog = [
       { ikon: 'rengoering', tekst: 'Nem rengøring' },
       { ikon: 'skjold', tekst: 'Lang levetid' },
     ],
-    cta: { tekst: 'Perfekt til industri og lager', slug: 'erhvervsgulve' },
+    bjaelke: 'Perfekt til industri og lager',
     farver: [
       { slug: 'antracit', navn: 'Antracit', kode: 'RAL 7016' },
       { slug: 'lysegraa', navn: 'Lysegrå', kode: 'RAL 7035' },
@@ -37,7 +38,7 @@ export const katalog = [
       { ikon: 'lag', tekst: 'Slidstærkt' },
       { ikon: 'farvekort', tekst: 'Mange farvekombinationer' },
     ],
-    cta: { tekst: 'Et populært valg til både privat og erhverv', slug: 'flakesgulv' },
+    bjaelke: 'Et populært valg til både privat og erhverv',
     farver: [
       { slug: 'graa', navn: 'Grå mix' },
       { slug: 'beige', navn: 'Beige mix' },
@@ -55,7 +56,7 @@ export const katalog = [
       { ikon: 'fodspor', tekst: 'Skridsikker overflade' },
       { ikon: 'farvekort', tekst: 'Flere farvemuligheder' },
     ],
-    cta: { tekst: 'Ideel til erhverv og repræsentative miljøer', slug: 'erhvervsgulve' },
+    bjaelke: 'Ideel til erhverv og repræsentative miljøer',
     farver: [
       { slug: 'granit', navn: 'Granit' },
       { slug: 'sand', navn: 'Sand' },
@@ -73,7 +74,7 @@ export const katalog = [
       { ikon: 'lyd', tekst: 'Lyddæmpende' },
       { ikon: 'rengoering', tekst: 'Meget rengøringsvenligt' },
     ],
-    cta: { tekst: 'Velegnet til bl.a. fødevarer og sundhed', slug: 'erhvervsgulve' },
+    bjaelke: 'Velegnet til bl.a. fødevarer og sundhed',
     farver: [
       { slug: 'lysegraa', navn: 'Lysegrå' },
       { slug: 'varmgraa', navn: 'Varm grå' },
@@ -91,7 +92,7 @@ export const katalog = [
       { ikon: 'sol', tekst: 'Velegnet til ude og inde' },
       { ikon: 'skjold', tekst: 'Lang holdbarhed' },
     ],
-    cta: { tekst: 'Perfekt til udendørsarealer og indgange', slug: 'pris' },
+    bjaelke: 'Perfekt til udendørsarealer og indgange',
     farver: [
       { slug: 'carrara', navn: 'Carrara hvid' },
       { slug: 'graa', navn: 'Grå mix' },
