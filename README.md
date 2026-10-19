@@ -37,6 +37,7 @@ I `npm run dev` er `VITE_DEMO=1` slået til (`.env.development`). Tak-skærmen v
 | Ydelser `/garagegulv/`, `/kaeldergulv/`, `/gulv-i-boligen/`, `/erhvervsgulve/`, `/ensfarvet-epoxy/`, `/flakesgulv/`, `/metallic-epoxy/` | `src/pages/[ydelse].astro` + `src/data/ydelser.js` |
 | Bysider `/epoxygulv-silkeborg/`, `/epoxygulv-aarhus/` osv. | `src/pages/epoxygulv-[by].astro` + `src/data/byer.js` |
 | Viden `/viden/` og guides fx `/epoxy-eller-gulvmaling/` | `src/pages/viden.astro`, `src/components/GuideSide.astro` + `src/data/viden.js` |
+| Gulvkatalog `/gulvtyper/` (fem gulvtyper med farveprøver) | `src/pages/gulvtyper.astro` + `src/data/katalog.js` |
 | Referencer, Om os, Kontakt, Privatliv, 404 | `src/pages/*.astro` |
 
 En ny ydelse eller by er en ny post i data-filen. Siden, menuen, footeren og sitemap følger med. En ny guide er en post i `src/data/viden.js` plus en sidefil på tre linjer i `src/pages/` (kopiér en af de eksisterende).
@@ -58,10 +59,17 @@ En ny ydelse eller by er en ny post i data-filen. Siden, menuen, footeren og sit
 | Billeder i beregneren | `src/media/valg/`, fx `rum-garage.webp`. Samme navn, 4:3 |
 | Fotos på siderne | `src/media/foto/`. Læg en ny fil med samme navn, så laver Astro selv de mindre størrelser. Referencernes fotos står i `src/data/referencer.js` |
 | Videoen | `src/media/arbejde.mp4`, `arbejde.webm` og stillbilledet `arbejde.jpg`, se herunder |
+| Gulvkataloget: gulvtyper, tekster, farver og RAL-koder | `src/data/katalog.js`. Billeder i `src/media/katalog/<type>-<farve>.jpg` (16:10) og prøver i `src/media/katalog/proeve/` (kvadrat). Se herunder |
 | Farver, skrift og former pr. stilart | `src/styles/tokens.css` (A, B og C hver for sig) |
 | Toppen med video eller foto, flueben og beregneren | `src/components/Hero.astro` |
 
 Beregneren er testet, så intervallet altid dækker prisen for enhver måde at svare færdig på. Når kundens tilbud er lagt ind i `calibration.cases.js`, fejler `npm test`, hvis beregneren rammer ved siden af et tilbud. Prissidens tabel og eksempler og bysidernes eksempelpris regnes med samme motor, så tallene altid passer med beregneren.
+
+### Gulvkataloget
+
+Billederne på `/gulvtyper/` er renderede visualiseringer af overfladerne (WebGL i `scripts/katalog/`), fordi der ikke var rigtige fotos. Siden skriver det selv nederst. Skift dem til fotos af rigtige gulve eller leverandørens farvekort med de samme filnavne. Et foto skal være 1600×1000 eller større, og prøven et kvadrat på mindst 192 px. En ny farve er en linje i `src/data/katalog.js` plus to billeder. Mangler et billede, stopper bygget med en fejl, der siger hvilket.
+
+Nye renderinger: `PLAYWRIGHT=/sti/til/playwright/index.mjs node scripts/katalog/render.mjs pu-sand` (scenerne står i `scripts/katalog/scener.json`, ca. 1 minut pr. billede).
 
 ### Video
 
@@ -98,6 +106,7 @@ Lighthouse (29.09.2026, produktionsbyg, mobil med simuleret 4G):
 | Pris | 99 | 100 | 100 |
 | Guide | 100 | 100 | 100 |
 | Epoxygulv Aarhus | 99 | 100 | 100 |
+| Gulvtyper (katalog) | 100 | 100 | 100 |
 
 Stil C. A og B giver også 100 i tilgængelighed og 99-100 i hastighed. Desktop: 100. Ingen layout-hop (CLS 0-0,001). SEO er 100 uden kladde-tilstand (målt på forsiden). Med `kladde: true` giver `noindex` med vilje 69.
 
@@ -158,6 +167,7 @@ Det, siden gør for at få flest mulige til at se prisen og skrive sig op:
 - [ ] Kundens egne fotos i stedet for AI-billederne i `src/media/valg/` og videostillbillederne i `src/media/foto/`
 - [ ] Rigtige referencer i `src/data/referencer.js` og anmeldelser fra Trustpilot eller Google
 - [ ] Kundens farvekort og fotos af færdige gulve pr. overflade, så gulvtypesiderne kan vise dem
+- [ ] Gulvkataloget: de renderede billeder i `src/media/katalog/` skiftet til fotos, og farverne i `src/data/katalog.js` rettet til dem, firmaet faktisk tilbyder
 - [ ] Guiderne læst igennem af ejeren, især levetid, garanti og gulvvarme i `src/data/viden.js`
 - [ ] Zone (kommuner) og bysidernes afstande bekræftet
 - [ ] Privatlivspolitik gennemgået

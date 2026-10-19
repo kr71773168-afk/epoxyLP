@@ -1,0 +1,129 @@
+---
+/**
+ * Gulvkataloget: hver gulvtype med et stort billede, en kort tekst og farveprøver.
+ * Et tryk på en farve viser gulvet i den farve. Data i src/data/katalog.js.
+ */
+import { Image } from 'astro:assets';
+import SideBand from '../components/SideBand.astro';
+import { katalog } from '../data/katalog.js';
+import Side from '../layouts/Side.astro';
+
+const billeder = import.meta.glob<{ default: ImageMetadata }>('../media/katalog/*.jpg', { eager: true });
+const proever = import.meta.glob<{ default: ImageMetadata }>('../media/katalog/proeve/*.jpg', { eager: true });
+const hent = (samling, sti) => {
+  const fil = samling[sti];
+  if (!fil) throw new Error(`Billede mangler: ${sti}`);
+  return fil.default;
+};
+const typer = katalog.map((g) => ({
+  ...g,
+  farver: g.farver.map((f) => ({
+    ...f,
+    billede: hent(billeder, `../media/katalog/${g.slug}-${f.slug}.jpg`),
+    proeve: hent(proever, `../media/katalog/proeve/${g.slug}-${f.slug}.jpg`),
+  })),
+}));
+---
+<Side
+  titel="Gulvtyper og farver · Se epoxygulvene · Silkeborg Epoxy"
+  beskrivelse="Se vores gulvtyper: industrigulv, Flake Floor, Color Quartz, PU-gulv og stentæppe. Tryk på en farve, og se gulvet i den farve."
+  slug="gulvtyper"
+>
+  <SideBand
+    over="Gulvtyper"
+    titel="Find dit [gulv]"
+    tekst="Fem gulvtyper, hver med sine farver. Tryk på en farve, så ser du gulvet i den variant."
+    sti={[{ navn: 'Gulvtyper', slug: 'gulvtyper' }]}
+  >
+    <nav class="katalog-hop" aria-label="Gulvtyper på siden">
+      {typer.map((g) => <a href={`#${g.slug}`}>{g.navn}</a>)}
+    </nav>
+  </SideBand>
+
+  <div class="katalog">
+    {typer.map((g, gi) => (
+      <section class="kolonne katalog-type" id={g.slug} aria-labelledby={`${g.slug}-titel`} data-katalog>
+        <div class="katalog-hoved">
+          <span class="katalog-nr" aria-hidden="true">{String(gi + 1).padStart(2, '0')}</span>
+          <h2 id={`${g.slug}-titel`}>{g.navn}</h2>
+          <ul class="katalog-egnet" aria-label="Velegnet til">{g.egnet.map((e) => <li>{e}</li>)}</ul>
+        </div>
+
+        <div class="katalog-billede">
+          {g.farver.map((f, fi) => (
+            <Image
+              src={f.billede}
+              alt={`${g.navn} i ${f.navn.toLowerCase()}`}
+              widths={[480, 800, 1200, 1600]}
+              sizes="(max-width: 1240px) 100vw, 1160px"
+              quality={78}
+              loading={gi === 0 && fi === 0 ? 'eager' : 'lazy'}
+              fetchpriority={gi === 0 && fi === 0 ? 'high' : undefined}
+              decoding="async"
+              data-farve={f.slug}
+              hidden={fi !== 0}
+            />
+          ))}
+          <p class="katalog-valgt-maerke" aria-hidden="true" data-valgt-maerke>{g.farver[0].navn}</p>
+        </div>
+
+        <div class="katalog-fod">
+          <p class="katalog-tekst">{g.tekst}</p>
+          <div class="katalog-farver">
+            <p class="katalog-farver-titel">Farve: <b data-valgt-navn>{g.farver[0].navn}</b>{g.farver[0].kode && <span data-valgt-kode> · {g.farver[0].kode}</span>}</p>
+            <div class="katalog-proever" role="radiogroup" aria-label={`Farver til ${g.navn}`}>
+              {g.farver.map((f, fi) => (
+                <button type="button" role="radio" aria-checked={fi === 0 ? 'true' : 'false'} tabindex={fi === 0 ? 0 : -1}
+                  class="katalog-proeve" data-farve={f.slug} data-navn={f.navn} data-kode={f.kode ?? ''} aria-label={f.kode ? `${f.navn}, ${f.kode}` : f.navn}>
+                  <Image src={f.proeve} alt="" width={96} height={96} quality={80} loading="lazy" decoding="async" />
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    ))}
+    <p class="kolonne katalog-note">Billederne er visualiseringer af overfladerne. Farverne er eksempler. Ved den gratis besigtigelse viser vi rigtige prøver, så du kan se farven i dit eget lys.</p>
+  </div>
+
+  <script>
+    // Farveprøverne: et tryk (eller piletasterne) viser gulvet i den valgte farve
+    for (const type of document.querySelectorAll('[data-katalog]')) {
+      const proever = Array.from(type.querySelectorAll('.katalog-proeve'));
+      const billeder = Array.from(type.querySelectorAll('.katalog-billede img[data-farve]'));
+      const navn = type.querySelector('[data-valgt-navn]');
+      const kode = type.querySelector('[data-valgt-kode]');
+      const maerke = type.querySelector('[data-valgt-maerke]');
+      const vaelg = (knap, fokus = false) => {
+        for (const p of proever) {
+          const valgt = p === knap;
+          p.setAttribute('aria-checked', String(valgt));
+          p.tabIndex = valgt ? 0 : -1;
+        }
+        for (const b of billeder) {
+          const vis = b.dataset.farve === knap.dataset.farve;
+          b.hidden = !vis;
+          if (vis) { b.classList.remove('er-ny'); void b.offsetWidth; b.classList.add('er-ny'); }
+        }
+        navn.textContent = knap.dataset.navn;
+        maerke.textContent = knap.dataset.navn;
+        if (kode) kode.textContent = knap.dataset.kode ? ` · ${knap.dataset.kode}` : '';
+        if (fokus) knap.focus();
+      };
+      proever.forEach((p, i) => {
+        p.addEventListener('click', () => vaelg(p));
+        p.addEventListener('keydown', (e) => {
+          const ret = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+          if (!ret) return;
+          e.preventDefault();
+          vaelg(proever[(i + ret + proever.length) % proever.length], true);
+        });
+        // Hent billedet, så snart man peger på prøven, så skiftet er øjeblikkeligt
+        p.addEventListener('pointerenter', () => {
+          const b = billeder.find((x) => x.dataset.farve === p.dataset.farve);
+          if (b && b.loading === 'lazy') b.loading = 'eager';
+        }, { once: true });
+      });
+    }
+  </script>
+</Side>
