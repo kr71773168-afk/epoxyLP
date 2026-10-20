@@ -4,6 +4,10 @@ En selvstændig side, ikke en del af hjemmesiden: en interaktiv brochure med de 
 
 Preview: https://claude.ai/artifact/Fc91USBv9WkGmsMjrk6sSx
 
+## Online
+
+https://silkeborg-epoxy.fyldtordrebog.dk (Vercel-projektet `silkeborg-epoxy-lp` i teamet TFCX, samme mønster som de andre kunder på fyldtordrebog.dk). Vercel bygger fra GitHub med `node katalog/byg.mjs` og udgiver `katalog/dist`. DNS for fyldtordrebog.dk ligger hos Simply: subdomænet peger på Vercel med en A-record `silkeborg-epoxy` → `76.76.21.21`.
+
 ## Byg
 
 ```
