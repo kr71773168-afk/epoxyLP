@@ -24,7 +24,7 @@ Giver `katalog/dist/index.html` og `katalog/dist/img/`. Mappen kan lægges op hv
 
 ## Video i toppen
 
-Baggrunden i toppen er videoen af Dusko, der lægger gulv. Det er det samme klip som på hjemmesiden, og det hentes fra `../src/media/arbejde.mp4`, `arbejde.webm` og stillbilledet `arbejde.jpg`. Videoen spiller uden lyd i loop og kun, mens toppen er på skærmen, og den kan stoppes med knappen. Ved "reducer bevægelse" eller datasparetilstand står stillbilledet. Et nyt klip laves med ffmpeg-kommandoerne i hovedmappens README (samme filnavne), og så bygger du igen.
+Baggrunden i toppen er videoen af Dusko, der lægger gulv. Det er det samme klip som på hjemmesiden, og det hentes fra `../src/media/arbejde.mp4`, `arbejde.webm` og stillbilledet `arbejde.jpg`. Videoen spiller uden lyd i loop og kun, mens toppen er på skærmen. Ved "reducer bevægelse" eller datasparetilstand står stillbilledet. Et nyt klip laves med ffmpeg-kommandoerne i hovedmappens README (samme filnavne), og så bygger du igen.
 
 ## Billeder
 

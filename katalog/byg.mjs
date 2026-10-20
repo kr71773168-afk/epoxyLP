@@ -150,7 +150,6 @@ ${css}
       <source src="video/arbejde.webm" type="video/webm">
       <source src="video/arbejde.mp4" type="video/mp4">
     </video>
-    <button type="button" class="video-knap" data-video-knap aria-pressed="false"><span class="video-ikon" aria-hidden="true"></span><span data-video-tekst>Stop video</span></button>
     <div class="kol hero-indre">
       <p class="tag">Stærke gulve<br>til krævende miljøer</p>
       <h1 id="titel">Vores<br>gulvtyper</h1>
