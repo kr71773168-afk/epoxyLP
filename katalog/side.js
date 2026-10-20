@@ -1,3 +1,21 @@
+// Videoen i toppen: spiller uden lyd, kun mens toppen er på skærmen. Står stille ved "reducer bevægelse" eller datasparetilstand.
+const video = document.querySelector('[data-video]');
+const videoKnap = document.querySelector('[data-video-knap]');
+let stoppet = matchMedia('(prefers-reduced-motion: reduce)').matches || navigator.connection?.saveData === true;
+let synlig = true;
+const opdaterVideo = () => {
+  videoKnap.setAttribute('aria-pressed', String(stoppet));
+  videoKnap.querySelector('[data-video-tekst]').textContent = stoppet ? 'Afspil video' : 'Stop video';
+  if (stoppet || !synlig) { video.pause(); return; }
+  if (video.preload === 'none') video.preload = 'auto';
+  // Blokerer browseren afspilning (fx strømsparetilstand), vises stillbilledet og knappen siger "Afspil video"
+  video.play().catch((e) => { if (e.name === 'NotAllowedError') { stoppet = true; opdaterVideo(); } });
+};
+video.addEventListener('playing', () => video.classList.add('spiller'));
+videoKnap.addEventListener('click', () => { stoppet = !stoppet; opdaterVideo(); });
+new IntersectionObserver(([e]) => { synlig = e.isIntersecting; opdaterVideo(); }).observe(video);
+opdaterVideo();
+
 // Farverne: et tryk (eller piletasterne) skifter overfladen på kortet og i den store visning
 const stor = document.getElementById('stor');
 const valgt = {};

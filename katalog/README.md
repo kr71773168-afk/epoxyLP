@@ -22,11 +22,14 @@ Giver `katalog/dist/index.html` og `katalog/dist/img/`. Mappen kan lægges op hv
 | Farveskift, stor visning, kopiér-knapper | `side.js` |
 | Ikoner | `ikoner.js` (Lucide) |
 
+## Video i toppen
+
+Baggrunden i toppen er videoen af Dusko, der lægger gulv. Det er det samme klip som på hjemmesiden, og det hentes fra `../src/media/arbejde.mp4`, `arbejde.webm` og stillbilledet `arbejde.jpg`. Videoen spiller uden lyd i loop og kun, mens toppen er på skærmen, og den kan stoppes med knappen. Ved "reducer bevægelse" eller datasparetilstand står stillbilledet. Et nyt klip laves med ffmpeg-kommandoerne i hovedmappens README (samme filnavne), og så bygger du igen.
+
 ## Billeder
 
 | Billede | Fil | Størrelse |
 |---|---|---|
-| Toppen (tom hal) | `billeder/fotos/hero.jpg` | mindst 1600 px bred |
 | Fotoet øverst på kortet | `billeder/fotos/scene-<type>.jpg` | kvadrat, mindst 700 px |
 | Overfladen på kortet | `billeder/overflader/flade/<type>-<farve>.jpg` | 2,2:1 |
 | Den store visning | `billeder/overflader/<type>-<farve>.jpg` | 1600×1000 |

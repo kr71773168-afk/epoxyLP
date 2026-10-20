@@ -46,7 +46,11 @@ const kilde = (sti) => {
   return fuld;
 };
 
-const hero = await billede(kilde('fotos/hero.jpg'), 'hero', [640, 943]);
+// Baggrunden i toppen: videoen fra et job (samme klip som på hjemmesiden) med stillbilledet som plakat
+const video = her('../src/media/');
+fs.mkdirSync(`${ud}video`);
+for (const f of ['arbejde.mp4', 'arbejde.webm']) fs.copyFileSync(video + f, `${ud}video/${f}`);
+const plakat = await billede(video + 'arbejde.jpg', 'arbejde', [640, 1280]);
 const typer = [];
 for (const g of katalog) {
   const farver = [];
@@ -141,7 +145,12 @@ ${css}
 
 <main id="top">
   <section class="hero" aria-labelledby="titel">
-    <img class="hero-billede" src="${hero.src}" srcset="${hero.srcset}" sizes="(max-width: 760px) 100vw, 66vw" alt="" fetchpriority="high">
+    <img class="hero-billede" src="${plakat.src}" srcset="${plakat.srcset}" sizes="100vw" alt="" fetchpriority="high">
+    <video class="hero-video" muted loop playsinline preload="none" poster="${plakat.src}" aria-hidden="true" data-video>
+      <source src="video/arbejde.webm" type="video/webm">
+      <source src="video/arbejde.mp4" type="video/mp4">
+    </video>
+    <button type="button" class="video-knap" data-video-knap aria-pressed="false"><span class="video-ikon" aria-hidden="true"></span><span data-video-tekst>Stop video</span></button>
     <div class="kol hero-indre">
       <p class="tag">Stærke gulve<br>til krævende miljøer</p>
       <h1 id="titel">Vores<br>gulvtyper</h1>

@@ -55,8 +55,19 @@ button { font: inherit; color: inherit; }
 
 /* ---------- hero ---------- */
 .hero { position: relative; isolation: isolate; overflow: hidden; background: var(--groen-moerk); color: var(--lys-ink); }
-.hero-billede { position: absolute; z-index: -2; top: 0; right: 0; width: min(66%, 1100px); max-width: none; height: 100%; object-fit: cover; object-position: 30% 60%; }
-.hero::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, var(--groen-moerk) 32%, rgba(23, 33, 30, .78) 52%, rgba(23, 33, 30, .12) 100%); }
+/* Videoen fra et job fylder hele toppen. Stillbilledet ligger under, og videoen toner frem, når den spiller. */
+.hero-billede, .hero-video { position: absolute; z-index: -3; inset: 0; width: 100%; max-width: none; height: 100%; object-fit: cover; object-position: 60% 50%; }
+.hero-video { z-index: -2; opacity: 0; transition: opacity .8s; }
+.hero-video.spiller { opacity: 1; }
+.hero::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(23, 33, 30, .94) 0%, rgba(23, 33, 30, .86) 38%, rgba(23, 33, 30, .45) 70%, rgba(23, 33, 30, .25) 100%); }
+.video-knap {
+  position: absolute; z-index: 1; right: var(--gutter-h); bottom: clamp(5rem, 8vw, 6.5rem); display: inline-flex; align-items: center; gap: .45rem;
+  padding: .4rem .75rem; border: 1px solid var(--lys-linje); border-radius: 999px; background: rgba(23, 33, 30, .55); color: var(--lys-ink);
+  font-size: .8rem; font-weight: 600; cursor: pointer; backdrop-filter: blur(4px);
+}
+.video-knap:hover { background: rgba(23, 33, 30, .8); }
+.video-ikon { width: .65rem; height: .7rem; border-left: 3px solid currentColor; border-right: 3px solid currentColor; }
+.video-knap[aria-pressed="true"] .video-ikon { width: 0; height: 0; border-style: solid; border-width: .35rem 0 .35rem .6rem; border-color: transparent transparent transparent currentColor; }
 .hero-indre { position: relative; padding-block: clamp(3rem, 7vw, 5.5rem) clamp(6.5rem, 10vw, 8.5rem); }
 .hero h1 { color: #fff; font-size: clamp(2.9rem, 7.4vw, 6rem); line-height: .94; letter-spacing: -.015em; text-transform: uppercase; text-wrap: initial; }
 .tag {
@@ -177,6 +188,7 @@ html:has(.stor[open]) { overflow: hidden; }
 .stor-fod .proeve[aria-checked="true"] { box-shadow: 0 0 0 2px var(--hvid), 0 0 0 4px var(--groen); }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-video { transition: none; }
   .flade img, .flade img.er-ny, .stor[open] { animation: none; transition: none; }
 }
 
@@ -192,8 +204,8 @@ html:has(.stor[open]) { overflow: hidden; }
   .tag { display: none; }
 }
 @media (max-width: 760px) {
-  .hero-billede { width: 100%; object-position: 60% 60%; }
-  .hero::before { background: linear-gradient(180deg, rgba(23, 33, 30, .78) 0%, rgba(23, 33, 30, .9) 60%, var(--groen-moerk) 100%); }
+  .hero::before { background: linear-gradient(180deg, rgba(23, 33, 30, .62) 0%, rgba(23, 33, 30, .74) 55%, var(--groen-moerk) 100%); }
+  .video-knap { top: 1rem; bottom: auto; }
 }
 @media (max-width: 600px) {
   .kort-liste { grid-template-columns: minmax(0, 1fr); padding: .5rem; gap: .5rem; border-radius: 14px; }
