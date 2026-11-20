@@ -68,6 +68,15 @@ export const byer = [
     omraader: ['Bording', 'Engesvang', 'Brande', 'Nørre Snede', 'Ejstrupholm'],
     tekst: 'Ikast og Brande ligger tæt på Silkeborg, og vi laver gulve i hele Ikast-Brande Kommune, både hjemme hos folk og for virksomheder.',
   },
+  {
+    // Vejle by (7100/7120) dækker Hedensted Kommune og ligger derfor i zonen. Afstand og køretid skal bekræftes af kunden.
+    slug: 'vejle',
+    navn: 'Vejle',
+    km: 70,
+    min: 55,
+    omraader: ['Vejle Øst', 'Tørring', 'Uldum', 'Stouby'],
+    tekst: 'Vejle og byerne mod nord og øst ligger i vores område. Vi laver garager og kældre i parcelhusene og gulve til værksteder og butikker.',
+  },
 ];
 
 /** Stien til bysiden, fx epoxygulv-aarhus */
