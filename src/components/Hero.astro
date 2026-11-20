@@ -51,14 +51,6 @@ const harAnmeldelser = Boolean(a.snit && a.antal);
       <Foto navn={medie} alt="" class="hero-plakat" sizes="100vw" eager />
     )}
   </div>
-  {medie === 'video' && (
-    <p class="hero-video-tekst">
-      <span class="hero-video-prik" aria-hidden="true"></span>Fra et af vores jobs
-      <button type="button" class="hero-video-knap" data-video-knap aria-label="Stop videoen" hidden>
-        <Ikon navn="pause" class="ikon-pause" /><Ikon navn="afspil" class="ikon-afspil" />
-      </button>
-    </p>
-  )}
 
   <div class="hero-tekst">
     <slot name="top" />
