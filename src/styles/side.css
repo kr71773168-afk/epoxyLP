@@ -702,3 +702,134 @@ h1, h2 { font-stretch: 104%; }
   .med-oveni ul { display: block; }
   .med-oveni li { margin: 0; padding: .45rem 0; border-right: 0; border-top: 1px solid var(--moerk-linje); }
 }
+
+/* ---------- sådan bliver dit gulv til: billederne skifter, mens man scroller ---------- */
+.hist { position: relative; height: 420vh; background: #FCF5EF; }
+.hist-stik { position: sticky; top: 0; height: 100vh; padding-top: 4.75rem; display: grid; align-items: center; overflow: hidden; }
+.hist-raekke { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 var(--gutter); display: grid; grid-template-columns: minmax(19rem, .5fr) minmax(0, 1.5fr); gap: clamp(1.5rem, 3vw, 3rem); align-items: center; }
+.hist h2 { font-size: clamp(2rem, 1.3rem + 2.2vw, 3rem); line-height: 1.05; text-wrap: balance; }
+.hist h2 em { font-style: normal; color: var(--noegleord); }
+.hist-prog { display: flex; gap: 6px; margin: 1.5rem 0 1.4rem; }
+.hist-prog i { position: relative; flex: 1; height: 2px; background: #E3DBD2; overflow: hidden; }
+.hist-prog i::after { content: ""; position: absolute; inset: 0; background: var(--accent); transform: scaleX(var(--f, 0)); transform-origin: left; }
+.hist-trin { position: relative; list-style: none; margin: 0; padding: 0; min-height: 13rem; }
+.hist-trin li { position: absolute; inset: 0 0 auto; opacity: 0; transform: translateY(10px); transition: opacity .45s ease, transform .6s var(--ease); pointer-events: none; }
+.hist-trin li.er-aktiv { opacity: 1; transform: none; pointer-events: auto; }
+.hist-n { font-size: .88rem; color: var(--ink-3); }
+.hist-trin b { display: block; margin-top: .15rem; font-family: var(--f-display); font-size: 1.3rem; font-weight: 500; letter-spacing: -.01em; }
+.hist-trin p { margin: .5rem 0 0; color: var(--ink-2); font-size: 1.05rem; max-width: 36ch; }
+.hist-trin .knap { margin-top: 1.25rem; }
+.hist-scene { position: relative; aspect-ratio: 2688 / 1520; -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent), linear-gradient(transparent, #000 5%, #000 95%, transparent); -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent), linear-gradient(transparent, #000 5%, #000 95%, transparent); mask-composite: intersect; }
+.hist-billede { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; will-change: opacity; }
+.hist-billede[data-i="0"] { opacity: 1; }
+.hist-maerke { position: absolute; display: flex; align-items: center; gap: 8px; transform: translate(-6px, -50%); opacity: 0; transition: opacity .4s ease; pointer-events: none; white-space: nowrap; }
+.hist-maerke.v { flex-direction: row-reverse; transform: translate(calc(-100% + 6px), -50%); }
+.hist-maerke.er-aktiv { opacity: 1; }
+.hist-maerke i { position: relative; flex: none; width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px rgba(30, 60, 45, .35); }
+.hist-maerke i::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--accent); }
+.hist-maerke em { font-style: normal; font-size: .85rem; font-weight: 500; color: var(--ink); background: rgba(255, 255, 255, .94); padding: .3rem .6rem; border-radius: 6px; box-shadow: 0 0 0 1px rgba(28, 35, 32, .06); }
+@media (max-width: 900px) {
+  .hist { height: 360vh; }
+  .hist-raekke { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+  .hist-scene { order: -1; margin-inline: calc(var(--gutter) * -1); }
+  .hist .kick { display: none; }
+  .hist h2 { font-size: 1.6rem; }
+  .hist-prog { margin: .9rem 0 .9rem; }
+  .hist-trin { min-height: 11.5rem; }
+  .hist-trin p { font-size: .98rem; }
+  .hist-maerke em { font-size: .72rem; padding: .2rem .45rem; }
+}
+/* Uden scroll-animation: alle trin under hinanden og det færdige gulv */
+@media (prefers-reduced-motion: reduce) {
+  .hist { height: auto; }
+  .hist-stik { position: static; height: auto; padding-block: 4rem; }
+  .hist-billede { opacity: 0 !important; }
+  .hist-billede[data-i="4"] { opacity: 1 !important; position: relative; }
+  .hist-trin { min-height: 0; }
+  .hist-trin li { position: static; opacity: 1; transform: none; margin-bottom: 1.25rem; }
+  .hist-prog, .hist-maerke { display: none; }
+}
+
+/* ---------- forsiden: gulvtyperne som store rækker med mærker i fotoet ---------- */
+.gr-hoved { display: grid; grid-template-columns: 1.1fr 1fr; gap: 1rem 3rem; align-items: end; padding-bottom: 2.25rem; border-bottom: 1px solid var(--linje); }
+.gr-hoved .sektion-titel { margin: 0; }
+.gr-hoved > p { color: var(--ink-2); font-size: 1.1rem; max-width: 42ch; justify-self: end; margin: 0; }
+.gr-hoved .gulv-links { grid-column: 2; justify-self: end; display: flex; gap: .5rem 1.75rem; flex-wrap: wrap; }
+.gr-raekke { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: center; padding-block: clamp(2.5rem, 5vw, 3.75rem); border-bottom: 1px solid var(--linje); }
+.gr-raekke:last-child { border-bottom: 0; padding-bottom: 0; }
+.gr-raekke.vend { grid-template-columns: 5fr 7fr; }
+.gr-raekke.vend .gr-foto { order: 2; }
+.gr-foto { position: relative; display: block; aspect-ratio: 3 / 2; overflow: hidden; border-radius: 14px; background: var(--flade-2); }
+.gr-foto img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.05); transition: transform 1.4s var(--ease); }
+.gr-raekke.er-synlig .gr-foto img, html:not(.js-vis) .gr-foto img { transform: none; }
+.gr-foto:hover img { transform: scale(1.02); }
+.gr-maerke { position: absolute; display: flex; align-items: center; gap: 8px; transform: translate(-7px, -50%); opacity: 0; transition: opacity .5s ease var(--d); pointer-events: none; }
+.gr-maerke.v { flex-direction: row-reverse; transform: translate(calc(-100% + 7px), -50%); }
+.gr-raekke.er-synlig .gr-maerke, html:not(.js-vis) .gr-maerke { opacity: 1; }
+.gr-maerke i { position: relative; flex: none; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 4px rgba(255, 255, 255, .3); }
+.gr-maerke i::after { content: ""; position: absolute; inset: 3.5px; border-radius: 50%; background: var(--accent); }
+.gr-maerke em { font-style: normal; font-size: .85rem; font-weight: 500; background: #fff; color: var(--ink); padding: .35rem .7rem; border-radius: 7px; white-space: nowrap; box-shadow: 0 8px 20px -10px rgba(0, 0, 0, .45); }
+.gr-k { color: var(--noegleord); font-weight: 500; font-size: .95rem; }
+.gr-tekst h3 { font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.15rem); font-weight: 500; letter-spacing: -.02em; line-height: 1.1; margin-top: .5rem; }
+.gr-tekst > p { color: var(--ink-2); font-size: 1.08rem; margin: .85rem 0 0; max-width: 42ch; }
+.gr-data { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 1.6rem 0 0; border-block: 1px solid var(--linje); }
+.gr-data div { padding: .85rem 0 .85rem 1rem; border-left: 1px solid var(--linje); }
+.gr-data div:first-child { padding-left: 0; border-left: 0; }
+.gr-data dt { font-size: .82rem; color: var(--ink-3); }
+.gr-data dd { margin: .2rem 0 0; font-family: var(--f-display); font-size: 1.12rem; font-weight: 500; letter-spacing: -.01em; }
+.gr-knapper { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; margin-top: 1.75rem; }
+@media (max-width: 900px) {
+  .gr-hoved { grid-template-columns: 1fr; }
+  .gr-hoved > p, .gr-hoved .gulv-links { justify-self: start; grid-column: auto; }
+  .gr-raekke, .gr-raekke.vend { grid-template-columns: 1fr; gap: 1.5rem; }
+  .gr-raekke.vend .gr-foto { order: 0; }
+  .gr-maerke em { font-size: .74rem; padding: .25rem .5rem; }
+  .gr-data dd { font-size: 1rem; }
+  .gr-data div { padding-left: .75rem; }
+}
+
+/* ---------- forløbet: en stribe epoxy, der trækkes ud ved scroll ---------- */
+.fl-hoved { text-align: center; max-width: 40rem; margin: 0 auto; }
+.fl-hoved .sektion-titel { margin-bottom: .75rem; }
+.fl-hoved .sektion-titel em { font-style: normal; color: var(--noegleord); }
+.fl-hoved p:last-child { color: var(--ink-2); font-size: 1.08rem; margin: 0; }
+.fl-stribe { position: relative; height: 60px; margin: clamp(2.5rem, 5vw, 4rem) 0 2rem; }
+.fl-stribe svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.fl-bund { fill: none; stroke: #E6EBE8; stroke-width: 22; stroke-linecap: round; }
+.fl-blank { fill: none; stroke: var(--accent); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--p, 0)); }
+.fl-prik { position: absolute; z-index: 1; display: grid; place-items: center; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; background: #fff; border: 1px solid var(--linje-2); font-size: .85rem; font-weight: 600; color: var(--ink-3); transition: background-color .3s, color .3s, border-color .3s; }
+.fl-prik.er-naaet { background: var(--accent); border-color: var(--accent); color: #fff; }
+.fl-trin { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; text-align: center; }
+.fl-ikon { display: block; width: 120px; height: 120px; object-fit: contain; margin: 0 auto .9rem; }
+.fl-naar { font-size: .85rem; color: var(--ink-3); }
+.fl-trin h3 { font-size: 1.3rem; font-weight: 500; margin: .2rem 0 .45rem; }
+.fl-trin p { color: var(--ink-2); margin: 0 auto; max-width: 26ch; font-size: .98rem; }
+.fl-knap { text-align: center; margin-top: 2.5rem; }
+@media (max-width: 860px) {
+  .fl-stribe { display: none; }
+  .fl-trin { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.25rem 1rem; }
+  .fl-ikon { width: 96px; height: 96px; }
+}
+@media (max-width: 460px) { .fl-trin { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- om os: to fotos fra et job og en datastrimmel ---------- */
+.os-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2.5rem, 6vw, 5rem); align-items: center; }
+.os-fotos { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1rem; align-items: end; }
+.os-fotos figure { margin: 0; }
+.os-fotos img { display: block; width: 100%; height: auto; object-fit: cover; border-radius: 14px; background: var(--flade-2); }
+.os-stor img { aspect-ratio: 4 / 5; }
+.os-lille img { aspect-ratio: 4 / 4.4; }
+.os-fotos figcaption { margin-top: .7rem; padding-top: .6rem; border-top: 1px solid var(--linje); font-size: .95rem; font-weight: 500; }
+.os-fotos figcaption span { display: block; font-size: .82rem; font-weight: 400; color: var(--ink-3); }
+.os-tekst .sektion-titel { margin-bottom: 1rem; }
+.os-tekst .sektion-titel em { font-style: normal; color: var(--noegleord); }
+.os-lede { font-size: 1.14rem; color: var(--ink); max-width: 44ch; margin: 0; }
+.os-mere { color: var(--ink-2); max-width: 44ch; margin: .9rem 0 0; }
+.os-tlf { font-size: 1.1rem; }
+@media (max-width: 900px) { .os-grid { grid-template-columns: minmax(0, 1fr); } }
+/* Afslutningen over huset i skumringen: teksten står på himlen, garagen lyser nedenunder */
+.slut-aften { padding-block: clamp(4.5rem, 8vw, 7rem) clamp(14rem, 30vw, 26rem); }
+.slut-aften .slut-billede { object-position: 50% 100%; }
+.slut-aften::before { background: rgba(10, 16, 28, .28); }
+.slut-aften h2 { text-shadow: 0 1px 24px rgba(0, 0, 0, .35); }
+@media (max-width: 600px) { .slut-aften { padding-bottom: 15rem; } .slut-aften .slut-billede { object-position: 72% 100%; } }

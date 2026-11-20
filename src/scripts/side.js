@@ -116,3 +116,50 @@ for (const liste of document.querySelectorAll('[data-ydelser]')) {
     a.style.setProperty('--my', `${e.clientY - r.top}px`);
   });
 }
+
+// "Sådan bliver dit gulv til": billederne toner over i hinanden, mens man scroller gennem sektionen
+const hist = document.querySelector('[data-hist]');
+if (hist && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const billeder = [...hist.querySelectorAll('.hist-billede')];
+  const trin = [...hist.querySelectorAll('.hist-trin li')];
+  const maerker = [...hist.querySelectorAll('.hist-maerke')];
+  const prog = [...hist.querySelectorAll('.hist-prog i')];
+  const n = billeder.length - 1;
+  // Hent alle billeder, når sektionen nærmer sig, så skiftene ikke hakker
+  new IntersectionObserver(([e], o) => { if (e.isIntersecting) { billeder.forEach((b) => { b.loading = 'eager'; }); o.disconnect(); } }, { rootMargin: '600px 0px' }).observe(hist);
+  let sidst = -1;
+  const tegn = () => {
+    const r = hist.getBoundingClientRect();
+    const laengde = r.height - innerHeight;
+    const p = Math.min(1, Math.max(0, -r.top / laengde));
+    const f = p * n * 1.08; // lidt luft til sidst, så det færdige gulv står et øjeblik
+    billeder.forEach((b, i) => { if (i) b.style.opacity = String(Math.min(1, Math.max(0, (f - (i - .35)) / .22))); });
+    prog.forEach((el, k) => el.style.setProperty('--f', String(Math.min(1, Math.max(0, f - k)))));
+    const aktiv = Math.min(n, Math.floor(f + .45));
+    if (aktiv !== sidst) {
+      sidst = aktiv;
+      trin.forEach((t, i) => t.classList.toggle('er-aktiv', i === aktiv));
+      maerker.forEach((m) => m.classList.toggle('er-aktiv', Number(m.dataset.t) === aktiv));
+    }
+  };
+  let ventende = false;
+  addEventListener('scroll', () => { if (!ventende) { ventende = true; requestAnimationFrame(() => { ventende = false; tegn(); }); } }, { passive: true });
+  addEventListener('resize', tegn);
+  tegn();
+}
+
+// Forløbet: striben trækkes ud, mens sektionen passerer midten af skærmen
+const fl = document.querySelector('[data-forloeb]');
+if (fl) {
+  const stribe = fl.querySelector('.fl-stribe');
+  const prikker = [...fl.querySelectorAll('.fl-prik')];
+  const pos = [.125, .375, .625, .875];
+  const opdater = () => {
+    const r = stribe.getBoundingClientRect();
+    const p = matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : Math.min(1, Math.max(0, (innerHeight * .85 - r.top) / (innerHeight * .55)));
+    stribe.style.setProperty('--p', p.toFixed(3));
+    prikker.forEach((el, i) => el.classList.toggle('er-naaet', p >= pos[i] - .02));
+  };
+  addEventListener('scroll', () => requestAnimationFrame(opdater), { passive: true });
+  opdater();
+}

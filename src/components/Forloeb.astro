@@ -1,57 +1,52 @@
 ---
-import { beregnPris } from '../calculator/engine.js';
+/**
+ * Forløbet: en blank stribe epoxy, der bliver trukket ud hen over siden, mens man scroller (som vejen med varevognen
+ * på sikker-isolering.dk), og fire trin med små 3D-illustrationer under. Tiderne er pladsholdere i pricing.config.js.
+ */
+import { Image } from 'astro:assets';
 import cfg from '../calculator/pricing.config.js';
-import Foto from './Foto.astro';
+import pris from '../media/ikon/trin-pris.png';
+import fugt from '../media/ikon/trin-fugt.png';
+import kalender from '../media/ikon/trin-kalender.png';
+import gulv from '../media/ikon/trin-gulv.png';
 
-interface Props {
-  alt?: boolean;
-}
-const { alt = false } = Astro.props;
-
-// Eksemplet i trin 1 regnes med samme motor som beregneren (dobbelt garage, 36 m², flakes), så tallet passer med priserne
-const fmt = (n) => Math.round(n).toLocaleString('da-DK');
-const eks = beregnPris({ rum: 'garage', areal: 36, overflade: 'flakes', stand: 'paen', tilvalg: [], postnummer: '8600' }, cfg);
-const eksPris = eks.lav === eks.hoej ? `${fmt(eks.lav)} kr` : `${fmt(eks.lav)}–${fmt(eks.hoej)} kr`;
+interface Props { alt?: boolean; harBeregner?: boolean }
+const { alt = false, harBeregner = true } = Astro.props;
+const trin = [
+  { billede: pris, naar: 'Nu', titel: 'Se din pris', tekst: 'Seks korte spørgsmål her på siden. Du binder dig ikke til noget.' },
+  { billede: fugt, naar: 'Bagefter', titel: 'Gratis besigtigelse', tekst: 'Vi kommer ud, måler op og tjekker fugten i betonen. Så får du en fast pris på skrift.' },
+  { billede: kalender, naar: 'Når det passer dig', titel: 'Vi finder en dag', tekst: 'Du vælger en dag. Gulvet tager typisk ' + cfg.tid.arbejdsdage.toLowerCase() + '.' },
+  { billede: gulv, naar: 'Selve dagene', titel: 'Vi lægger gulvet', tekst: `${cfg.tid.gaaPaa}. ${cfg.tid.koerPaa}.` },
+];
+// Striben: en blød bølge over hele bredden med et punkt ved hvert trin
+const punkter = [12.5, 37.5, 62.5, 87.5];
+const y = (x) => 30 + Math.sin((x / 100) * Math.PI * 2 - 0.6) * 9;
+const sti = Array.from({ length: 41 }, (_, i) => { const x = i * 2.5; return `${i ? 'L' : 'M'}${(x * 12).toFixed(1)} ${y(x).toFixed(1)}`; }).join(' ');
 ---
-<section class:list={['sektion', { 'sektion-alt': alt }]} aria-labelledby="forloeb-titel">
+<section class:list={['sektion', 'fl', { 'sektion-alt': alt }]} aria-labelledby="forloeb-titel" data-forloeb>
   <div class="kolonne">
-    <p class="kick">Forløbet</p>
-    <div class="forloeb-hoved">
-      <h2 class="sektion-titel" id="forloeb-titel">Tre trin fra pris til <em>færdigt gulv</em></h2>
-      <p>Du ser prisen her på siden. Vi kommer ud og giver en fast pris. Så lægger vi gulvet.</p>
+    <div class="fl-hoved" data-vis>
+      <p class="kick">Sådan foregår det</p>
+      <h2 class="sektion-titel" id="forloeb-titel">Fra pris til <em>færdigt gulv</em></h2>
+      <p>Du siger ja, før vi går i gang. Ingen overraskelser undervejs.</p>
     </div>
-    <ol class="forloeb">
-      <li>
-        <div class="forloeb-spor" aria-hidden="true"><span class="forloeb-nr">01</span></div>
-        <div class="forloeb-billede forloeb-pris" aria-hidden="true">
-          <div class="mini-pris">
-            <p class="mini-pris-top">Dit prisoverslag</p>
-            <dl>
-              <div><dt>Rum</dt><dd>Garage</dd></div>
-              <div><dt>Areal</dt><dd>36 m²</dd></div>
-              <div><dt>Overflade</dt><dd>Flakes</dd></div>
-            </dl>
-            <p class="mini-pris-sum"><span>Pris inkl. moms</span><strong>{eksPris}</strong></p>
-          </div>
-        </div>
-        <h3>Se prisen her</h3>
-        <p>Seks spørgsmål, et minut. Du får et prisinterval med det samme.</p>
-        <p class="forloeb-tid">Ca. 1 minut</p>
-      </li>
-      <li>
-        <div class="forloeb-spor" aria-hidden="true"><span class="forloeb-nr">02</span></div>
-        <Foto navn="beton" alt="Et betongulv, før vi går i gang" class="forloeb-billede" sizes="(max-width: 760px) 100vw, 33vw" />
-        <h3>Gratis besigtigelse</h3>
-        <p>Vi kommer ud, måler op og tjekker fugten i betonen. Så får du en fast pris på skrift.</p>
-        <p class="forloeb-tid">Fast pris på skrift</p>
-      </li>
-      <li>
-        <div class="forloeb-spor" aria-hidden="true"><span class="forloeb-nr">03</span></div>
-        <Foto navn="haelder" alt="Vi hælder epoxy op til gulvet" class="forloeb-billede" sizes="(max-width: 760px) 100vw, 33vw" />
-        <h3>Vi lægger gulvet</h3>
-        <p><span data-pladsholder>{cfg.tid.gaaPaa}</span>. <span data-pladsholder>{cfg.tid.koerPaa}</span>.</p>
-        <p class="forloeb-tid"><span data-pladsholder>{cfg.tid.arbejdsdage}</span></p>
-      </li>
+    <div class="fl-stribe" aria-hidden="true">
+      <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+        <path class="fl-bund" d={sti} />
+        <path class="fl-blank" d={sti} pathLength="1" />
+      </svg>
+      {punkter.map((x, i) => <span class="fl-prik" style={`left:${x}%;top:${y(x) / 60 * 100}%`}>{i + 1}</span>)}
+    </div>
+    <ol class="fl-trin">
+      {trin.map((t) => (
+        <li data-vis>
+          <Image src={t.billede} alt="" width={260} height={260} class="fl-ikon" loading="lazy" />
+          <span class="fl-naar">{t.naar}</span>
+          <h3>{t.titel}</h3>
+          <p><span data-pladsholder>{t.tekst}</span></p>
+        </li>
+      ))}
     </ol>
+    <div class="fl-knap"><a class="knap knap-accent knap-stor" href={harBeregner ? '#beregner' : '/pris/'}>Se din pris <span aria-hidden="true">→</span></a></div>
   </div>
 </section>

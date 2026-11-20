@@ -18,7 +18,7 @@ const {
 } = Astro.props;
 const titelHtml = titel.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]).replace(/\[(.+?)\]/g, '<em>$1</em>');
 ---
-<section class="slut" aria-labelledby="slut-titel">
+<section class={`slut slut-${foto}`} aria-labelledby="slut-titel">
   <Foto navn={foto} alt="" class="slut-billede" sizes="100vw" />
   <div class="kolonne moerk">
     <h2 id="slut-titel" set:html={titelHtml} />

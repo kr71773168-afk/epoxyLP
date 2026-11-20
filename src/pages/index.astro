@@ -2,8 +2,9 @@
 import FAQ from '../components/FAQ.astro';
 import Forloeb from '../components/Forloeb.astro';
 import Foto from '../components/Foto.astro';
-import GulvKort from '../components/GulvKort.astro';
+import GulvRaekker from '../components/GulvRaekker.astro';
 import Hero from '../components/Hero.astro';
+import Historie from '../components/Historie.astro';
 import MedIPrisen from '../components/MedIPrisen.astro';
 import Omraade from '../components/Omraade.astro';
 import Slut from '../components/Slut.astro';
@@ -14,13 +15,6 @@ import { erhverv, privat } from '../data/ydelser.js';
 import Side from '../layouts/Side.astro';
 import { link } from '../lib/link.js';
 
-// Det, der adskiller firmaet fra de fleste gulvfirmaer. Garantien er en pladsholder i firma.js.
-const loefter = [
-  { titel: 'Pris på et minut', tekst: 'De fleste gulvfirmaer skriver “ring for pris”. Her får du en vejledende pris på et minut, uden at vente på et tilbud.' },
-  { titel: 'Én at tale med', tekst: 'Samme person fra besigtigelsen til det færdige gulv. Du skal ikke forklare det hele to gange.' },
-  { titel: 'Fast pris på skrift', tekst: 'Efter den gratis besigtigelse får du en fast pris. Den ændrer sig ikke undervejs.' },
-  { titel: firma.garanti, tekst: 'Vi står inde for gulvet. Sker der noget, der skyldes vores arbejde, kommer vi og udbedrer det.', pladsholder: true },
-];
 ---
 <Side
   titel="Epoxygulve i Silkeborg · Se prisen på 60 sekunder · Silkeborg Epoxy"
@@ -34,43 +28,51 @@ const loefter = [
     annonceTitel
   />
 
-  <section class="sektion gulv-sektion" aria-labelledby="gulve-titel">
-    <div class="kolonne moerk">
-      <div class="sektion-hoved">
+  <Historie />
+
+  <section class="sektion" aria-labelledby="gulve-titel">
+    <div class="kolonne">
+      <div class="gr-hoved">
         <div>
           <p class="kick">Overflader og priser</p>
-          <h2 class="sektion-titel" id="gulve-titel">Vælg dit <em>epoxygulv</em></h2>
-          <p>Tre overflader, der hver giver gulvet sit eget udtryk. Priserne er inkl. moms.</p>
+          <h2 class="sektion-titel" id="gulve-titel">Tre gulve. <em>Ét, der passer til dig.</em></h2>
         </div>
+        <p>Alle tre er epoxy, og alle tre er lette at holde rene. Forskellen er udtrykket.</p>
         <div class="gulv-links">
-          <a class="pil-link" href={link('katalog')}>Se alle farver i kataloget <span aria-hidden="true">→</span></a>
-          <a class="pil-link" href={link('pris')}>Se alle priser <span aria-hidden="true">→</span></a>
+          <a class="hero-book" href={link('katalog')}>Se alle farver i kataloget →</a>
+          <a class="hero-book" href={link('pris')}>Se alle priser →</a>
         </div>
       </div>
-      <GulvKort />
+      <GulvRaekker />
     </div>
   </section>
 
-  <section class="sektion sektion-alt" aria-labelledby="loefter-titel">
-    <div class="folk">
-      <figure class="folk-billede-ramme">
-        <Foto navn="arbejde-taet" alt="Vi trækker epoxy ud over et gulv på et job" class="folk-billede" sizes="(max-width: 900px) 100vw, 55vw" />
-        <figcaption>Fra et job. Epoxyen trækkes ud, mens den er flydende.</figcaption>
-      </figure>
-      <div class="folk-tekst">
+  <section class="sektion os" aria-labelledby="loefter-titel">
+    <div class="kolonne os-grid">
+      <div class="os-fotos" data-vis>
+        <figure class="os-stor">
+          <Foto navn="arbejde-taet" alt="Vi trækker epoxy ud over et gulv på et job" sizes="(max-width: 900px) 60vw, 30vw" />
+          <figcaption>Epoxyen trækkes ud<span>Fra et af vores jobs</span></figcaption>
+        </figure>
+        <figure class="os-lille">
+          <Foto navn="arbejde-primer" alt="Primer bliver lagt på betonen" sizes="(max-width: 900px) 40vw, 22vw" />
+          <figcaption>Primeren går på<span>Fra samme job</span></figcaption>
+        </figure>
+      </div>
+      <div class="os-tekst" data-vis>
         <p class="kick">Om os</p>
-        <h2 class="folk-titel" id="loefter-titel">Du taler med den, <em>der lægger gulvet</em></h2>
-        <p class="folk-lede">Vi er et lille firma fra Silkeborg. Ejeren kommer selv ud, måler op og står for gulvet fra første besøg til sidste lag.</p>
-        <ul class="folk-liste">
-          {loefter.map((l, i) => (
-            <li>
-              <span class="folk-nr" aria-hidden="true">0{i + 1}</span>
-              <h3>{l.pladsholder ? <span data-pladsholder>{l.titel}</span> : l.titel}</h3>
-              <p>{l.tekst}</p>
-            </li>
-          ))}
-        </ul>
-        <a class="hero-book folk-link" href={link('om-os')}>Mere om os <span aria-hidden="true">→</span></a>
+        <h2 class="sektion-titel" id="loefter-titel">Du taler med den, <em>der lægger gulvet</em></h2>
+        <p class="os-lede">Silkeborg Epoxy er et lille, lokalt firma. Ejeren kommer selv ud, måler op og står for gulvet fra første besøg til sidste lag.</p>
+        <p class="os-mere">Du får prisen på et minut her på siden. Efter besigtigelsen står den på skrift, og den ændrer sig ikke.</p>
+        <dl class="gr-data os-data">
+          <div><dt>Ejeren</dt><dd>Kommer selv</dd></div>
+          <div><dt>Prisen</dt><dd>Fast på skrift</dd></div>
+          <div><dt>Garanti</dt><dd><span data-pladsholder>{firma.garanti.replace(/ garanti$/, '')}</span></dd></div>
+        </dl>
+        <div class="gr-knapper">
+          <a class="knap knap-accent" href="#beregner">Beregn din pris <span aria-hidden="true">→</span></a>
+          <a class="hero-tlf os-tlf" href={`tel:${firma.telefonLink}`} data-telefon><span class="hero-tlf-ring" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></span><span data-pladsholder>{firma.telefon}</span></a>
+        </div>
       </div>
     </div>
   </section>
@@ -93,5 +95,5 @@ const loefter = [
 
   <Omraade />
   <FAQ items={faq} alt />
-  <Slut harBeregner />
+  <Slut harBeregner foto="aften" />
 </Side>
