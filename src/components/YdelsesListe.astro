@@ -21,16 +21,18 @@ function fraPris(y) {
   return r.erhverv ? `fra ${fmt(billigst)} kr/m² ekskl. moms` : `fra ${fmt(billigst * (1 + cfg.moms))} kr/m²`;
 }
 ---
-<ul class="ydelses-liste">
-  {ydelser.map((y) => (
-    <li>
+<ul class="ydelses-liste" data-ydelser>
+  {ydelser.map((y, i) => (
+    <li data-vis>
       <a href={link(y.slug)}>
+        <span class="yl-nr" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
         {y.overflade || !rumFotos[`../media/valg/rum-${y.rum}.webp`]
-          ? <Foto navn={`gulv-${y.overflade ?? 'ensfarvet'}`} alt="" class="yl-foto" sizes="112px" />
-          : <Image src={rumFotos[`../media/valg/rum-${y.rum}.webp`].default} alt="" widths={[200]} sizes="112px" quality={68} class="yl-foto" loading="lazy" decoding="async" />}
+          ? <Foto navn={`gulv-${y.overflade ?? 'ensfarvet'}`} alt="" class="yl-foto" sizes="240px" />
+          : <Image src={rumFotos[`../media/valg/rum-${y.rum}.webp`].default} alt="" widths={[200]} sizes="240px" quality={72} class="yl-foto" loading="lazy" decoding="async" />}
         <span class="yl-navn">{y.navn}</span>
         <span class="yl-desk">{y.kort}</span>
-        <span class="yl-pris">{fraPris(y)} <span class="yl-pil" aria-hidden="true">→</span></span>
+        <span class="yl-pris">{fraPris(y)}</span>
+        <span class="yl-pil" aria-hidden="true">→</span>
       </a>
     </li>
   ))}

@@ -16,29 +16,39 @@ const eksPris = eks.lav === eks.hoej ? `${fmt(eks.lav)} kr` : `${fmt(eks.lav)}�
 <section class:list={['sektion', { 'sektion-alt': alt }]} aria-labelledby="forloeb-titel">
   <div class="kolonne">
     <p class="kick">Forløbet</p>
-    <h2 class="sektion-titel" id="forloeb-titel">Sådan foregår det</h2>
+    <div class="forloeb-hoved">
+      <h2 class="sektion-titel" id="forloeb-titel">Tre trin fra pris til <em>færdigt gulv</em></h2>
+      <p>Du ser prisen her på siden. Vi kommer ud og giver en fast pris. Så lægger vi gulvet.</p>
+    </div>
     <ol class="forloeb">
       <li>
+        <div class="forloeb-spor" aria-hidden="true"><span class="forloeb-nr">01</span></div>
         <div class="forloeb-billede forloeb-pris" aria-hidden="true">
           <div class="mini-pris">
-            <span>Din vejledende pris</span>
-            <strong>{eksPris}</strong>
-            <span>36 m² flakes · inkl. moms</span>
+            <p class="mini-pris-top">Dit prisoverslag</p>
+            <dl>
+              <div><dt>Rum</dt><dd>Garage</dd></div>
+              <div><dt>Areal</dt><dd>36 m²</dd></div>
+              <div><dt>Overflade</dt><dd>Flakes</dd></div>
+            </dl>
+            <p class="mini-pris-sum"><span>Pris inkl. moms</span><strong>{eksPris}</strong></p>
           </div>
         </div>
-        <h3><span class="forloeb-nr">1.</span> Se prisen her</h3>
+        <h3>Se prisen her</h3>
         <p>Seks spørgsmål, et minut. Du får et prisinterval med det samme.</p>
         <p class="forloeb-tid">Ca. 1 minut</p>
       </li>
       <li>
+        <div class="forloeb-spor" aria-hidden="true"><span class="forloeb-nr">02</span></div>
         <Foto navn="beton" alt="Et betongulv, før vi går i gang" class="forloeb-billede" sizes="(max-width: 760px) 100vw, 33vw" />
-        <h3><span class="forloeb-nr">2.</span> Gratis besigtigelse</h3>
+        <h3>Gratis besigtigelse</h3>
         <p>Vi kommer ud, måler op og tjekker fugten i betonen. Så får du en fast pris på skrift.</p>
         <p class="forloeb-tid">Fast pris på skrift</p>
       </li>
       <li>
+        <div class="forloeb-spor" aria-hidden="true"><span class="forloeb-nr">03</span></div>
         <Foto navn="haelder" alt="Vi hælder epoxy op til gulvet" class="forloeb-billede" sizes="(max-width: 760px) 100vw, 33vw" />
-        <h3><span class="forloeb-nr">3.</span> Vi lægger gulvet</h3>
+        <h3>Vi lægger gulvet</h3>
         <p><span data-pladsholder>{cfg.tid.gaaPaa}</span>. <span data-pladsholder>{cfg.tid.koerPaa}</span>.</p>
         <p class="forloeb-tid"><span data-pladsholder>{cfg.tid.arbejdsdage}</span></p>
       </li>

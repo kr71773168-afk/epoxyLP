@@ -10,7 +10,7 @@ interface Props {
   alt?: boolean;
   harBeregner?: boolean;
 }
-const { alt = false, harBeregner = true } = Astro.props;
+const { harBeregner = true } = Astro.props;
 
 const altidMed = [
   { ikon: 'besigtigelse', titel: 'Gratis besigtigelse', tekst: 'Vi kommer ud, måler op og måler fugten i betonen.' },
@@ -25,29 +25,34 @@ const kanKommeOveni = [
   'Fugtspærre, hvis betonen er for fugtig',
 ];
 ---
-<section class:list={['sektion', { 'sektion-alt': alt }]} aria-labelledby="med-titel">
+<section class="med" aria-labelledby="med-titel">
   <div class="kolonne med-grid">
-    <div class="med-intro">
+    <div class="med-intro moerk" data-vis>
       <p class="kick">Fast pris</p>
-      <h2 class="sektion-titel" id="med-titel">Det er med i prisen</h2>
-      <p>Ingen skjulte tillæg. Efter besigtigelsen får du en fast pris på skrift, og den ændrer sig ikke undervejs.</p>
-      <a class="knap knap-accent" href={harBeregner ? '#beregner' : link('pris')}>Se prisen på dit gulv <span aria-hidden="true">→</span></a>
-    </div>
-    <div class="med-kort">
-      <p class="med-kort-titel">Altid med</p>
-      <ul class="med-liste">
-        {altidMed.map((m) => (
-          <li>
-            <b>{m.titel}</b>
-            <span>{m.tekst}</span>
-          </li>
-        ))}
-      </ul>
+      <h2 class="sektion-titel" id="med-titel">Én fast pris. <em>Det hele er med.</em></h2>
+      <p>Efter besigtigelsen får du prisen på skrift. Den ændrer sig ikke undervejs, heller ikke hvis arbejdet tager længere tid.</p>
+      <a class="knap knap-hvid" href={harBeregner ? '#beregner' : link('pris')}>Se prisen på dit gulv <span aria-hidden="true">→</span></a>
       <div class="med-oveni">
-        <p class="med-kort-titel">Kan komme oveni, hvis gulvet kræver det</p>
+        <p class="med-oveni-titel">Kan komme oveni, hvis gulvet kræver det</p>
         <ul>{kanKommeOveni.map((k) => <li>{k}</li>)}</ul>
         <p class="med-note">Du ser det i beregneren og i den faste pris, før du siger ja.</p>
       </div>
+    </div>
+    <div class="med-ark" data-vis aria-label="Eksempel på hvad prisen dækker">
+      <div class="med-ark-top">
+        <span class="med-ark-firma">Silkeborg Epoxy</span>
+        <span>Fast pris · eksempel</span>
+      </div>
+      <ul class="med-liste">
+        {altidMed.map((m) => (
+          <li>
+            <span class="med-linje"><b>{m.titel}</b><span>{m.tekst}</span></span>
+            <span class="med-tag">Med</span>
+          </li>
+        ))}
+      </ul>
+      <p class="med-sum"><span>Din faste pris</span><strong aria-hidden="true">00.000 kr</strong></p>
+      <p class="med-ark-fod">Prisen står på skrift efter den gratis besigtigelse.</p>
     </div>
   </div>
 </section>

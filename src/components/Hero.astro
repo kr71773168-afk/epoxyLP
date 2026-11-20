@@ -81,8 +81,11 @@ const harAnmeldelser = Boolean(a.snit && a.antal);
       </ul>
     )}
     <div class="hero-knapper">
-      <a class="knap knap-accent hero-tlf" href={`tel:${firma.telefonLink}`} data-telefon><Ikon navn="tlf" />Ring <span data-pladsholder>{firma.telefon}</span></a>
-      <a class="knap knap-hvid hero-book" href={link('kontakt')}>Book gratis besigtigelse</a>
+      <a class="hero-tlf" href={`tel:${firma.telefonLink}`} data-telefon>
+        <span class="hero-tlf-ring" aria-hidden="true"><Ikon navn="tlf" /></span>
+        <span><span data-pladsholder>{firma.telefon}</span><small data-pladsholder>{firma.aabningstider}</small></span>
+      </a>
+      <a class="hero-book" href={link('kontakt')}>Book gratis besigtigelse <span aria-hidden="true">→</span></a>
     </div>
   </div>
 

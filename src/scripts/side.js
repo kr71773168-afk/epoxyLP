@@ -87,3 +87,32 @@ if (tegn && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-mo
   }, { threshold: 0.35 });
   io.observe(tegn);
 }
+
+// Rolig indtoning: overskrifter, kort og rækker toner frem, når de kommer på skærmen
+if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const vis = document.querySelectorAll('[data-vis], .sektion-hoved, .forloeb-hoved, .gulvkort li, .forloeb li, .folk-liste li, .folk-titel, .koer-tekst, .faq-intro');
+  for (const el of vis) el.setAttribute('data-vis', '');
+  document.documentElement.classList.add('js-vis');
+  const io = new IntersectionObserver((rk) => {
+    for (const e of rk) {
+      if (!e.isIntersecting) continue;
+      // Søskende i samme liste kommer lidt efter hinanden
+      const i = e.target.parentElement ? [...e.target.parentElement.children].indexOf(e.target) : 0;
+      e.target.style.transitionDelay = `${Math.min(i, 4) * 90}ms`;
+      e.target.classList.add('er-synlig');
+      io.unobserve(e.target);
+    }
+  }, { rootMargin: '0px 0px -8% 0px' });
+  for (const el of vis) io.observe(el);
+}
+
+// Ydelser: fotoet følger musen hen over rækken
+for (const liste of document.querySelectorAll('[data-ydelser]')) {
+  liste.addEventListener('pointermove', (e) => {
+    const a = e.target.closest('a');
+    if (!a) return;
+    const r = a.getBoundingClientRect();
+    a.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    a.style.setProperty('--my', `${e.clientY - r.top}px`);
+  });
+}

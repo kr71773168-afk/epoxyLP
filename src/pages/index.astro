@@ -17,7 +17,7 @@ import { link } from '../lib/link.js';
 // Det, der adskiller firmaet fra de fleste gulvfirmaer. Garantien er en pladsholder i firma.js.
 const loefter = [
   { titel: 'Pris på et minut', tekst: 'De fleste gulvfirmaer skriver “ring for pris”. Her får du en vejledende pris på et minut, uden at vente på et tilbud.' },
-  { titel: 'Ejeren kommer selv', tekst: 'Du taler med den, der lægger gulvet. Fra første besøg til sidste lag.' },
+  { titel: 'Én at tale med', tekst: 'Samme person fra besigtigelsen til det færdige gulv. Du skal ikke forklare det hele to gange.' },
   { titel: 'Fast pris på skrift', tekst: 'Efter den gratis besigtigelse får du en fast pris. Den ændrer sig ikke undervejs.' },
   { titel: firma.garanti, tekst: 'Vi står inde for gulvet. Sker der noget, der skyldes vores arbejde, kommer vi og udbedrer det.', pladsholder: true },
 ];
@@ -29,26 +29,22 @@ const loefter = [
   <Hero
     over="Garage · kælder · bolig · erhverv"
     titel="Epoxygulve i Silkeborg. [Se prisen på 60 sekunder.]"
-    punkter={[
-      'Pris på et minut, gratis og uforpligtende',
-      'Fast pris på skrift efter gratis besigtigelse',
-      `<span data-pladsholder>${firma.garanti}</span>, og ejeren kommer selv`,
-    ]}
+    tekst="Svar på seks korte spørgsmål, så ser du prisen med det samme. Fast pris på skrift efter en gratis besigtigelse."
     bjaelke
     annonceTitel
   />
 
-  <section class="sektion" aria-labelledby="gulve-titel">
-    <div class="kolonne">
+  <section class="sektion gulv-sektion" aria-labelledby="gulve-titel">
+    <div class="kolonne moerk">
       <div class="sektion-hoved">
         <div>
           <p class="kick">Overflader og priser</p>
           <h2 class="sektion-titel" id="gulve-titel">Vælg dit <em>epoxygulv</em></h2>
-          <p>Tre overflader. Prisen pr. m² står på hver, inkl. moms.</p>
+          <p>Tre overflader, der hver giver gulvet sit eget udtryk. Priserne er inkl. moms.</p>
         </div>
-        <div class="sektion-knapper">
-          <a class="knap knap-lys" href={link('katalog')}>Se alle farver i kataloget</a>
-          <a class="knap knap-lys" href={link('pris')}>Se alle priser <span aria-hidden="true">→</span></a>
+        <div class="gulv-links">
+          <a class="pil-link" href={link('katalog')}>Se alle farver i kataloget <span aria-hidden="true">→</span></a>
+          <a class="pil-link" href={link('pris')}>Se alle priser <span aria-hidden="true">→</span></a>
         </div>
       </div>
       <GulvKort />
@@ -56,23 +52,25 @@ const loefter = [
   </section>
 
   <section class="sektion sektion-alt" aria-labelledby="loefter-titel">
-    <div class="kolonne folk">
+    <div class="folk">
       <figure class="folk-billede-ramme">
-        <Foto navn="arbejde-taet" alt="Vi trækker epoxy ud over et gulv på et job" class="folk-billede" sizes="(max-width: 900px) 100vw, 50vw" />
+        <Foto navn="arbejde-taet" alt="Vi trækker epoxy ud over et gulv på et job" class="folk-billede" sizes="(max-width: 900px) 100vw, 55vw" />
         <figcaption>Fra et job. Epoxyen trækkes ud, mens den er flydende.</figcaption>
       </figure>
-      <div>
+      <div class="folk-tekst">
         <p class="kick">Om os</p>
-        <h2 class="sektion-titel" id="loefter-titel">Derfor vælger folk os</h2>
+        <h2 class="folk-titel" id="loefter-titel">Du taler med den, <em>der lægger gulvet</em></h2>
+        <p class="folk-lede">Vi er et lille firma fra Silkeborg. Ejeren kommer selv ud, måler op og står for gulvet fra første besøg til sidste lag.</p>
         <ul class="folk-liste">
-          {loefter.map((l) => (
+          {loefter.map((l, i) => (
             <li>
+              <span class="folk-nr" aria-hidden="true">0{i + 1}</span>
               <h3>{l.pladsholder ? <span data-pladsholder>{l.titel}</span> : l.titel}</h3>
               <p>{l.tekst}</p>
             </li>
           ))}
         </ul>
-        <a class="knap knap-lys" href={link('om-os')}>Mere om os <span aria-hidden="true">→</span></a>
+        <a class="hero-book folk-link" href={link('om-os')}>Mere om os <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
