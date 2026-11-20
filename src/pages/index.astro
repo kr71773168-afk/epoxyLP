@@ -13,6 +13,10 @@ import { firma } from '../data/firma.js';
 import { erhverv, privat } from '../data/ydelser.js';
 import Side from '../layouts/Side.astro';
 import { link } from '../lib/link.js';
+import { Image } from 'astro:assets';
+import plakat from '../media/arbejde.jpg';
+import mp4 from '../media/arbejde.mp4?url';
+import webm from '../media/arbejde.webm?url';
 
 ---
 <Side
@@ -35,15 +39,22 @@ import { link } from '../lib/link.js';
 
   <section class="sektion os" aria-labelledby="loefter-titel">
     <div class="kolonne os-grid">
-      <div class="os-fotos" data-vis>
-        <figure class="os-stor">
-          <Foto navn="arbejde-taet" alt="Vi trækker epoxy ud over et gulv på et job" sizes="(max-width: 900px) 60vw, 30vw" />
-          <figcaption>Epoxyen trækkes ud<span>Fra et af vores jobs</span></figcaption>
-        </figure>
-        <figure class="os-lille">
-          <Foto navn="arbejde-primer" alt="Primer bliver lagt på betonen" sizes="(max-width: 900px) 40vw, 22vw" />
-          <figcaption>Primeren går på<span>Fra samme job</span></figcaption>
-        </figure>
+      <div class="os-medie" data-vis>
+        <div class="os-video">
+          <Image src={plakat} alt="" widths={[480, 800, 1200]} sizes="(max-width: 900px) 100vw, 45vw" quality={68} class="os-plakat" loading="lazy" decoding="async" />
+          <video muted loop playsinline disablepictureinpicture preload="none" data-auto aria-label="Video fra et af vores jobs: epoxyen bliver trukket ud over gulvet">
+            <source src={webm} type="video/webm">
+            <source src={mp4} type="video/mp4">
+          </video>
+        </div>
+        <div class="os-kort">
+          <p class="os-kort-titel">Samme mand hele vejen</p>
+          <ul>
+            <li><span class="flueben" aria-hidden="true"></span>Måler op og tjekker fugten</li>
+            <li><span class="flueben" aria-hidden="true"></span>Giver dig prisen på skrift</li>
+            <li><span class="flueben" aria-hidden="true"></span>Lægger gulvet selv</li>
+          </ul>
+        </div>
       </div>
       <div class="os-tekst" data-vis>
         <p class="kick">Om os</p>
@@ -81,5 +92,5 @@ import { link } from '../lib/link.js';
 
   <Omraade />
   <FAQ items={faq} alt />
-  <Slut harBeregner foto="aften" />
+  <Slut harBeregner foto="overflade-flakes" />
 </Side>
