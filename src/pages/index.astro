@@ -4,7 +4,6 @@ import Forloeb from '../components/Forloeb.astro';
 import Foto from '../components/Foto.astro';
 import GulvRaekker from '../components/GulvRaekker.astro';
 import Hero from '../components/Hero.astro';
-import Historie from '../components/Historie.astro';
 import MedIPrisen from '../components/MedIPrisen.astro';
 import Omraade from '../components/Omraade.astro';
 import Slut from '../components/Slut.astro';
@@ -28,21 +27,8 @@ import { link } from '../lib/link.js';
     annonceTitel
   />
 
-  <Historie />
-
   <section class="sektion" aria-labelledby="gulve-titel">
     <div class="kolonne">
-      <div class="gr-hoved">
-        <div>
-          <p class="kick">Overflader og priser</p>
-          <h2 class="sektion-titel" id="gulve-titel">Tre gulve. <em>Ét, der passer til dig.</em></h2>
-        </div>
-        <p>Alle tre er epoxy, og alle tre er lette at holde rene. Forskellen er udtrykket.</p>
-        <div class="gulv-links">
-          <a class="hero-book" href={link('katalog')}>Se alle farver i kataloget →</a>
-          <a class="hero-book" href={link('pris')}>Se alle priser →</a>
-        </div>
-      </div>
       <GulvRaekker />
     </div>
   </section>

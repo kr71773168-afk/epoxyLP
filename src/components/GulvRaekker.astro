@@ -1,7 +1,8 @@
 ---
 /**
- * Forsiden: de tre gulvtyper som store rækker med et foto, små mærker i billedet og en datastrimmel under teksten
- * (samme opbygning som ydelserne på sikker-isolering.dk). Fotoene er pladsholdere i src/media/foto/overflade-*.jpg.
+ * Forsiden: de tre gulvtyper samlet i én blok. Et stort foto til venstre og gulvtyperne som rækker til højre.
+ * Et tryk på en række skifter fotoet, mærkerne i billedet og datastrimlen. Uden JavaScript står den første.
+ * Fotoene er pladsholdere i src/media/foto/overflade-*.jpg.
  */
 import cfg from '../calculator/pricing.config.js';
 import { gulvtyper } from '../data/ydelser.js';
@@ -10,52 +11,48 @@ import Foto from './Foto.astro';
 
 const fmt = (n) => Math.round(n).toLocaleString('da-DK');
 const ekstra = {
-  ensfarvet: {
-    titel: 'Det rene, klassiske gulv',
-    maerker: [[22, 62, 'Blank overflade, ingen fuger'], [78, 30, 'Afspejler lyset', true]],
-    egnet: 'Garage og kælder',
-    udtryk: 'Rent og enkelt',
-  },
-  flakes: {
-    titel: 'Flakes, der skjuler snavs',
-    maerker: [[24, 78, 'Flakes giver greb'], [80, 48, 'Tåler bil og dæk', true]],
-    egnet: 'Garage og værksted',
-    udtryk: 'Granit-look',
-  },
-  metallic: {
-    titel: 'Metallic, hvor intet gulv er ens',
-    maerker: [[30, 82, 'Mønstret flyder selv'], [82, 70, 'Dybe spejlinger', true]],
-    egnet: 'Bolig og butik',
-    udtryk: 'Unikt mønster',
-  },
+  ensfarvet: { maerker: [[22, 62, 'Blank overflade, ingen fuger'], [78, 30, 'Afspejler lyset', true]], egnet: 'Garage og kælder', udtryk: 'Rent og enkelt' },
+  flakes: { maerker: [[24, 78, 'Flakes giver greb'], [80, 48, 'Tåler bil og dæk', true]], egnet: 'Garage og værksted', udtryk: 'Granit-look' },
+  metallic: { maerker: [[30, 82, 'Mønstret flyder selv'], [82, 70, 'Dybe spejlinger', true]], egnet: 'Bolig og butik', udtryk: 'Unikt mønster' },
 };
+const pris = (y) => `fra ${fmt(cfg.overflader[y.overflade].prisPrM2 * (1 + cfg.moms))} kr/m²`;
 ---
-<div class="gr">
-  {gulvtyper.map((y, i) => {
-    const e = ekstra[y.overflade];
-    return (
-      <article class:list={['gr-raekke', { vend: i % 2 === 1 }]} data-vis>
-        <a class="gr-foto" href={link(y.slug)} tabindex="-1" aria-hidden="true">
-          <Foto navn={`overflade-${y.overflade}`} alt="" sizes="(max-width: 900px) 100vw, 58vw" />
-          {e.maerker.map(([x, top, t, v], k) => (
-            <span class:list={['gr-maerke', { v }]} style={`left:${x}%;top:${top}%;--d:${.25 + k * .18}s`}><i></i><em>{t}</em></span>
-          ))}
-        </a>
-        <div class="gr-tekst">
-          <span class="gr-k">{String(i + 1).padStart(2, '0')} · {y.navn}</span>
-          <h3>{e.titel}</h3>
-          <p>{y.kort}</p>
-          <dl class="gr-data">
-            <div><dt>Pris fra</dt><dd><span data-pladsholder>{fmt(cfg.overflader[y.overflade].prisPrM2 * (1 + cfg.moms))} kr/m²</span></dd></div>
-            <div><dt>Godt til</dt><dd>{e.egnet}</dd></div>
-            <div><dt>Udtryk</dt><dd>{e.udtryk}</dd></div>
-          </dl>
-          <div class="gr-knapper">
-            <a class="knap knap-accent" href="#beregner">Beregn pris <span aria-hidden="true">→</span></a>
-            <a class="hero-book" href={link(y.slug)}>Læs om {y.navn.toLowerCase()}</a>
-          </div>
+<div class="gv" data-gulvvalg>
+  <div class="gv-scene" data-vis>
+    {gulvtyper.map((y, i) => (
+      <div class:list={['gv-foto', { 'er-aktiv': i === 0 }]} data-gv={i}>
+        <Foto navn={`overflade-${y.overflade}`} alt={`${y.navn}: ${y.kort}`} sizes="(max-width: 900px) 100vw, 58vw" />
+        {ekstra[y.overflade].maerker.map(([x, top, t, v], k) => (
+          <span class:list={['gr-maerke', { v }]} style={`left:${x}%;top:${top}%;--d:${.2 + k * .15}s`} aria-hidden="true"><i></i><em>{t}</em></span>
+        ))}
+      </div>
+    ))}
+  </div>
+  <div class="gv-tekst" data-vis>
+    <p class="kick">Overflader og priser</p>
+    <h2 class="sektion-titel" id="gulve-titel">Tre gulve. <em>Ét, der passer til dig.</em></h2>
+    <div class="gv-valg" role="tablist" aria-label="Gulvtyper">
+      {gulvtyper.map((y, i) => (
+        <button type="button" role="tab" class="gv-knap" aria-selected={i === 0 ? 'true' : 'false'} data-gv-knap={i}>
+          <span class="gv-nr">{String(i + 1).padStart(2, '0')}</span>
+          <span class="gv-navn">{y.navn}</span>
+          <span class="gv-pris" data-pladsholder>{pris(y)}</span>
+        </button>
+      ))}
+    </div>
+    {gulvtyper.map((y, i) => (
+      <div class="gv-info" role="tabpanel" data-gv-info={i} hidden={i !== 0}>
+        <p>{y.kort}</p>
+        <dl class="gr-data">
+          <div><dt>Godt til</dt><dd>{ekstra[y.overflade].egnet}</dd></div>
+          <div><dt>Udtryk</dt><dd>{ekstra[y.overflade].udtryk}</dd></div>
+        </dl>
+        <div class="gr-knapper">
+          <a class="knap knap-accent" href="#beregner">Beregn pris <span aria-hidden="true">→</span></a>
+          <a class="hero-book" href={link(y.slug)}>Læs om {y.navn.toLowerCase()}</a>
         </div>
-      </article>
-    );
-  })}
+      </div>
+    ))}
+    <p class="gv-links"><a href={link('katalog')}>Se alle farver i kataloget →</a> <a href={link('pris')}>Se alle priser →</a></p>
+  </div>
 </div>

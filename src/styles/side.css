@@ -584,38 +584,6 @@ h1, h2 { font-stretch: 104%; }
 .gulv-sektion .gulvkort a:hover .gulvkort-navn { color: #fff; }
 @media (max-width: 860px) { .gulv-sektion .gulvkort-billede { aspect-ratio: 4 / 3; } }
 
-/* ---------- ydelser: stort register, fotoet dukker op ved musen ---------- */
-.ydelses-liste { position: relative; list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--linje); }
-.ydelses-liste li { border-top: 1px solid var(--linje); }
-.ydelses-liste a {
-  position: relative; display: grid; grid-template-columns: 3rem minmax(0, 1.1fr) minmax(0, 1fr) auto 2rem; align-items: center; gap: 1.5rem;
-  padding: clamp(1.25rem, 2.6vw, 1.9rem) 0; text-decoration: none; transition: padding .35s var(--ease);
-}
-.yl-nr { font-size: .9rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
-.yl-navn { font-family: var(--f-display); font-size: clamp(1.5rem, 1rem + 2vw, 2.6rem); font-weight: 500; font-stretch: 104%; letter-spacing: -.025em; line-height: 1.05; transition: color .25s, transform .35s var(--ease); }
-.yl-desk { color: var(--ink-2); font-size: .98rem; max-width: 34ch; }
-.yl-pris { font-size: .95rem; font-weight: 500; color: var(--noegleord); white-space: nowrap; }
-.yl-pil { justify-self: end; font-size: 1.3rem; color: var(--ink); transition: transform .3s var(--ease); }
-.ydelses-liste a:hover .yl-navn { color: var(--noegleord); transform: translateX(.5rem); }
-.ydelses-liste a:hover .yl-pil { transform: translateX(6px); }
-/* Fotoet: lille ved siden af navnet på telefon, svæver efter musen på computer */
-.yl-foto { display: none; }
-@media (hover: hover) and (min-width: 901px) {
-  .yl-foto {
-    display: block; position: absolute; z-index: 2; left: 0; top: 0; width: 15rem; height: auto; aspect-ratio: 4 / 3; object-fit: cover;
-    border-radius: var(--r-billede); pointer-events: none; opacity: 0; transform: translate(var(--mx, 50%), var(--my, 0)) translate(-50%, -50%) scale(.92) rotate(-2deg);
-    transition: opacity .3s var(--ease), transform .45s var(--ease);
-  }
-  .ydelses-liste a:hover .yl-foto { opacity: 1; transform: translate(var(--mx, 50%), var(--my, 0)) translate(-50%, -50%) scale(1) rotate(0); }
-}
-@media (max-width: 900px) {
-  .ydelses-liste a { grid-template-columns: 2.25rem minmax(0, 1fr) 1.5rem; gap: .35rem 1rem; }
-  .yl-nr { grid-row: 1; align-self: start; padding-top: .45rem; }
-  .yl-navn { grid-column: 2; }
-  .yl-desk, .yl-pris { grid-column: 2; }
-  .yl-pil { grid-column: 3; grid-row: 1; }
-}
-
 /* ---------- forsiden: om os med stort foto ud til kanten ---------- */
 .folk { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: center; padding-right: calc(max(0px, (100vw - var(--maks)) / 2) + var(--gutter)); }
 .folk-billede-ramme { margin: 0; }
@@ -703,90 +671,20 @@ h1, h2 { font-stretch: 104%; }
   .med-oveni li { margin: 0; padding: .45rem 0; border-right: 0; border-top: 1px solid var(--moerk-linje); }
 }
 
-/* ---------- sådan bliver dit gulv til: billederne skifter, mens man scroller ---------- */
-.hist { position: relative; height: 420vh; background: #FCF5EF; }
-.hist-stik { position: sticky; top: 0; height: 100vh; padding-top: 4.75rem; display: grid; align-items: center; overflow: hidden; }
-.hist-raekke { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 var(--gutter); display: grid; grid-template-columns: minmax(19rem, .5fr) minmax(0, 1.5fr); gap: clamp(1.5rem, 3vw, 3rem); align-items: center; }
-.hist h2 { font-size: clamp(2rem, 1.3rem + 2.2vw, 3rem); line-height: 1.05; text-wrap: balance; }
-.hist h2 em { font-style: normal; color: var(--noegleord); }
-.hist-prog { display: flex; gap: 6px; margin: 1.5rem 0 1.4rem; }
-.hist-prog i { position: relative; flex: 1; height: 2px; background: #E3DBD2; overflow: hidden; }
-.hist-prog i::after { content: ""; position: absolute; inset: 0; background: var(--accent); transform: scaleX(var(--f, 0)); transform-origin: left; }
-.hist-trin { position: relative; list-style: none; margin: 0; padding: 0; min-height: 13rem; }
-.hist-trin li { position: absolute; inset: 0 0 auto; opacity: 0; transform: translateY(10px); transition: opacity .45s ease, transform .6s var(--ease); pointer-events: none; }
-.hist-trin li.er-aktiv { opacity: 1; transform: none; pointer-events: auto; }
-.hist-n { font-size: .88rem; color: var(--ink-3); }
-.hist-trin b { display: block; margin-top: .15rem; font-family: var(--f-display); font-size: 1.3rem; font-weight: 500; letter-spacing: -.01em; }
-.hist-trin p { margin: .5rem 0 0; color: var(--ink-2); font-size: 1.05rem; max-width: 36ch; }
-.hist-trin .knap { margin-top: 1.25rem; }
-.hist-scene { position: relative; aspect-ratio: 2688 / 1520; -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent), linear-gradient(transparent, #000 5%, #000 95%, transparent); -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent), linear-gradient(transparent, #000 5%, #000 95%, transparent); mask-composite: intersect; }
-.hist-billede { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; will-change: opacity; }
-.hist-billede[data-i="0"] { opacity: 1; }
-.hist-maerke { position: absolute; display: flex; align-items: center; gap: 8px; transform: translate(-6px, -50%); opacity: 0; transition: opacity .4s ease; pointer-events: none; white-space: nowrap; }
-.hist-maerke.v { flex-direction: row-reverse; transform: translate(calc(-100% + 6px), -50%); }
-.hist-maerke.er-aktiv { opacity: 1; }
-.hist-maerke i { position: relative; flex: none; width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px rgba(30, 60, 45, .35); }
-.hist-maerke i::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--accent); }
-.hist-maerke em { font-style: normal; font-size: .85rem; font-weight: 500; color: var(--ink); background: rgba(255, 255, 255, .94); padding: .3rem .6rem; border-radius: 6px; box-shadow: 0 0 0 1px rgba(28, 35, 32, .06); }
-@media (max-width: 900px) {
-  .hist { height: 360vh; }
-  .hist-raekke { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
-  .hist-scene { order: -1; margin-inline: calc(var(--gutter) * -1); }
-  .hist .kick { display: none; }
-  .hist h2 { font-size: 1.6rem; }
-  .hist-prog { margin: .9rem 0 .9rem; }
-  .hist-trin { min-height: 11.5rem; }
-  .hist-trin p { font-size: .98rem; }
-  .hist-maerke em { font-size: .72rem; padding: .2rem .45rem; }
-}
-/* Uden scroll-animation: alle trin under hinanden og det færdige gulv */
-@media (prefers-reduced-motion: reduce) {
-  .hist { height: auto; }
-  .hist-stik { position: static; height: auto; padding-block: 4rem; }
-  .hist-billede { opacity: 0 !important; }
-  .hist-billede[data-i="4"] { opacity: 1 !important; position: relative; }
-  .hist-trin { min-height: 0; }
-  .hist-trin li { position: static; opacity: 1; transform: none; margin-bottom: 1.25rem; }
-  .hist-prog, .hist-maerke { display: none; }
-}
-
-/* ---------- forsiden: gulvtyperne som store rækker med mærker i fotoet ---------- */
-.gr-hoved { display: grid; grid-template-columns: 1.1fr 1fr; gap: 1rem 3rem; align-items: end; padding-bottom: 2.25rem; border-bottom: 1px solid var(--linje); }
-.gr-hoved .sektion-titel { margin: 0; }
-.gr-hoved > p { color: var(--ink-2); font-size: 1.1rem; max-width: 42ch; justify-self: end; margin: 0; }
-.gr-hoved .gulv-links { grid-column: 2; justify-self: end; display: flex; gap: .5rem 1.75rem; flex-wrap: wrap; }
-.gr-raekke { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: center; padding-block: clamp(2.5rem, 5vw, 3.75rem); border-bottom: 1px solid var(--linje); }
-.gr-raekke:last-child { border-bottom: 0; padding-bottom: 0; }
-.gr-raekke.vend { grid-template-columns: 5fr 7fr; }
-.gr-raekke.vend .gr-foto { order: 2; }
-.gr-foto { position: relative; display: block; aspect-ratio: 3 / 2; overflow: hidden; border-radius: 14px; background: var(--flade-2); }
-.gr-foto img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.05); transition: transform 1.4s var(--ease); }
-.gr-raekke.er-synlig .gr-foto img, html:not(.js-vis) .gr-foto img { transform: none; }
-.gr-foto:hover img { transform: scale(1.02); }
+/* ---------- mærker i fotos og datastrimmel (gulvtyper og om os) ---------- */
 .gr-maerke { position: absolute; display: flex; align-items: center; gap: 8px; transform: translate(-7px, -50%); opacity: 0; transition: opacity .5s ease var(--d); pointer-events: none; }
 .gr-maerke.v { flex-direction: row-reverse; transform: translate(calc(-100% + 7px), -50%); }
-.gr-raekke.er-synlig .gr-maerke, html:not(.js-vis) .gr-maerke { opacity: 1; }
 .gr-maerke i { position: relative; flex: none; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 4px rgba(255, 255, 255, .3); }
 .gr-maerke i::after { content: ""; position: absolute; inset: 3.5px; border-radius: 50%; background: var(--accent); }
 .gr-maerke em { font-style: normal; font-size: .85rem; font-weight: 500; background: #fff; color: var(--ink); padding: .35rem .7rem; border-radius: 7px; white-space: nowrap; box-shadow: 0 8px 20px -10px rgba(0, 0, 0, .45); }
 .gr-k { color: var(--noegleord); font-weight: 500; font-size: .95rem; }
-.gr-tekst h3 { font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.15rem); font-weight: 500; letter-spacing: -.02em; line-height: 1.1; margin-top: .5rem; }
-.gr-tekst > p { color: var(--ink-2); font-size: 1.08rem; margin: .85rem 0 0; max-width: 42ch; }
 .gr-data { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 1.6rem 0 0; border-block: 1px solid var(--linje); }
 .gr-data div { padding: .85rem 0 .85rem 1rem; border-left: 1px solid var(--linje); }
 .gr-data div:first-child { padding-left: 0; border-left: 0; }
 .gr-data dt { font-size: .82rem; color: var(--ink-3); }
 .gr-data dd { margin: .2rem 0 0; font-family: var(--f-display); font-size: 1.12rem; font-weight: 500; letter-spacing: -.01em; }
 .gr-knapper { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; margin-top: 1.75rem; }
-@media (max-width: 900px) {
-  .gr-hoved { grid-template-columns: 1fr; }
-  .gr-hoved > p, .gr-hoved .gulv-links { justify-self: start; grid-column: auto; }
-  .gr-raekke, .gr-raekke.vend { grid-template-columns: 1fr; gap: 1.5rem; }
-  .gr-raekke.vend .gr-foto { order: 0; }
-  .gr-maerke em { font-size: .74rem; padding: .25rem .5rem; }
-  .gr-data dd { font-size: 1rem; }
-  .gr-data div { padding-left: .75rem; }
-}
+@media (max-width: 900px) { .gr-maerke em { font-size: .74rem; padding: .25rem .5rem; } .gr-data dd { font-size: 1rem; } .gr-data div { padding-left: .75rem; } }
 
 /* ---------- forløbet: en stribe epoxy, der trækkes ud ved scroll ---------- */
 .fl-hoved { text-align: center; max-width: 40rem; margin: 0 auto; }
@@ -833,3 +731,88 @@ h1, h2 { font-stretch: 104%; }
 .slut-aften::before { background: rgba(10, 16, 28, .28); }
 .slut-aften h2 { text-shadow: 0 1px 24px rgba(0, 0, 0, .35); }
 @media (max-width: 600px) { .slut-aften { padding-bottom: 15rem; } .slut-aften .slut-billede { object-position: 72% 100%; } }
+
+/* ---------- forsiden: gulvtyperne i én blok, der skifter ---------- */
+.gv { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+.gv-scene { position: relative; aspect-ratio: 4 / 3.4; border-radius: 14px; overflow: hidden; background: var(--flade-2); }
+.gv-foto { position: absolute; inset: 0; opacity: 0; transition: opacity .6s var(--ease); }
+.gv-foto.er-aktiv { opacity: 1; }
+.gv-foto img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.04); transition: transform 1.6s var(--ease); }
+.gv-foto.er-aktiv img { transform: none; }
+.gv-foto .gr-maerke { opacity: 0; }
+.gv-foto.er-aktiv .gr-maerke { opacity: 1; }
+.gv-tekst .sektion-titel { margin-bottom: 1.5rem; }
+.gv-tekst .sektion-titel em { font-style: normal; color: var(--noegleord); }
+.gv-valg { border-bottom: 1px solid var(--linje); }
+.gv-knap {
+  position: relative; display: grid; grid-template-columns: 2.25rem minmax(0, 1fr) auto; align-items: baseline; gap: 1rem; width: 100%;
+  padding: 1rem 0; border: 0; border-top: 1px solid var(--linje); background: none; font: inherit; color: var(--ink-3); text-align: left; cursor: pointer; transition: color .2s;
+}
+.gv-knap::before { content: ""; position: absolute; left: 0; top: -1px; height: 1px; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .5s var(--ease); }
+.gv-knap[aria-selected="true"]::before { transform: scaleX(1); }
+.gv-knap:hover, .gv-knap[aria-selected="true"] { color: var(--ink); }
+.gv-nr { font-size: .85rem; font-variant-numeric: tabular-nums; }
+.gv-knap[aria-selected="true"] .gv-nr { color: var(--noegleord); }
+.gv-navn { font-family: var(--f-display); font-size: clamp(1.25rem, 1rem + .9vw, 1.6rem); font-weight: 500; letter-spacing: -.015em; }
+.gv-pris { font-size: .95rem; white-space: nowrap; }
+.gv-knap[aria-selected="true"] .gv-pris { color: var(--noegleord); font-weight: 500; }
+.gv-info { animation: spgind .45s var(--ease); }
+.gv-info > p { color: var(--ink-2); font-size: 1.05rem; margin: 1.25rem 0 0; max-width: 42ch; }
+.gv-info .gr-data { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 1.25rem; }
+.gv-info .gr-knapper { margin-top: 1.4rem; }
+.gv-links { display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; margin: 1.5rem 0 0; font-size: .92rem; }
+.gv-links a { color: var(--ink-2); text-decoration: none; }
+.gv-links a:hover { color: var(--ink); text-decoration: underline; }
+@media (max-width: 900px) {
+  .gv { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .gv-scene { aspect-ratio: 4 / 3; order: 2; }
+  .gv-tekst { display: contents; }
+  .gv-tekst > .kick, .gv-tekst > .sektion-titel { order: 1; margin-bottom: 0; }
+  .gv-valg { order: 3; }
+  .gv-info { order: 4; }
+  .gv-links { order: 5; }
+  .gv-info > p { margin-top: 0; }
+}
+
+/* ---------- ydelser: høje fotokort ---------- */
+.yk { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: clamp(1rem, 2vw, 1.5rem); }
+.yk a { display: grid; gap: .35rem; text-decoration: none; }
+.yk-foto { display: block; overflow: hidden; border-radius: 12px; background: var(--flade-2); aspect-ratio: 4 / 5; margin-bottom: .75rem; }
+.yk-foto img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
+.yk a:hover .yk-foto img { transform: scale(1.04); }
+.yk-navn { font-family: var(--f-display); font-size: 1.3rem; font-weight: 500; letter-spacing: -.015em; transition: color .2s; }
+.yk a:hover .yk-navn { color: var(--noegleord); }
+.yk-desk { color: var(--ink-2); font-size: .95rem; }
+.yk-pris { margin-top: .5rem; padding-top: .6rem; border-top: 1px solid var(--linje); font-size: .92rem; font-weight: 500; color: var(--noegleord); display: flex; justify-content: space-between; }
+.yk-pil { color: var(--ink); transition: transform .25s var(--ease); }
+.yk a:hover .yk-pil { transform: translateX(4px); }
+@media (max-width: 600px) { .yk-foto { aspect-ratio: 4 / 3; } }
+
+/* ---------- beregneren som pop-up ---------- */
+.pop-aaben, .pop-aaben body { overflow: hidden; }
+.pop { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 2rem 1rem; }
+.pop[hidden] { display: none; }
+.pop-bag { position: absolute; inset: 0; background: rgba(12, 17, 15, .62); opacity: 0; transition: opacity .25s ease; }
+.pop-panel { position: relative; display: flex; flex-direction: column; width: min(100%, 34rem); max-height: calc(100dvh - 4rem); opacity: 0; transform: translateY(14px) scale(.985); transition: opacity .25s ease, transform .35s var(--ease); }
+.pop.er-aaben .pop-bag, .pop.er-aaben .pop-panel { opacity: 1; transform: none; }
+.pop-top { display: flex; justify-content: flex-end; align-items: center; padding-bottom: .6rem; }
+.pop-tilbage, .pop-navn { display: none; }
+.pop-luk { display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .2rem; border: 0; background: none; color: #fff; font: inherit; font-weight: 500; cursor: pointer; }
+.pop-luk span { font-size: 1.4rem; line-height: 1; }
+.pop-krop { overflow-y: auto; overscroll-behavior: contain; border-radius: var(--r-kort); }
+.pop .quiz { box-shadow: var(--skygge); background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.pop .quiz .raekke { background: #fff; }
+.pop .quiz-top { background: var(--moerk-gron); }
+/* Mobil: fuld skærm med en bjælke øverst */
+@media (max-width: 960px) {
+  .pop { padding: 0; place-items: stretch; }
+  .pop-panel { width: 100%; max-height: none; height: 100dvh; background: #fff; transform: translateY(24px); }
+  .pop-top { justify-content: space-between; padding: .7rem var(--gutter); border-bottom: 1px solid var(--linje); background: #fff; }
+  .pop-tilbage { display: inline-flex; padding: .3rem 0; border: 0; background: none; font: inherit; font-weight: 500; color: var(--ink); cursor: pointer; }
+  .pop-navn { display: block; font-family: var(--f-display); font-weight: 600; }
+  .pop-luk { display: none; }
+  .pop-krop { flex: 1; border-radius: 0; }
+  .pop .quiz { box-shadow: none; border-radius: 0; min-height: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .pop-bag, .pop-panel { transition: none; } }
+.pop-aaben .bundbar, .pop-aaben .samtykke { display: none !important; }

@@ -262,6 +262,9 @@ export function startQuiz() {
   function fokuser(el) {
     requestAnimationFrame(() => {
       // Er beregnerens top rullet ud af skærmen eller ind under headeren (typisk på mobil), rulles den tilbage i syne
+      // I pop-up'en ruller selve vinduet ikke. Der starter hvert trin bare øverst.
+      const pop = quiz.closest('.pop-krop');
+      if (pop) { pop.scrollTop = 0; el.focus({ preventScroll: true }); return; }
       const hoved = document.querySelector('.top')?.offsetHeight ?? 0;
       const top = quiz.getBoundingClientRect().top;
       if (top < hoved || top > window.innerHeight * 0.5) {
@@ -290,9 +293,9 @@ export function startQuiz() {
     else forbered(TRIN[nr]);
     if (historik === 'push') {
       hIndex += 1;
-      history.pushState({ quiz: nr, i: hIndex }, '');
+      history.pushState({ quiz: nr, i: hIndex, pop: Boolean(quiz.closest('.pop')) }, '');
     } else if (historik === 'replace') {
-      history.replaceState({ quiz: nr, i: hIndex }, '');
+      history.replaceState({ quiz: nr, i: hIndex, pop: Boolean(quiz.closest('.pop')) }, '');
     }
     if (fokus) fokuser(visPrisen ? $('#res-titel') : erSlut ? $('#kontakt-titel') : $(`.spg[data-trin="${TRIN[nr]}"] .spg-titel`));
     lyttere.forEach((fn) => fn());

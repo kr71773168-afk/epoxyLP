@@ -106,47 +106,6 @@ if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: re
   for (const el of vis) io.observe(el);
 }
 
-// Ydelser: fotoet følger musen hen over rækken
-for (const liste of document.querySelectorAll('[data-ydelser]')) {
-  liste.addEventListener('pointermove', (e) => {
-    const a = e.target.closest('a');
-    if (!a) return;
-    const r = a.getBoundingClientRect();
-    a.style.setProperty('--mx', `${e.clientX - r.left}px`);
-    a.style.setProperty('--my', `${e.clientY - r.top}px`);
-  });
-}
-
-// "Sådan bliver dit gulv til": billederne toner over i hinanden, mens man scroller gennem sektionen
-const hist = document.querySelector('[data-hist]');
-if (hist && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  const billeder = [...hist.querySelectorAll('.hist-billede')];
-  const trin = [...hist.querySelectorAll('.hist-trin li')];
-  const maerker = [...hist.querySelectorAll('.hist-maerke')];
-  const prog = [...hist.querySelectorAll('.hist-prog i')];
-  const n = billeder.length - 1;
-  // Hent alle billeder, når sektionen nærmer sig, så skiftene ikke hakker
-  new IntersectionObserver(([e], o) => { if (e.isIntersecting) { billeder.forEach((b) => { b.loading = 'eager'; }); o.disconnect(); } }, { rootMargin: '600px 0px' }).observe(hist);
-  let sidst = -1;
-  const tegn = () => {
-    const r = hist.getBoundingClientRect();
-    const laengde = r.height - innerHeight;
-    const p = Math.min(1, Math.max(0, -r.top / laengde));
-    const f = p * n * 1.08; // lidt luft til sidst, så det færdige gulv står et øjeblik
-    billeder.forEach((b, i) => { if (i) b.style.opacity = String(Math.min(1, Math.max(0, (f - (i - .35)) / .22))); });
-    prog.forEach((el, k) => el.style.setProperty('--f', String(Math.min(1, Math.max(0, f - k)))));
-    const aktiv = Math.min(n, Math.floor(f + .45));
-    if (aktiv !== sidst) {
-      sidst = aktiv;
-      trin.forEach((t, i) => t.classList.toggle('er-aktiv', i === aktiv));
-      maerker.forEach((m) => m.classList.toggle('er-aktiv', Number(m.dataset.t) === aktiv));
-    }
-  };
-  let ventende = false;
-  addEventListener('scroll', () => { if (!ventende) { ventende = true; requestAnimationFrame(() => { ventende = false; tegn(); }); } }, { passive: true });
-  addEventListener('resize', tegn);
-  tegn();
-}
 
 // Forløbet: striben trækkes ud, mens sektionen passerer midten af skærmen
 const fl = document.querySelector('[data-forloeb]');
@@ -162,4 +121,85 @@ if (fl) {
   };
   addEventListener('scroll', () => requestAnimationFrame(opdater), { passive: true });
   opdater();
+}
+
+// Gulvtyperne på forsiden: et tryk på en række skifter foto, mærker og tekst. Piletasterne flytter mellem rækkerne.
+for (const gv of document.querySelectorAll('[data-gulvvalg]')) {
+  const knapper = [...gv.querySelectorAll('[data-gv-knap]')];
+  const vaelg = (i, fokus) => {
+    knapper.forEach((k, j) => { k.setAttribute('aria-selected', String(j === i)); k.tabIndex = j === i ? 0 : -1; });
+    gv.querySelectorAll('[data-gv]').forEach((el, j) => el.classList.toggle('er-aktiv', j === i));
+    gv.querySelectorAll('[data-gv-info]').forEach((el, j) => { el.hidden = j !== i; });
+    if (fokus) knapper[i].focus();
+  };
+  knapper.forEach((k, i) => {
+    if (i) k.tabIndex = -1;
+    k.addEventListener('click', () => vaelg(i));
+    k.addEventListener('keydown', (e) => {
+      const r = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+      if (r) { e.preventDefault(); vaelg((i + r + knapper.length) % knapper.length, true); }
+    });
+  });
+}
+
+// Beregneren som pop-up: knapperne "Beregn pris" længere nede åbner beregneren midt på skærmen (computer)
+// eller i fuld skærm (mobil). Det er den samme beregner, der flyttes ind i pop-up'en, så svarene følger med.
+// Luk, Esc, klik udenfor og browserens tilbage-knap lukker den, og man står, hvor man var.
+const quizEl = document.getElementById('beregner');
+if (quizEl) {
+  const plads = document.createElement('div');
+  plads.className = 'pop-plads';
+  const pop = document.createElement('div');
+  pop.className = 'pop';
+  pop.hidden = true;
+  pop.innerHTML = `<div class="pop-bag" data-pop-luk></div>
+    <div class="pop-panel" role="dialog" aria-modal="true" aria-label="Prisberegner">
+      <div class="pop-top"><button type="button" class="pop-tilbage" data-pop-luk>← Tilbage</button><span class="pop-navn">Silkeborg Epoxy</span><button type="button" class="pop-luk" data-pop-luk aria-label="Luk beregneren">Luk <span aria-hidden="true">×</span></button></div>
+      <div class="pop-krop"></div>
+    </div>`;
+  document.body.append(pop);
+  const krop = pop.querySelector('.pop-krop');
+  let aaben = false;
+  let fra = null;
+  let y = 0;
+  const aabn = (udloeser) => {
+    if (aaben) return;
+    aaben = true;
+    fra = udloeser;
+    y = scrollY;
+    plads.style.height = `${quizEl.offsetHeight}px`;
+    quizEl.before(plads);
+    krop.append(quizEl);
+    pop.hidden = false;
+    document.documentElement.classList.add('pop-aaben');
+    history.pushState({ ...(history.state || {}), pop: true }, '');
+    requestAnimationFrame(() => { pop.classList.add('er-aaben'); (quizEl.querySelector('.spg:not([hidden]) .spg-titel, .kontakt-trin:not([hidden]) .spg-titel') || pop.querySelector('.pop-luk')).focus({ preventScroll: true }); });
+  };
+  const luk = () => {
+    if (!aaben) return;
+    aaben = false;
+    pop.classList.remove('er-aaben');
+    pop.hidden = true;
+    plads.replaceWith(quizEl);
+    document.documentElement.classList.remove('pop-aaben');
+    fra?.focus({ preventScroll: true });
+    // Beregneren ruller sig selv i syne, når den skifter trin. Efter lukning skal man stå, hvor man var.
+    const tilbage = () => scrollTo({ top: y, behavior: 'instant' });
+    tilbage();
+    requestAnimationFrame(() => requestAnimationFrame(tilbage));
+    setTimeout(tilbage, 120);
+  };
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href="#beregner"], a.top-cta, .mobilmenu a[href$="/pris/"]');
+    if (!a || quizEl.contains(a)) return;
+    e.preventDefault();
+    document.documentElement.classList.remove('menu-aaben');
+    aabn(a);
+  });
+  pop.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-pop-luk]')) return;
+    if (history.state?.pop) history.back(); else luk();
+  });
+  addEventListener('keydown', (e) => { if (aaben && e.key === 'Escape') { if (history.state?.pop) history.back(); else luk(); } });
+  addEventListener('popstate', (e) => { if (aaben && !e.state?.pop) luk(); });
 }

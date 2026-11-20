@@ -1,12 +1,11 @@
 ---
 /**
- * Ydelser som kort: et foto af rummet (eller gulvtypen), navn, kort tekst og fra-pris. Ingen ikoner.
+ * Ydelser som høje fotokort: et foto af rummet (eller gulvtypen), navn, kort tekst og fra-pris.
+ * Fotoene ligger i src/media/foto og hedder rum-<rum>.jpg og overflade-<overflade>.jpg (pladsholdere).
  */
-import { Image } from 'astro:assets';
 import cfg from '../calculator/pricing.config.js';
 import { link } from '../lib/link.js';
 import Foto from './Foto.astro';
-const rumFotos = import.meta.glob<{ default: ImageMetadata }>('../media/valg/rum-*.webp', { eager: true });
 
 interface Props {
   ydelser: any[];
@@ -20,19 +19,16 @@ function fraPris(y) {
   const billigst = Math.min(...Object.values(cfg.overflader).map((o) => o.prisPrM2));
   return r.erhverv ? `fra ${fmt(billigst)} kr/m² ekskl. moms` : `fra ${fmt(billigst * (1 + cfg.moms))} kr/m²`;
 }
+const foto = (y) => (y.overflade ? `overflade-${y.overflade}` : `rum-${y.rum}`);
 ---
-<ul class="ydelses-liste" data-ydelser>
-  {ydelser.map((y, i) => (
+<ul class="yk">
+  {ydelser.map((y) => (
     <li data-vis>
       <a href={link(y.slug)}>
-        <span class="yl-nr" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-        {y.overflade || !rumFotos[`../media/valg/rum-${y.rum}.webp`]
-          ? <Foto navn={`gulv-${y.overflade ?? 'ensfarvet'}`} alt="" class="yl-foto" sizes="240px" />
-          : <Image src={rumFotos[`../media/valg/rum-${y.rum}.webp`].default} alt="" widths={[200]} sizes="240px" quality={72} class="yl-foto" loading="lazy" decoding="async" />}
-        <span class="yl-navn">{y.navn}</span>
-        <span class="yl-desk">{y.kort}</span>
-        <span class="yl-pris">{fraPris(y)}</span>
-        <span class="yl-pil" aria-hidden="true">→</span>
+        <span class="yk-foto"><Foto navn={foto(y)} alt="" sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 25vw" /></span>
+        <span class="yk-navn">{y.navn}</span>
+        <span class="yk-desk">{y.kort}</span>
+        <span class="yk-pris">{fraPris(y)} <span class="yk-pil" aria-hidden="true">→</span></span>
       </a>
     </li>
   ))}
