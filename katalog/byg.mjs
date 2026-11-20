@@ -87,7 +87,7 @@ const kort = typer.map((g, gi) => `
             </div>
             <p class="tekst">${esc(g.tekst)}</p>
             <ul class="fordele">${g.fordele.map((f) => `
-              <li><span class="fordel-ikon">${ikon(f.ikon)}</span>${esc(f.tekst)}</li>`).join('')}
+              <li>${esc(f.tekst)}</li>`).join('')}
             </ul>
           </div>
           <a class="bjaelke" href="#kontakt"><span>${esc(g.bjaelke)}</span>${ikon('pil')}</a>
@@ -160,8 +160,8 @@ ${css}
       <source src="video/arbejde.mp4" type="video/mp4">
     </video>
     <div class="kol hero-indre">
-      <p class="tag">Stærke gulve<br>til krævende miljøer</p>
-      <h1 id="titel">Vores<br>gulvtyper</h1>
+      <p class="tag">Stærke gulve til krævende miljøer</p>
+      <h1 id="titel">Vores <em>gulvtyper</em></h1>
       <p class="hero-tekst">Vi tilbyder en række slidstærke og flotte gulvløsninger, der kombinerer funktion, holdbarhed og et godt udtryk. Her er vores fem gulvtyper. Tryk på en farve, og se overfladen.</p>
       <nav class="hop" aria-label="Gulvtyperne">${typer.map((g) => `<a href="#${g.slug}">${esc(g.navn)}</a>`).join('')}</nav>
     </div>
@@ -197,7 +197,7 @@ ${css}
 
   <section class="loefter" aria-label="Det får du hos os">
     <ul class="kol loefter-liste">${loefter.map((l) => `
-      <li>${ikon(l.ikon, 'loefte-ikon')}<p><b>${esc(l.titel)}</b><span>${esc(l.tekst)}</span></p></li>`).join('')}
+      <li><p><b>${esc(l.titel)}</b><span>${esc(l.tekst)}</span></p></li>`).join('')}
     </ul>
   </section>
 </main>

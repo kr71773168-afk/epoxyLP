@@ -28,6 +28,7 @@
 
   /* mørke flader: topbjælke, hero over video, områder, bund */
   --moerk: #17211E;
+  --moerk-gron: #22382E;
   --moerk-ink: #EEF2EF;
   --moerk-ink-2: rgba(238, 242, 239, .78);
   --moerk-linje: rgba(238, 242, 239, .16);
@@ -36,9 +37,9 @@
   --tjek-ink: #17211E;
   --tjek-lys-bg: #3E6B55;
   --tjek-lys-ink: #FFFFFF;
-  --hero-slor: linear-gradient(90deg, rgba(17, 25, 22, .9) 0%, rgba(17, 25, 22, .78) 46%, rgba(17, 25, 22, .5) 100%);
-  --hero-slor-mobil: linear-gradient(180deg, rgba(17, 25, 22, .72) 0%, rgba(17, 25, 22, .86) 100%);
-  --slut-slor: linear-gradient(90deg, rgba(17, 25, 22, .92) 0%, rgba(17, 25, 22, .74) 55%, rgba(17, 25, 22, .4) 100%);
+  --hero-slor: rgba(12, 17, 15, .64);
+  --hero-slor-mobil: rgba(12, 17, 15, .64);
+  --slut-slor: rgba(12, 17, 15, .58);
   --stjerne: #E0A21B;
 
   --fod-bg: #17211E;
@@ -56,7 +57,7 @@
   --f-tekst: 'Archivo Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --tekst-vaegt: 400;
   --tekst-fed: 600;
-  --h-vaegt: 650;
+  --h-vaegt: 600;
   --h-spacing: -.02em;
   --h-linje: 1.08;
   --h-transform: none;
@@ -76,8 +77,8 @@
   --fejl: #B3261E;
   --kladde: #FFD84D;
 
-  --t-h1: clamp(2.15rem, 1.35rem + 3vw, 3.75rem);
-  --t-h2: clamp(1.7rem, 1.25rem + 1.6vw, 2.5rem);
+  --t-h1: clamp(2.1rem, 1.35rem + 2.6vw, 3.4rem);
+  --t-h2: clamp(1.65rem, 1.25rem + 1.4vw, 2.3rem);
   --t-spg: clamp(1.3rem, 1.15rem + .5vw, 1.55rem);
   --t-tekst: 1.0625rem;
   --t-lille: .9rem;

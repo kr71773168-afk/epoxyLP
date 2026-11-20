@@ -1,10 +1,10 @@
 ---
 /**
- * Toppen på forsiden, prissiden, ydelserne og bysiderne: overskrift, flueben, knapper og beregneren.
+ * Toppen på forsiden, prissiden, ydelserne og bysiderne: overskrift, korte løfter, knapper og beregneren.
  * medie="video" viser videoen fra et job som levende baggrund. Ellers et foto fra src/media/foto (navnet uden .jpg).
  * Stil A og C: mediet fylder hele toppen bag en mørk tone. Stil B: mediet står i en rund ramme, og beregneren ligger ind over.
  * Skriv [ord] i titlen for at fremhæve dem, fx "Epoxygulve i Silkeborg. [Se prisen på 60 sekunder.]"
- * `punkter` er korte løfter med flueben. De må indeholde HTML (fx en pladsholder).
+ * `punkter` er korte løfter på hver sin linje med en hårlinje imellem. De må indeholde HTML (fx en pladsholder).
  * Slot "top" er til brødkrummer. Standard-slot kommer under teksten (fx fakta om byen).
  * På mobil står beregneren lige under overskriften (over folden). Flueben og knapper kommer efter beregneren.
  */
@@ -15,6 +15,7 @@ import plakat from '../media/arbejde.jpg';
 import mp4 from '../media/arbejde.mp4?url';
 import webm from '../media/arbejde.webm?url';
 import Beregner from './Beregner.astro';
+import Baand from './Baand.astro';
 import Foto from './Foto.astro';
 import Ikon from './Ikon.astro';
 
@@ -35,7 +36,6 @@ const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 const titelHtml = esc(titel).replace(/\[(.+?)\]/g, '<em>$1</em>');
 const a = firma.anmeldelser;
 const harAnmeldelser = Boolean(a.snit && a.antal);
-const garanti = firma.garanti.replace(/ garanti$/, '');
 ---
 <section class:list={['hero', { 'hero-med-bjaelke': bjaelke }]} aria-labelledby="hero-titel">
   <div class="hero-medie">
@@ -76,8 +76,8 @@ const garanti = firma.garanti.replace(/ garanti$/, '');
 
   <div class="hero-ekstra">
     {punkter.length > 0 && (
-      <ul class="tjekliste hero-punkter">
-        {punkter.map((p) => <li><Ikon navn="tjek" /><span set:html={p} /></li>)}
+      <ul class="hero-punkter">
+        {punkter.map((p) => <li set:html={p} />)}
       </ul>
     )}
     <div class="hero-knapper">
@@ -90,12 +90,5 @@ const garanti = firma.garanti.replace(/ garanti$/, '');
     <Beregner rum={rum} overflade={overflade} />
   </div>
 
-  {bjaelke && (
-    <ul class="hero-bjaelke">
-      <li><Ikon navn="ur" /><b>60 sek.</b><span>til en pris</span></li>
-      <li><Ikon navn="kontrakt" /><b>Fast pris</b><span>på skrift</span></li>
-      <li><Ikon navn="skjold" /><b><span data-pladsholder>{garanti}</span></b><span>garanti</span></li>
-      <li><Ikon navn="sted" /><b>60 km</b><span>kørsel med i prisen</span></li>
-    </ul>
-  )}
 </section>
+{bjaelke && <Baand />}

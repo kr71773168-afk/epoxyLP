@@ -4,7 +4,6 @@ import Forloeb from '../components/Forloeb.astro';
 import Foto from '../components/Foto.astro';
 import GulvKort from '../components/GulvKort.astro';
 import Hero from '../components/Hero.astro';
-import Ikon from '../components/Ikon.astro';
 import MedIPrisen from '../components/MedIPrisen.astro';
 import Omraade from '../components/Omraade.astro';
 import Slut from '../components/Slut.astro';
@@ -22,8 +21,6 @@ const loefter = [
   { titel: 'Fast pris på skrift', tekst: 'Efter den gratis besigtigelse får du en fast pris. Den ændrer sig ikke undervejs.' },
   { titel: firma.garanti, tekst: 'Vi står inde for gulvet. Sker der noget, der skyldes vores arbejde, kommer vi og udbedrer det.', pladsholder: true },
 ];
-const garantiAar = firma.garanti.replace(/ års? garanti$/, '');
-const ejerNavn = firma.ejer.startsWith('[') ? 'Ejeren' : firma.ejer;
 ---
 <Side
   titel="Epoxygulve i Silkeborg · Se prisen på 60 sekunder · Silkeborg Epoxy"
@@ -60,21 +57,16 @@ const ejerNavn = firma.ejer.startsWith('[') ? 'Ejeren' : firma.ejer;
 
   <section class="sektion sektion-alt" aria-labelledby="loefter-titel">
     <div class="kolonne folk">
-      <div class="folk-billede-ramme">
+      <figure class="folk-billede-ramme">
         <Foto navn="arbejde-taet" alt="Vi trækker epoxy ud over et gulv på et job" class="folk-billede" sizes="(max-width: 900px) 100vw, 50vw" />
-        <p class="segl"><Ikon navn="skjold" /><b><span data-pladsholder>{garantiAar}</span> år</b><span>garanti</span></p>
-        <figure class="citat">
-          <blockquote><p><span data-pladsholder>“Jeg kommer selv ud og måler op, og jeg er der, når gulvet bliver lagt. Så ved du, hvem du har med at gøre.”</span></p></blockquote>
-          <figcaption><span data-pladsholder>{ejerNavn}</span>, Silkeborg Epoxy</figcaption>
-        </figure>
-      </div>
+        <figcaption>Fra et job. Epoxyen trækkes ud, mens den er flydende.</figcaption>
+      </figure>
       <div>
         <p class="kick">Om os</p>
         <h2 class="sektion-titel" id="loefter-titel">Derfor vælger folk os</h2>
         <ul class="folk-liste">
           {loefter.map((l) => (
             <li>
-              <Ikon navn="tjek" />
               <h3>{l.pladsholder ? <span data-pladsholder>{l.titel}</span> : l.titel}</h3>
               <p>{l.tekst}</p>
             </li>

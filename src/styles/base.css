@@ -19,7 +19,7 @@ body {
 img, svg, video { display: block; max-width: 100%; }
 h1, h2, h3 { font-family: var(--f-display); font-weight: var(--h-vaegt); letter-spacing: var(--h-spacing); line-height: var(--h-linje); margin: 0; text-wrap: balance; }
 h1, h2 { text-transform: var(--h-transform); }
-h3 { font-weight: max(500, var(--h-vaegt)); letter-spacing: min(var(--h-spacing), 0em); line-height: 1.2; }
+h3 { font-weight: 500; letter-spacing: min(var(--h-spacing), 0em); line-height: 1.2; }
 h1 em, h2 em { font-style: normal; color: var(--noegleord); }
 p { margin: 0 0 1rem; }
 b, strong { font-weight: var(--tekst-fed); }
@@ -73,11 +73,11 @@ a:hover { text-decoration-color: currentColor; }
 
 /* Flueben i en cirkel. Farven følger stilen og baggrunden. */
 .tjek { width: 1.35rem; height: 1.35rem; flex: none; }
+.tjekliste .tjek { display: none; }
 .tjek circle { fill: var(--tjek-lys-bg); }
 .tjek path { fill: none; stroke: var(--tjek-lys-ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-.tjekliste { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
-.tjekliste li { display: grid; grid-template-columns: 1.35rem minmax(0, 1fr); gap: .7rem; align-items: start; }
-.tjekliste .tjek { margin-top: .15rem; }
+.tjekliste { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--linje); }
+.tjekliste li { padding: .55rem 0; border-top: 1px solid var(--linje); }
 
 .stjerner { display: inline-flex; gap: 2px; color: var(--stjerne); }
 .stjerner svg { width: 1.05rem; height: 1.05rem; fill: currentColor; }

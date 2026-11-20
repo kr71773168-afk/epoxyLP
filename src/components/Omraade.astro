@@ -32,12 +32,12 @@ const punkter = byer
       <p>Vi kører fra Silkeborg og laver gulve i hele Midtjylland. Bor du længere væk, kan vi stadig komme. Så aftaler vi kørslen med dig.</p>
       <a class="knap knap-hvid" href={link('pris')}>Se prisen på dit gulv <span aria-hidden="true">→</span></a>
     </div>
-    <figure class="koer-kort">
+    <figure class="koer-kort" data-tegn>
       <svg viewBox="-200 -200 400 400" role="img" aria-labelledby="omraade-kort-titel">
         <title id="omraade-kort-titel">Kort over byerne omkring Silkeborg med zonen på 60 km</title>
-        <circle r={60 * PX_KM} class="ok-zone" />
-        <circle r={30 * PX_KM} class="ok-ring" />
-        {punkter.map((p) => <line x1="0" y1="0" x2={p.x} y2={p.y} class="ok-linje" />)}
+        <circle r={60 * PX_KM} class="ok-zone" pathLength="1" />
+        <circle r={30 * PX_KM} class="ok-ring" pathLength="1" />
+        {punkter.map((p) => <line x1="0" y1="0" x2={p.x} y2={p.y} class="ok-linje" pathLength="1" />)}
         {punkter.map((p) => (
           <a href={link(`epoxygulv-${p.slug}`)} class="ok-by">
             <circle cx={p.x} cy={p.y} r="5" />

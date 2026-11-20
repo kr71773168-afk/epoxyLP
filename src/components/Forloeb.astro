@@ -2,7 +2,6 @@
 import { beregnPris } from '../calculator/engine.js';
 import cfg from '../calculator/pricing.config.js';
 import Foto from './Foto.astro';
-import Ikon from './Ikon.astro';
 
 interface Props {
   alt?: boolean;
@@ -13,7 +12,6 @@ const { alt = false } = Astro.props;
 const fmt = (n) => Math.round(n).toLocaleString('da-DK');
 const eks = beregnPris({ rum: 'garage', areal: 36, overflade: 'flakes', stand: 'paen', tilvalg: [], postnummer: '8600' }, cfg);
 const eksPris = eks.lav === eks.hoej ? `${fmt(eks.lav)} kr` : `${fmt(eks.lav)}–${fmt(eks.hoej)} kr`;
-const eksM2 = `ca. ${fmt((eks.lav + eks.hoej) / 2 / 36)} kr/m²`;
 ---
 <section class:list={['sektion', { 'sektion-alt': alt }]} aria-labelledby="forloeb-titel">
   <div class="kolonne">
@@ -25,27 +23,24 @@ const eksM2 = `ca. ${fmt((eks.lav + eks.hoej) / 2 / 36)} kr/m²`;
           <div class="mini-pris">
             <span>Din vejledende pris</span>
             <strong>{eksPris}</strong>
-            <span>inkl. moms · {eksM2}</span>
+            <span>36 m² flakes · inkl. moms</span>
           </div>
         </div>
-        <span class="forloeb-nr" aria-hidden="true">1</span>
-        <h3>Se prisen her</h3>
+        <h3><span class="forloeb-nr">1.</span> Se prisen her</h3>
         <p>Seks spørgsmål, et minut. Du får et prisinterval med det samme.</p>
-        <p class="forloeb-tid"><Ikon navn="ur" />Ca. 1 minut</p>
+        <p class="forloeb-tid">Ca. 1 minut</p>
       </li>
       <li>
         <Foto navn="beton" alt="Et betongulv, før vi går i gang" class="forloeb-billede" sizes="(max-width: 760px) 100vw, 33vw" />
-        <span class="forloeb-nr" aria-hidden="true">2</span>
-        <h3>Gratis besigtigelse</h3>
+        <h3><span class="forloeb-nr">2.</span> Gratis besigtigelse</h3>
         <p>Vi kommer ud, måler op og tjekker fugten i betonen. Så får du en fast pris på skrift.</p>
-        <p class="forloeb-tid"><Ikon navn="kontrakt" />Fast pris på skrift</p>
+        <p class="forloeb-tid">Fast pris på skrift</p>
       </li>
       <li>
         <Foto navn="haelder" alt="Vi hælder epoxy op til gulvet" class="forloeb-billede" sizes="(max-width: 760px) 100vw, 33vw" />
-        <span class="forloeb-nr" aria-hidden="true">3</span>
-        <h3>Vi lægger gulvet</h3>
+        <h3><span class="forloeb-nr">3.</span> Vi lægger gulvet</h3>
         <p><span data-pladsholder>{cfg.tid.gaaPaa}</span>. <span data-pladsholder>{cfg.tid.koerPaa}</span>.</p>
-        <p class="forloeb-tid"><Ikon navn="kalender" /><span data-pladsholder>{cfg.tid.arbejdsdage}</span></p>
+        <p class="forloeb-tid"><span data-pladsholder>{cfg.tid.arbejdsdage}</span></p>
       </li>
     </ol>
   </div>

@@ -75,3 +75,15 @@ for (const g of grupper) {
 }
 document.addEventListener('click', (e) => { if (!e.target.closest('[data-nav-gruppe]')) lukAlle(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lukAlle(); });
+
+// Kortet over området tegnes ind, når det kommer på skærmen (står bare færdigt ved "reducer bevægelse")
+const tegn = document.querySelector('[data-tegn]');
+if (tegn && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  tegn.classList.add('kan-tegne');
+  const io = new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting) return;
+    tegn.classList.add('er-tegnet');
+    io.disconnect();
+  }, { threshold: 0.35 });
+  io.observe(tegn);
+}

@@ -1,0 +1,30 @@
+---
+/**
+ * Det slanke, mørkegrønne bånd under toppen: korte punkter på én linje, der kører langsomt og stopper ved hover.
+ * Kun punkter, der står andre steder på siden. Garantien er en pladsholder i firma.js.
+ * Ved "reducer bevægelse" står båndet stille og kan rulles sidelæns.
+ */
+import { firma } from '../data/firma.js';
+
+const punkter = [
+  ['Pris på 60 sekunder', 'i beregneren'],
+  ['Fast pris på skrift', 'efter gratis besigtigelse'],
+  [firma.garanti, 'på gulvet', true],
+  ['Ejeren kommer selv', 'fra første besøg til sidste lag'],
+  ['Kørsel med i prisen', 'inden for 60 km'],
+  ['Lokalt firma', 'fra Silkeborg'],
+  ['Garage, kælder, bolig', 'og erhverv'],
+  ['Gratis besigtigelse', 'vi måler op og tjekker fugten'],
+];
+---
+<section class="baand" aria-label="Kort om os">
+  <div class="baand-mq">
+    {[false, true].map((skjult) => (
+      <ul class="baand-spor" aria-hidden={skjult ? 'true' : undefined}>
+        {punkter.map(([b, s, pl]) => (
+          <li><b>{pl ? <span data-pladsholder>{b}</span> : b}</b> <span>{s}</span></li>
+        ))}
+      </ul>
+    ))}
+  </div>
+</section>

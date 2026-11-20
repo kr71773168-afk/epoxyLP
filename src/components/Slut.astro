@@ -11,25 +11,26 @@ interface Props {
   foto?: string;
 }
 const {
-  titel = 'Se hvad dit gulv koster',
-  tekst = 'Det tager et minut, og det er helt uforpligtende.',
+  titel = 'Klar til [et nyt gulv]?',
+  tekst = 'Se prisen på dit gulv på et minut. Det er gratis og uforpligtende.',
   harBeregner = false,
   foto = 'hal',
 } = Astro.props;
+const titelHtml = titel.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]).replace(/\[(.+?)\]/g, '<em>$1</em>');
 ---
 <section class="slut" aria-labelledby="slut-titel">
   <Foto navn={foto} alt="" class="slut-billede" sizes="100vw" />
   <div class="kolonne moerk">
-    <h2 id="slut-titel">{titel}</h2>
+    <h2 id="slut-titel" set:html={titelHtml} />
     <p>{tekst}</p>
     <div class="slut-knapper">
       <a class="knap knap-stor knap-accent" href={harBeregner ? '#beregner' : link('pris')}>Beregn din pris <span aria-hidden="true">→</span></a>
       <a class="knap knap-stor knap-hvid" href={`tel:${firma.telefonLink}`} data-telefon><Ikon navn="tlf" />Ring <span data-pladsholder>{firma.telefon}</span></a>
     </div>
     <ul class="slut-tillid">
-      <li><Ikon navn="tjek" />Gratis besigtigelse</li>
-      <li><Ikon navn="tjek" />Fast pris på skrift</li>
-      <li><Ikon navn="tjek" /><span data-pladsholder>{firma.garanti}</span></li>
+      <li>Fast pris efter gratis besigtigelse</li>
+      <li>Silkeborg og 60 km omkring</li>
+      <li><span data-pladsholder>{firma.garanti}</span></li>
     </ul>
   </div>
 </section>

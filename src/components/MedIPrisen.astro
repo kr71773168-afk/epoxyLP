@@ -5,7 +5,6 @@
  */
 import cfg from '../calculator/pricing.config.js';
 import { link } from '../lib/link.js';
-import Ikon from './Ikon.astro';
 
 interface Props {
   alt?: boolean;
@@ -39,8 +38,8 @@ const kanKommeOveni = [
       <ul class="med-liste">
         {altidMed.map((m) => (
           <li>
-            <span class="med-ikon"><Ikon navn={m.ikon} /></span>
-            <span><b>{m.titel}</b>{m.tekst}</span>
+            <b>{m.titel}</b>
+            <span>{m.tekst}</span>
           </li>
         ))}
       </ul>
