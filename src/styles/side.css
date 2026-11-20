@@ -242,6 +242,7 @@
 .sektion-hoved p { color: var(--ink-2); margin: 0; max-width: 52ch; }
 .sektion-hoved .kick { margin: 0; color: var(--noegleord); }
 .sektion-knapper { display: flex; flex-wrap: wrap; gap: .5rem; }
+@media (max-width: 600px) { .sektion-knapper { width: 100%; } .sektion-knapper .knap { flex: 1 1 100%; } }
 /* Lille grøn overskrift over sektionens titel */
 .kick { margin: 0 0 .6rem; font-size: .95rem; font-weight: 600; letter-spacing: 0; color: var(--noegleord); }
 h1, h2 { font-stretch: 104%; }
