@@ -1,11 +1,9 @@
 /**
  * Firmaets oplysninger. Alt med `pladsholder: true` eller markeret i kommentaren skal bekræftes af kunden.
- * `kladde: true` viser kladde-bjælken (stilarter og "Vis pladsholdere") og sætter noindex på alle sider. Slås fra ved launch.
- * `stil` er den stilart, siden bygges i: 'A' (blå), 'B' (grøn) eller 'C' (egen). Se src/styles/tokens.css.
+ * `kladde: true` viser kladde-knappen ("Vis pladsholdere") og sætter noindex på alle sider. Slås fra ved launch.
  */
 export const firma = {
   kladde: true,
-  stil: 'C',
   navn: 'Silkeborg Epoxy',
   juridiskNavn: 'Silkeborg Epoxygulve ApS',
   cvr: '46299752',

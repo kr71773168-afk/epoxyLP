@@ -1,14 +1,16 @@
 {
   "name": "silkeborg-epoxy",
   "private": true,
-  "version": "0.12.0",
+  "version": "0.13.0",
   "type": "module",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "build:demo": "DEMO=1 VITE_DEMO=1 astro build && node scripts/flad-preview.mjs dist-demo",
     "preview": "astro preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:vercel": "node scripts/byg-vercel.mjs",
+    "build:katalog": "node katalog/byg.mjs"
   },
   "devDependencies": {
     "vite": "^8.3.1",
@@ -16,10 +18,7 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
-    "@fontsource-variable/lexend": "^5.3.0",
-    "@fontsource-variable/manrope": "^5.3.0",
-    "@fontsource-variable/red-hat-display": "^5.3.0",
-    "@fontsource-variable/red-hat-text": "^5.3.0",
+    "@fontsource-variable/archivo": "^5.3.0",
     "astro": "^7.3.5"
   }
 }

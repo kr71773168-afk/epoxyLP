@@ -18,6 +18,7 @@ const schema = {
 <section class:list={['sektion', { 'sektion-alt': alt }]} aria-labelledby="faq-titel">
   <div class="kolonne faq-grid">
     <div class="faq-intro">
+      <p class="kick">Spørgsmål</p>
       <h2 class="sektion-titel" id="faq-titel">{titel}</h2>
       <p>Finder du ikke svaret, så ring. Det er ejeren, der tager telefonen.</p>
       <a class="knap knap-lys" href={`tel:${firma.telefonLink}`} data-telefon><Ikon navn="tlf" />Ring <span data-pladsholder>{firma.telefon}</span></a>

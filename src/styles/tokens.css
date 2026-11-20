@@ -1,213 +1,73 @@
 /*
- * Tre stilarter på samme side. <html data-stil="A|B|C"> vælger stilen, C er standard (firma.js).
- * A · Blå: marineblå og klar blå (tættest på Vestbjerg)
- * B · Grøn: hvid, dyb grøn og beige (tættest på Viborg Design)
- * C · Egen: antracit som et gulv, ravgul som epoxy, sand
- * Alle komponenter bruger kun tokens herfra, så stilen skifter hele sitet.
+ * Silkeborg Epoxys stil: mørkegrøn og salvie som gulvkataloget, Archivo, kantede knapper og kort med streg i stedet for skygge.
+ * Alle komponenter bruger kun tokens herfra.
  */
-:root,
-:root[data-stil="C"] {
-  --bg: #F2EDE4;
+:root {
+  --bg: #FFFFFF;
   --flade: #FFFFFF;
-  --flade-2: #EAE3D7;
-  --sektion-alt: #FFFFFF;
-  --ink: #1E2428;
-  --ink-2: #545B60;
-  --ink-3: #646B70;
-  --linje: #E4DED3;
-  --linje-2: #CFC7B9;
+  --flade-2: #EEF2EF;
+  --sektion-alt: #F3F6F4;
+  --ink: #18221F;
+  --ink-2: #4A5550;
+  --ink-3: #5B6661;
+  --linje: #DDE4E0;
+  --linje-2: #C4CEC9;
 
-  --primaer: #1E2428;
-  --primaer-hover: #343C42;
+  --primaer: #1D2925;
+  --primaer-hover: #2C3B36;
   --primaer-ink: #FFFFFF;
-  --accent: #D9982B;
-  --accent-hover: #E6A63A;
-  --accent-ink: #1E2428;
-  --accent-svag: #F6E7CC;
-  --accent-deko: #D9982B;
-  --noegleord: #A5690F;
+  --accent: #3E6B55;
+  --accent-hover: #315A46;
+  --accent-ink: #FFFFFF;
+  --accent-svag: #E3EDE7;
+  --accent-deko: #6F9282;
+  --noegleord: #3E6B55;
   --sekundaer: #FFFFFF;
-  --sekundaer-ink: #1E2428;
-  --sekundaer-linje: #CFC7B9;
+  --sekundaer-ink: #18221F;
+  --sekundaer-linje: #C4CEC9;
 
-  /* mørke flader: topbjælke, hero over video, bund */
-  --moerk: #1E2428;
-  --moerk-ink: #F1ECE3;
-  --moerk-ink-2: rgba(241, 236, 227, .74);
-  --moerk-linje: rgba(241, 236, 227, .16);
-  --moerk-noegleord: #E3A43A;
-  --tjek-bg: #D9982B;
-  --tjek-ink: #1E2428;
-  --tjek-lys-bg: #1E2428;
+  /* mørke flader: topbjælke, hero over video, områder, bund */
+  --moerk: #17211E;
+  --moerk-ink: #EEF2EF;
+  --moerk-ink-2: rgba(238, 242, 239, .78);
+  --moerk-linje: rgba(238, 242, 239, .16);
+  --moerk-noegleord: #A6CDB8;
+  --tjek-bg: #A6CDB8;
+  --tjek-ink: #17211E;
+  --tjek-lys-bg: #3E6B55;
   --tjek-lys-ink: #FFFFFF;
-  --hero-slor: linear-gradient(90deg, rgba(24, 29, 32, .93) 0%, rgba(24, 29, 32, .8) 48%, rgba(24, 29, 32, .42) 100%);
-  --hero-slor-mobil: linear-gradient(180deg, rgba(24, 29, 32, .72) 0%, rgba(24, 29, 32, .86) 100%);
-  --slut-slor: linear-gradient(90deg, rgba(24, 29, 32, .92) 0%, rgba(24, 29, 32, .72) 55%, rgba(24, 29, 32, .3) 100%);
-  --stjerne: #D9982B;
+  --hero-slor: linear-gradient(90deg, rgba(17, 25, 22, .9) 0%, rgba(17, 25, 22, .78) 46%, rgba(17, 25, 22, .5) 100%);
+  --hero-slor-mobil: linear-gradient(180deg, rgba(17, 25, 22, .72) 0%, rgba(17, 25, 22, .86) 100%);
+  --slut-slor: linear-gradient(90deg, rgba(17, 25, 22, .92) 0%, rgba(17, 25, 22, .74) 55%, rgba(17, 25, 22, .4) 100%);
+  --stjerne: #E0A21B;
 
-  --fod-bg: #1E2428;
-  --fod-ink: #F1ECE3;
-  --fod-ink-2: rgba(241, 236, 227, .72);
-  --fod-linje: rgba(241, 236, 227, .14);
+  --fod-bg: #17211E;
+  --fod-ink: #EEF2EF;
+  --fod-ink-2: rgba(238, 242, 239, .72);
+  --fod-linje: rgba(238, 242, 239, .14);
 
-  --r-knap: 999px;
+  --r-knap: 8px;
   --r-kort: 12px;
   --r-billede: 10px;
   --r-felt: 8px;
   --r-lille: 6px;
 
-  --f-display: 'Manrope Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --f-tekst: 'Manrope Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --tekst-vaegt: 450;
-  --tekst-fed: 700;
-  --h-vaegt: 800;
-  --h-spacing: -.03em;
-  --h-linje: 1.05;
-  --h-transform: none;
-  --knap-vaegt: 700;
-  --nav-vaegt: 600;
-  --nav-str: .97rem;
-  --nav-transform: none;
-  --nav-spacing: 0;
-
-  --kort-skygge: 0 1px 2px rgba(30, 36, 40, .05), 0 12px 32px -20px rgba(30, 36, 40, .35);
-  --skygge: 0 1px 2px rgba(30, 36, 40, .06), 0 30px 60px -30px rgba(0, 0, 0, .55);
-  --beregner-top: 5px solid var(--accent);
-}
-
-:root[data-stil="A"] {
-  --bg: #FFFFFF;
-  --flade: #FFFFFF;
-  --flade-2: #EAF4FA;
-  --sektion-alt: #EAF4FA;
-  --ink: #1A2A36;
-  --ink-2: #4F6170;
-  --ink-3: #5F707C;
-  --linje: #DCE7EE;
-  --linje-2: #BCCEDA;
-
-  --primaer: #10293A;
-  --primaer-hover: #1D3D54;
-  --primaer-ink: #FFFFFF;
-  --accent: #1479B5;
-  --accent-hover: #1B8CCF;
-  --accent-ink: #FFFFFF;
-  --accent-svag: #DCEEF9;
-  --accent-deko: #1B96DB;
-  --noegleord: #1470A8;
-  --sekundaer: #FFFFFF;
-  --sekundaer-ink: #10293A;
-  --sekundaer-linje: #BCCEDA;
-
-  --moerk: #10293A;
-  --moerk-ink: #FFFFFF;
-  --moerk-ink-2: rgba(223, 234, 241, .8);
-  --moerk-linje: rgba(255, 255, 255, .16);
-  --moerk-noegleord: #5CC0F2;
-  --tjek-bg: #1B96DB;
-  --tjek-ink: #FFFFFF;
-  --tjek-lys-bg: #1B96DB;
-  --tjek-lys-ink: #FFFFFF;
-  --hero-slor: linear-gradient(90deg, rgba(16, 41, 58, .94) 0%, rgba(16, 41, 58, .8) 55%, rgba(16, 41, 58, .55) 100%);
-  --hero-slor-mobil: linear-gradient(180deg, rgba(16, 41, 58, .78) 0%, rgba(16, 41, 58, .9) 100%);
-  --slut-slor: linear-gradient(90deg, rgba(16, 41, 58, .93) 0%, rgba(16, 41, 58, .75) 55%, rgba(16, 41, 58, .35) 100%);
-  --stjerne: #00B67A;
-
-  --fod-bg: #10293A;
-  --fod-ink: #FFFFFF;
-  --fod-ink-2: rgba(223, 234, 241, .76);
-  --fod-linje: rgba(255, 255, 255, .14);
-
-  --r-knap: 999px;
-  --r-kort: 14px;
-  --r-billede: 12px;
-  --r-felt: 10px;
-  --r-lille: 8px;
-
-  --f-display: 'Red Hat Display Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --f-tekst: 'Red Hat Text Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-display: 'Archivo Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-tekst: 'Archivo Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --tekst-vaegt: 400;
   --tekst-fed: 600;
-  --h-vaegt: 800;
-  --h-spacing: -.015em;
-  --h-linje: 1.04;
+  --h-vaegt: 650;
+  --h-spacing: -.02em;
+  --h-linje: 1.08;
   --h-transform: none;
-  --knap-vaegt: 700;
-  --nav-vaegt: 700;
-  --nav-str: .84rem;
-  --nav-transform: uppercase;
-  --nav-spacing: .05em;
-
-  --kort-skygge: 0 1px 2px rgba(16, 41, 58, .06), 0 14px 34px -20px rgba(16, 41, 58, .5);
-  --skygge: 0 1px 2px rgba(16, 41, 58, .08), 0 30px 60px -30px rgba(4, 16, 26, .7);
-  --beregner-top: 0;
-}
-
-:root[data-stil="B"] {
-  --bg: #FFFFFF;
-  --flade: #FFFFFF;
-  --flade-2: #F4F1EA;
-  --sektion-alt: #ECE7DC;
-  --ink: #1E2823;
-  --ink-2: #505B55;
-  --ink-3: #5F6A64;
-  --linje: #E6E0D4;
-  --linje-2: #CDC6B7;
-
-  --primaer: #33775C;
-  --primaer-hover: #2A6650;
-  --primaer-ink: #FFFFFF;
-  --accent: #33775C;
-  --accent-hover: #2A6650;
-  --accent-ink: #FFFFFF;
-  --accent-svag: #E1EDE6;
-  --accent-deko: #33775C;
-  --noegleord: #2B6B52;
-  --sekundaer: #ECE7DC;
-  --sekundaer-ink: #245A45;
-  --sekundaer-linje: #ECE7DC;
-
-  --moerk: #245A45;
-  --moerk-ink: #FFFFFF;
-  --moerk-ink-2: rgba(255, 255, 255, .8);
-  --moerk-linje: rgba(255, 255, 255, .18);
-  --moerk-noegleord: #BFE3D0;
-  --tjek-bg: #33775C;
-  --tjek-ink: #FFFFFF;
-  --tjek-lys-bg: #33775C;
-  --tjek-lys-ink: #FFFFFF;
-  --hero-slor: none;
-  --hero-slor-mobil: none;
-  --slut-slor: linear-gradient(90deg, rgba(28, 72, 55, .92) 0%, rgba(36, 90, 69, .76) 55%, rgba(36, 90, 69, .35) 100%);
-  --stjerne: #33775C;
-
-  --fod-bg: #ECE7DC;
-  --fod-ink: #1E2823;
-  --fod-ink-2: #505B55;
-  --fod-linje: #D8D1C3;
-
-  --r-knap: 999px;
-  --r-kort: 18px;
-  --r-billede: 22px;
-  --r-felt: 12px;
-  --r-lille: 10px;
-
-  --f-display: 'Lexend Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --f-tekst: 'Lexend Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --tekst-vaegt: 300;
-  --tekst-fed: 500;
-  --h-vaegt: 300;
-  --h-spacing: .02em;
-  --h-linje: 1.12;
-  --h-transform: uppercase;
-  --knap-vaegt: 500;
-  --nav-vaegt: 400;
+  --knap-vaegt: 600;
+  --nav-vaegt: 500;
   --nav-str: .95rem;
   --nav-transform: none;
   --nav-spacing: 0;
 
-  --kort-skygge: 0 1px 2px rgba(30, 40, 35, .04), 0 16px 40px -26px rgba(30, 40, 35, .4);
-  --skygge: 0 1px 2px rgba(30, 40, 35, .05), 0 26px 56px -26px rgba(30, 40, 35, .45);
+  --kort-skygge: none;
+  --skygge: 0 30px 60px -24px rgba(0, 0, 0, .45), 0 0 0 1px rgba(20, 40, 30, .06);
   --beregner-top: 0;
 }
 

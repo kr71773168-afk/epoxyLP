@@ -1,12 +1,6 @@
 ---
-import '@fontsource-variable/lexend';
-import lexend from '@fontsource-variable/lexend/files/lexend-latin-wght-normal.woff2?url';
-import '@fontsource-variable/manrope';
-import manrope from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
-import '@fontsource-variable/red-hat-display';
-import redHatDisplay from '@fontsource-variable/red-hat-display/files/red-hat-display-latin-wght-normal.woff2?url';
-import '@fontsource-variable/red-hat-text';
-import redHatText from '@fontsource-variable/red-hat-text/files/red-hat-text-latin-wght-normal.woff2?url';
+import '@fontsource-variable/archivo/wdth.css';
+import archivo from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/side.css';
@@ -23,9 +17,6 @@ interface Props {
   schema?: object[];
 }
 const { titel, beskrivelse, slug = '', schema = [] } = Astro.props;
-// Skriften til sidens stilart hentes med det samme. I kladden vælger scriptet i <head> skriften til den valgte stil.
-const alleSkrifter = { A: [redHatDisplay, redHatText], B: [lexend], C: [manrope] };
-const skrifter = alleSkrifter[firma.stil] ?? alleSkrifter.C;
 const kanonisk = new URL(slug ? `/${slug}/` : '/', Astro.site).href;
 
 // Firmaet som lokal virksomhed, så Google kan vise navn, telefon og område
@@ -51,35 +42,22 @@ const virksomhed = {
 };
 ---
 <!doctype html>
-<html lang="da" data-stil={firma.stil} class:list={[{ kladde: firma.kladde }]}>
+<html lang="da" class:list={[{ kladde: firma.kladde }]}>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>{titel}</title>
     {firma.kladde && (
-      <script is:inline define:vars={{ standard: firma.stil, skrifter: alleSkrifter }}>
-        // Kladde: stilen (A, B, C) kan vælges med knapperne i toppen eller ?stil=B i adressen. Sættes før siden tegnes.
-        var s = '';
-        try { s = new URLSearchParams(location.search).get('stil') || ''; } catch (e) {}
-        try { if (s) localStorage.setItem('se-stil', s.toUpperCase()); else s = localStorage.getItem('se-stil') || ''; } catch (e) {}
-        s = s.toUpperCase();
-        if (!/^[ABC]$/.test(s)) s = standard;
-        document.documentElement.setAttribute('data-stil', s);
-        // Pladsholderne markeres kun, når man har slået det til i bjælken
+      <script is:inline>
+        // Kladde: pladsholderne markeres kun, når man har slået det til i hjørnet
         try { if (localStorage.getItem('se-pladsholdere') === '1') document.documentElement.classList.add('vis-pladsholdere'); } catch (e) {}
-        // Hent stilens skrift med det samme, så teksten ikke hopper, når den kommer
-        (skrifter[s] || []).forEach(function (f) {
-          var l = document.createElement('link');
-          l.rel = 'preload'; l.as = 'font'; l.type = 'font/woff2'; l.crossOrigin = 'anonymous'; l.href = f;
-          document.head.appendChild(l);
-        });
       </script>
     )}
-    {!firma.kladde && skrifter.map((f) => <link rel="preload" href={f} as="font" type="font/woff2" crossorigin>)}
+    <link rel="preload" href={archivo} as="font" type="font/woff2" crossorigin>
     <meta name="description" content={beskrivelse}>
     {firma.kladde && <meta name="robots" content="noindex, nofollow">}
     <link rel="canonical" href={kanonisk}>
-    <meta name="theme-color" content="#FFFFFF">
+    <meta name="theme-color" content="#17211E">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="da_DK">
     <meta property="og:site_name" content={firma.navn}>
@@ -120,12 +98,6 @@ const virksomhed = {
         <button type="button" class="kladde-fane" aria-expanded="false" aria-controls="kladde-indhold"><span class="kladde-prik" aria-hidden="true"></span>Kladde</button>
         <div class="kladde-indhold" id="kladde-indhold" hidden>
           <p class="kladde-tekst">Priser, tekster og billeder er ikke endelige.</p>
-          <p class="kladde-titel">Stilart</p>
-          <div class="stilvaelger" role="group" aria-label="Vælg stilart">
-            <button type="button" data-stil-knap="A" aria-pressed="false">A · Blå</button>
-            <button type="button" data-stil-knap="B" aria-pressed="false">B · Grøn</button>
-            <button type="button" data-stil-knap="C" aria-pressed="false">C · Egen</button>
-          </div>
           <button type="button" class="kladde-knap" data-pladsholder-knap aria-pressed="false">Vis pladsholdere</button>
         </div>
       </div>

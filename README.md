@@ -6,17 +6,9 @@ Udkast v0.9: komplet hjemmeside i [Astro](https://astro.build) med 28 statiske s
 
 **Billederne er pladsholdere.** I beregneren er ni billeder AI-genererede (Canva) og fire stillbilleder fra kundens egen video. Fotoene på siderne er stillbilleder fra videoen. De skal skiftes til kundens egne billeder af færdige gulve før launch.
 
-**Stilarter (v0.7):** Sitet er bygget efter samme opskrift som ejerens referencer (vestbjergepoxygulve.dk og viborg-design.dk): tillid øverst, fluebensliste, telefonen som rund knap, én stærk farve og rigtige fotos. Det findes i tre stilarter med samme indhold:
+**Designet (v0.13):** Én fast stil for Silkeborg Epoxy, samme familie som sikker-isolering.dk og gulvkataloget: mørkegrøn og salvie, Archivo (bredt snit i overskrifterne), kantede knapper, kort med streg i stedet for skygge, små grønne overskrifter over sektionerne og mørkegrønne bånd. Videoen fra et job er baggrund i toppen med to svage, skrå lysstriber. Forsiden har et kort over, hvor vi kører (byerne efter deres rigtige placering og køreafstand). Farver, skrift og former står i `src/styles/tokens.css`. De tidligere stilarter A, B og C er fjernet.
 
-| Stil | Udtryk | Skrift |
-|---|---|---|
-| A · Blå | Marineblå og klar blå, tættest på Vestbjerg | Red Hat Display + Red Hat Text |
-| B · Grøn | Hvid, dyb grøn og beige, tættest på Viborg Design | Lexend |
-| C · Egen (standard) | Antracit som et gulv, ravgul som epoxy, sand | Manrope |
-
-C er standard, fordi den ikke kan forveksles med Vestbjerg, der også holder til i Silkeborg. Stilen vælges med `stil` i `src/data/firma.js`. I kladden kan man skifte under "Kladde" nederst til venstre eller med `?stil=A` i adressen. Valget huskes i browseren. Videoen fra et job er levende baggrund i toppen af forsiden, prissiden og bysiderne. Ydelserne har et foto af gulvtypen eller rummet i stedet.
-
-Gulvkataloget (brochuren med de fem gulvtyper) er en selvstændig side og ikke en del af hjemmesiden. Den ligger i `katalog/`, se [katalog/README.md](katalog/README.md).
+Gulvkataloget (brochuren med de fem gulvtyper) bygges for sig selv i `katalog/` og ligger på `/katalog/` under samme domæne. Se [katalog/README.md](katalog/README.md).
 
 ## Kom i gang
 
@@ -49,7 +41,7 @@ En ny ydelse eller by er en ny post i data-filen. Siden, menuen, footeren og sit
 |---|---|
 | Priser, opstart, minimumspris, tilvalg, tider, zone, hurtigvalg for størrelse | `src/calculator/pricing.config.js` (alt ekskl. moms) |
 | Kundens rigtige tilbud til kalibrering | `src/calculator/calibration.cases.js` |
-| Telefon, mail, adresse, garanti, svartid, kladde-tilstand, stilart, anmeldelser | `src/data/firma.js` |
+| Telefon, mail, adresse, garanti, svartid, kladde-tilstand, anmeldelser | `src/data/firma.js` |
 | Tekster, fordele og spørgsmål pr. ydelse | `src/data/ydelser.js` |
 | Byer, afstande og lokale tekster | `src/data/byer.js` |
 | Generelle spørgsmål | `src/data/faq.js` |
@@ -60,7 +52,7 @@ En ny ydelse eller by er en ny post i data-filen. Siden, menuen, footeren og sit
 | Billeder i beregneren | `src/media/valg/`, fx `rum-garage.webp`. Samme navn, 4:3 |
 | Fotos på siderne | `src/media/foto/`. Læg en ny fil med samme navn, så laver Astro selv de mindre størrelser. Referencernes fotos står i `src/data/referencer.js` |
 | Videoen | `src/media/arbejde.mp4`, `arbejde.webm` og stillbilledet `arbejde.jpg`, se herunder |
-| Farver, skrift og former pr. stilart | `src/styles/tokens.css` (A, B og C hver for sig) |
+| Farver, skrift og former | `src/styles/tokens.css` |
 | Toppen med video eller foto, flueben og beregneren | `src/components/Hero.astro` |
 
 Beregneren er testet, så intervallet altid dækker prisen for enhver måde at svare færdig på. Når kundens tilbud er lagt ind i `calibration.cases.js`, fejler `npm test`, hvis beregneren rammer ved siden af et tilbud. Prissidens tabel og eksempler og bysidernes eksempelpris regnes med samme motor, så tallene altid passer med beregneren.
@@ -89,27 +81,28 @@ Stillbilledet skal være første billede i klippet, så der ikke er et hop, når
 
 ## Hastighed
 
-Lighthouse (29.09.2026, produktionsbyg, mobil med simuleret 4G):
+Lighthouse (20.11.2026, produktionsbyg, mobil med simuleret 4G):
 
-| Side | Hastighed | Tilgængelighed | Best practices | SEO |
-|---|---|---|---|---|
 | Side | Hastighed | Tilgængelighed | Best practices |
 |---|---|---|---|
-| Forside | 100 | 100 | 100 |
-| Garagegulv | 98 | 100 | 100 |
-| Pris | 99 | 100 | 100 |
-| Guide | 100 | 100 | 100 |
-| Epoxygulv Aarhus | 99 | 100 | 100 |
+| Forside | 97 | 100 | 100 |
+| Garagegulv | 96 | 100 | 100 |
+| Gulvkatalog | 98 | 100 | 100 |
 
-Stil C. A og B giver også 100 i tilgængelighed og 99-100 i hastighed. Desktop: 100. Ingen layout-hop (CLS 0-0,001). SEO er 100 uden kladde-tilstand (målt på forsiden). Med `kladde: true` giver `noindex` med vilje 69.
+Ingen layout-hop (CLS 0-0,001). Med `kladde: true` giver `noindex` med vilje en lav SEO-score.
 
-Det, der holder siden hurtig: CSS ligger direkte i HTML'en, kun den valgte stilarts skrift hentes (preload), billederne laves i flere størrelser som webp, videoen hentes først, når siden er vist, og beregnerens valg bygges på serveren, så intet hopper, når JavaScript starter.
+Det, der holder siden hurtig: CSS ligger direkte i HTML'en, skriften (Archivo) hentes med det samme (preload), billederne laves i flere størrelser som webp, videoen hentes først, når siden er vist, og beregnerens valg bygges på serveren, så intet hopper, når JavaScript starter.
 
 ## URL-parametre
 
 - `?gulv=garage` / `kaelder` / `bolig` / `erhverv`: skifter overskriften på forsiden, vælger rummet og starter beregneren ved størrelsen. Brug én pr. annoncesæt.
 - `?kladde=0`: skjuler "Kladde"-knappen, fx til skærmbilleder.
-- `?stil=A` / `B` / `C`: viser siden i en anden stilart (kun i kladden). Valget huskes, så man kan klikke rundt på sitet.
+
+## Online (Vercel)
+
+https://silkeborg-epoxy.fyldtordrebog.dk: hjemmesiden på `/` og gulvkataloget på `/katalog/`. Vercel-projektet hedder `silkeborg-epoxy-lp` (teamet TFCX) og bygger fra GitHub med `vercel.json`: `node scripts/byg-vercel.mjs` bygger Astro til `dist/` og kataloget til `dist/katalog/`. Formularerne sender til `api/lead.mjs` (samme kode som Netlify-funktionen). Miljøvariablerne er de samme som herunder og sættes under *Settings → Environment Variables*. Uden `LEAD_WEBHOOK_URL` tager funktionen kun imod leads, mens `kladde: true` (de står i Vercels log). Uden kladde svarer den med en fejl, så ingen leads forsvinder i stilhed.
+
+DNS for fyldtordrebog.dk ligger hos Simply: A-record `silkeborg-epoxy` → `76.76.21.21`.
 
 ## Deploy på Netlify
 
@@ -152,7 +145,6 @@ Det, siden gør for at få flest mulige til at se prisen og skrive sig op:
 ## Før launch
 
 - [ ] Kundens priser i `pricing.config.js` og 5-10 tilbud i `calibration.cases.js` (`npm test` grøn)
-- [ ] Stilart valgt (`stil: 'A'`, `'B'` eller `'C'` i `src/data/firma.js`)
 - [ ] Telefon, mail, adresse, garanti, svartid og åbningstider i `src/data/firma.js`
 - [ ] Rigtige anmeldelser (`anmeldelser` i `src/data/firma.js`). Stjernerne i toppen vises først, når snit og antal står der
 - [ ] Ejerens navn, historie og foto på Om os, og citatet på forsiden i ejerens egne ord (`src/pages/index.astro`)

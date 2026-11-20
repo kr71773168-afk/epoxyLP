@@ -8,12 +8,6 @@
 .quiz-titel { font-family: var(--f-display); font-size: clamp(1.3rem, 1.2rem + .4vw, 1.5rem); font-weight: max(500, var(--h-vaegt)); letter-spacing: min(var(--h-spacing), 0em); line-height: 1.15; margin: 0 0 .25rem; }
 .quiz-sub { color: var(--ink-2); font-size: .93rem; margin: 0; }
 /* A: navy top på kortet, ligesom Vestbjergs formular */
-:root[data-stil="A"] .quiz-top {
-  margin: calc(var(--quiz-pad) * -1) calc(var(--quiz-pad) * -1) 1.1rem; padding: 1.15rem var(--quiz-pad) 1.1rem;
-  background: var(--primaer); color: #fff; border-radius: var(--r-kort) var(--r-kort) 0 0; text-align: center;
-}
-:root[data-stil="A"] .quiz-sub { color: rgba(223, 234, 241, .82); }
-:root[data-stil="B"] .quiz-titel { font-weight: 500; }
 
 .quiz-hoved { display: flex; align-items: center; gap: 1rem; min-height: 1.9rem; }
 .quiz-tilbage { background: none; border: 0; padding: .2rem 0; cursor: pointer; color: var(--ink-2); font-size: .93rem; font-weight: var(--tekst-fed); }
@@ -23,7 +17,6 @@
 .quiz-bar i { display: block; height: 100%; width: 0; background: var(--accent-deko); border-radius: 99px; transition: width .5s var(--ease); }
 
 .spg-titel { font-size: var(--t-spg); font-weight: max(600, var(--h-vaegt)); text-transform: none; letter-spacing: min(var(--h-spacing), -.01em); margin-bottom: 1rem; }
-:root[data-stil="B"] .spg-titel { font-weight: 500; letter-spacing: 0; }
 .spg-titel:focus, .res-titel:focus, .lead-titel:focus { outline: none; }
 .spg-hjaelp { color: var(--ink-2); margin: -.5rem 0 1.1rem; }
 .spg-hint { color: var(--fejl); font-size: .93rem; margin: .8rem 0 0; }
@@ -53,7 +46,6 @@
 .raekke-billede { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; background: var(--flade-2); border-radius: max(4px, calc(var(--r-felt) - 4px)); }
 .raekke-tekst { display: flex; flex-direction: column; gap: .1rem; min-width: 0; }
 .raekke-navn { font-family: var(--f-display); font-size: 1.04rem; font-weight: max(600, var(--h-vaegt)); line-height: 1.25; }
-:root[data-stil="B"] .raekke-navn { font-weight: 500; }
 .raekke-desk { font-size: .88rem; color: var(--ink-2); line-height: 1.35; }
 .raekke-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .6rem; margin-top: .25rem; font-size: .86rem; font-weight: var(--tekst-fed); }
 .raekke-meta:empty { display: none; }
@@ -89,7 +81,6 @@
   font-family: var(--f-display); font-size: clamp(2.9rem, 2.2rem + 3vw, 3.7rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.1;
   text-align: center; font-variant-numeric: tabular-nums; -moz-appearance: textfield; appearance: textfield;
 }
-:root[data-stil="B"] .areal-felt input { font-weight: 400; }
 .areal-felt input::-webkit-outer-spin-button, .areal-felt input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .areal-felt input:hover { border-bottom-color: var(--linje); }
 .areal-felt input:focus-visible { outline: none; border-bottom-color: var(--accent-deko); }
@@ -124,7 +115,6 @@
 /* ---------- resultat ---------- */
 .res-titel { font-family: var(--f-tekst); font-size: .95rem; font-weight: var(--tekst-fed); letter-spacing: 0; text-transform: none; color: var(--ink-2); margin-bottom: .3rem; }
 .res-pris { font-family: var(--f-display); font-size: clamp(2.1rem, 1.6rem + 2.2vw, 2.9rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.05; margin: 0 0 .45rem; }
-:root[data-stil="B"] .res-pris { font-weight: 500; letter-spacing: -.01em; }
 .res-meta { color: var(--ink-2); margin-bottom: 1rem; }
 .res-note { background: var(--accent-svag); border-radius: var(--r-felt); padding: .7rem .9rem; font-size: .95rem; }
 .res-svar { display: flex; flex-wrap: wrap; gap: .4rem; margin: .25rem 0 1.1rem; }
@@ -153,7 +143,6 @@
 
 /* ---------- formularer (beregneren og kontaktsiden) ---------- */
 .lead-titel { font-size: 1.45rem; text-transform: none; letter-spacing: min(var(--h-spacing), -.01em); margin-bottom: .45rem; }
-:root[data-stil="B"] .lead-titel { font-weight: 500; }
 .lead-intro { color: var(--ink-2); margin-bottom: 1.25rem; }
 .felt { margin: 0 0 1rem; padding: 0; border: 0; min-width: 0; }
 .felt label, .felt legend { display: block; padding: 0; margin-bottom: .35rem; font-size: .92rem; font-weight: var(--tekst-fed); }

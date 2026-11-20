@@ -12,7 +12,7 @@ const aktiv = guides.some((g) => g.slug === side) ? 'viden' : side;
 const menu = [
   { navn: 'Privat', punkter: privat },
   { navn: 'Erhverv', slug: 'erhvervsgulve' },
-  { navn: 'Gulvtyper', punkter: gulvtyper },
+  { navn: 'Gulvtyper', punkter: gulvtyper, alle: { navn: 'Gulvkatalog med alle farver', slug: 'katalog' } },
   { navn: 'Priser', slug: 'pris' },
   { navn: 'Referencer', slug: 'referencer' },
   { navn: 'Viden', slug: 'viden' },
@@ -41,6 +41,7 @@ const gruppeAktiv = (punkter) => punkter.some((p) => p.slug === aktiv);
             </button>
             <ul class="nav-under">
               {m.punkter.map((p) => <li><a href={link(p.slug)} aria-current={nu(p.slug)}>{p.navn}</a></li>)}
+              {m.alle && <li class="nav-under-alle"><a href={link(m.alle.slug)}>{m.alle.navn} <span aria-hidden="true">→</span></a></li>}
             </ul>
           </li>
         ) : (
@@ -70,7 +71,10 @@ const gruppeAktiv = (punkter) => punkter.some((p) => p.slug === aktiv);
         </div>
         <div>
           <p class="mobilmenu-titel">Gulvtyper</p>
-          <ul>{gulvtyper.map((p) => <li><a href={link(p.slug)} aria-current={nu(p.slug)}>{p.navn}</a></li>)}</ul>
+          <ul>
+            {gulvtyper.map((p) => <li><a href={link(p.slug)} aria-current={nu(p.slug)}>{p.navn}</a></li>)}
+            <li><a href={link('katalog')}>Gulvkatalog med alle farver</a></li>
+          </ul>
         </div>
         <div>
           <p class="mobilmenu-titel">Firmaet</p>

@@ -1,0 +1,66 @@
+---
+/**
+ * Hvor vi kører: et lille kort med Silkeborg i midten, zonen på 60 km og byerne placeret efter deres rigtige
+ * koordinater (afstanden i km er køreafstanden fra src/data/byer.js). Hver by linker til sin byside.
+ */
+import { byer } from '../data/byer.js';
+import { link } from '../lib/link.js';
+
+// Breddegrad og længdegrad for byerne. Projiceres omkring Silkeborg: 1° længde ≈ 61,9 km her, 1° bredde ≈ 111,2 km.
+const koord = {
+  silkeborg: [56.169, 9.545], aarhus: [56.157, 10.211], herning: [56.139, 8.974], viborg: [56.452, 9.402],
+  skanderborg: [56.034, 9.928], horsens: [55.861, 9.85], randers: [56.461, 10.036], ikast: [56.139, 9.158],
+};
+const PX_KM = 2.6; // 60 km = 156 px
+// Navnet står til højre eller venstre for prikken. Ikast ligger tæt på Herning, så navnet står under.
+const under = ['ikast'];
+const [lat0, lon0] = koord.silkeborg;
+const punkter = byer
+  .filter((b) => koord[b.slug] && b.slug !== 'silkeborg')
+  .map((b) => {
+    const [lat, lon] = koord[b.slug];
+    const x = (lon - lon0) * 61.9 * PX_KM;
+    const y = -(lat - lat0) * 111.2 * PX_KM;
+    return { ...b, x, y, venstre: x < 0, under: under.includes(b.slug) };
+  });
+---
+<section class="koer" aria-labelledby="omraade-titel">
+  <div class="kolonne koer-indre">
+    <div class="koer-tekst moerk">
+      <p class="kick">Hvor vi kører</p>
+      <h2 class="sektion-titel" id="omraade-titel">Inden for 60 km af Silkeborg er kørslen med i prisen</h2>
+      <p>Vi kører fra Silkeborg og laver gulve i hele Midtjylland. Bor du længere væk, kan vi stadig komme. Så aftaler vi kørslen med dig.</p>
+      <a class="knap knap-hvid" href={link('pris')}>Se prisen på dit gulv <span aria-hidden="true">→</span></a>
+    </div>
+    <figure class="koer-kort">
+      <svg viewBox="-200 -200 400 400" role="img" aria-labelledby="omraade-kort-titel">
+        <title id="omraade-kort-titel">Kort over byerne omkring Silkeborg med zonen på 60 km</title>
+        <circle r={60 * PX_KM} class="ok-zone" />
+        <circle r={30 * PX_KM} class="ok-ring" />
+        {punkter.map((p) => <line x1="0" y1="0" x2={p.x} y2={p.y} class="ok-linje" />)}
+        {punkter.map((p) => (
+          <a href={link(`epoxygulv-${p.slug}`)} class="ok-by">
+            <circle cx={p.x} cy={p.y} r="5" />
+            {p.under ? (
+              <>
+                <text x={p.x} y={p.y + 21} text-anchor="middle">{p.navn}</text>
+                <text x={p.x} y={p.y + 35} text-anchor="middle" class="ok-km">{p.km} km</text>
+              </>
+            ) : (
+              <>
+                <text x={p.x + (p.venstre ? -10 : 10)} y={p.y - 2} text-anchor={p.venstre ? 'end' : 'start'}>{p.navn}</text>
+                <text x={p.x + (p.venstre ? -10 : 10)} y={p.y + 13} text-anchor={p.venstre ? 'end' : 'start'} class="ok-km">{p.km} km</text>
+              </>
+            )}
+          </a>
+        ))}
+        <a href={link('epoxygulv-silkeborg')} class="ok-by ok-hjem">
+          <circle r="8" />
+          <text x="0" y="-16" text-anchor="middle">Silkeborg</text>
+        </a>
+        <text x="0" y={-60 * PX_KM - 8} text-anchor="middle" class="ok-km">60 km</text>
+      </svg>
+      <figcaption>Afstandene er køreafstand fra Silkeborg.</figcaption>
+    </figure>
+  </div>
+</section>

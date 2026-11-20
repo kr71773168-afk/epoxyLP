@@ -120,26 +120,35 @@ const stor = `
     </div>
   </dialog>`;
 
+// Skriften: Archivo (samme som hjemmesiden), lagt på selv i stedet for Google Fonts
+fs.mkdirSync(`${ud}fonts`);
+fs.copyFileSync(her('../node_modules/@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2'), `${ud}fonts/archivo.woff2`);
+// Links til hjemmesiden. Kataloget ligger på /katalog/ under samme domæne.
+const SITE = process.env.KATALOG_SITE ?? '/';
 const css = fs.readFileSync(her('./side.css'), 'utf8');
 const js = fs.readFileSync(her('./side.js'), 'utf8');
 
-const html = `<title>Silkeborg Epoxy Gulvtyper</title>
+const html = `<title>Gulvkatalog · Silkeborg Epoxy</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Industrigulv, Flake Floor, Color Quartz, PU-gulv og stentæppe fra Silkeborg Epoxy. Se overfladerne, tryk på en farve, og find det gulv, der passer til dig.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&display=swap">
+<link rel="icon" href="${SITE}favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#17211E">
+${firma.kladde ? '<meta name="robots" content="noindex, nofollow">' : ''}
+<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 ${css}
 </style>
 
 <header class="top">
   <div class="kol top-indre">
-    <a class="logo" href="#top" aria-label="${esc(firma.navn)}, til toppen">
+    <a class="logo" href="${SITE}" aria-label="${esc(firma.navn)}, til forsiden">
       <svg class="logo-maerke" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1D2925"/><path d="M4.5 20 16 13.6 27.5 20 16 26.4z" fill="#6F9282"/><path d="M10.2 20.9 17.6 16.8" stroke="#fff" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/><path d="M16 4.2c2.7 3.1 4.1 5.1 4.1 7a4.1 4.1 0 0 1-8.2 0c0-1.9 1.4-3.9 4.1-7z" fill="#DCE7E1"/></svg>
       <span>Silkeborg <b>Epoxy</b></span>
     </a>
-    <a class="knap knap-groen top-knap" href="#kontakt">Kontakt os</a>
+    <nav class="top-knapper" aria-label="Genveje">
+      <a class="knap knap-lys top-knap top-kontakt" href="#kontakt">Kontakt os</a>
+      <a class="knap knap-groen top-knap" href="${SITE}pris/">Beregn pris</a>
+    </nav>
   </div>
 </header>
 
@@ -169,6 +178,7 @@ ${css}
       <div class="kontakt-tekst">
         <h2 id="kontakt-titel">Vil du se prøverne i virkeligheden?</h2>
         <p>Ring eller skriv, så kommer vi forbi med rigtige prøver og giver dig en fast pris på skrift. Besigtigelsen er gratis.</p>
+        <a class="knap knap-groen kontakt-knap" href="${SITE}pris/">Se prisen på dit gulv på 60 sekunder <span aria-hidden="true">→</span></a>
       </div>
       <div class="kontakt-felter">
         <div class="kontakt-felt">
@@ -196,6 +206,7 @@ ${css}
   <div class="kol fod-indre">
     <p>© ${new Date().getFullYear()} ${esc(firma.juridiskNavn)} · CVR ${esc(firma.cvr)}</p>
     <p>${esc(firma.adresse.vej)}, ${esc(firma.adresse.postnr)} ${esc(firma.adresse.by)}</p>
+    <p><a href="${SITE}">Forside</a> · <a href="${SITE}pris/">Priser</a> · <a href="${SITE}kontakt/">Kontakt</a> · <a href="${SITE}privatliv/">Privatliv</a></p>
   </div>
 </footer>
 ${stor}
@@ -205,14 +216,16 @@ ${js}
 </script>
 `;
 fs.writeFileSync(`${ud}artifact.html`, html);
+// Den rigtige side: titel, meta og CSS i <head>, resten i <body>
+const skel = html.indexOf('<header class="top">');
 fs.writeFileSync(`${ud}index.html`, `<!doctype html>
 <html lang="da">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-</head>
+${html.slice(0, skel)}</head>
 <body>
-${html}</body>
+${html.slice(skel)}</body>
 </html>
 `);
 const filer = fs.readdirSync(`${ud}img`);

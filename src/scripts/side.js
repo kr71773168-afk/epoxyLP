@@ -23,19 +23,6 @@ if (kladdeFane && kladdeIndhold) {
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') saetAaben(false); });
 }
 
-/* ---------- kladde: skift stilart (A, B, C) ---------- */
-const stilKnapper = Array.from(document.querySelectorAll('[data-stil-knap]'));
-const markerStil = () => {
-  const aktivStil = document.documentElement.dataset.stil;
-  stilKnapper.forEach((k) => k.setAttribute('aria-pressed', String(k.dataset.stilKnap === aktivStil)));
-};
-stilKnapper.forEach((k) => k.addEventListener('click', () => {
-  document.documentElement.dataset.stil = k.dataset.stilKnap;
-  try { localStorage.setItem('se-stil', k.dataset.stilKnap); } catch { /* privat browsing */ }
-  markerStil();
-}));
-markerStil();
-
 /* ---------- kladde: vis eller skjul pladsholderne ---------- */
 const pladsholderKnap = document.querySelector('[data-pladsholder-knap]');
 if (pladsholderKnap) {

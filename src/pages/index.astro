@@ -6,6 +6,7 @@ import GulvKort from '../components/GulvKort.astro';
 import Hero from '../components/Hero.astro';
 import Ikon from '../components/Ikon.astro';
 import MedIPrisen from '../components/MedIPrisen.astro';
+import Omraade from '../components/Omraade.astro';
 import Slut from '../components/Slut.astro';
 import YdelsesListe from '../components/YdelsesListe.astro';
 import { faq } from '../data/faq.js';
@@ -44,10 +45,14 @@ const ejerNavn = firma.ejer.startsWith('[') ? 'Ejeren' : firma.ejer;
     <div class="kolonne">
       <div class="sektion-hoved">
         <div>
+          <p class="kick">Overflader og priser</p>
           <h2 class="sektion-titel" id="gulve-titel">Vælg dit <em>epoxygulv</em></h2>
           <p>Tre overflader. Prisen pr. m² står på hver, inkl. moms.</p>
         </div>
-        <a class="knap knap-lys" href={link('pris')}>Se alle priser <span aria-hidden="true">→</span></a>
+        <div class="sektion-knapper">
+          <a class="knap knap-lys" href={link('katalog')}>Se alle farver i kataloget</a>
+          <a class="knap knap-lys" href={link('pris')}>Se alle priser <span aria-hidden="true">→</span></a>
+        </div>
       </div>
       <GulvKort />
     </div>
@@ -64,6 +69,7 @@ const ejerNavn = firma.ejer.startsWith('[') ? 'Ejeren' : firma.ejer;
         </figure>
       </div>
       <div>
+        <p class="kick">Om os</p>
         <h2 class="sektion-titel" id="loefter-titel">Derfor vælger folk os</h2>
         <ul class="folk-liste">
           {loefter.map((l) => (
@@ -86,6 +92,7 @@ const ejerNavn = firma.ejer.startsWith('[') ? 'Ejeren' : firma.ejer;
     <div class="kolonne">
       <div class="sektion-hoved">
         <div>
+          <p class="kick">Ydelser</p>
           <h2 class="sektion-titel" id="ydelser-titel">Gulve til hjem og erhverv</h2>
           <p>Garager, kældre, boliger og erhverv. Vælg dit rum og se, hvad vi kan.</p>
         </div>
@@ -94,6 +101,7 @@ const ejerNavn = firma.ejer.startsWith('[') ? 'Ejeren' : firma.ejer;
     </div>
   </section>
 
+  <Omraade />
   <FAQ items={faq} alt />
   <Slut harBeregner />
 </Side>

@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { firma as firmaInfo } from '../../src/data/firma.js';
 import { gyldigMail, normaliserTelefon } from '../../src/validering.js';
 
 /**
@@ -112,6 +113,11 @@ export default async (req, context) => {
 
   const webhook = process.env.LEAD_WEBHOOK_URL;
   if (!webhook) {
+    // I kladden (før launch) tages imod uden webhook, så beregneren kan vises og testes. Leadet står i serverens log.
+    if (firmaInfo.kladde) {
+      console.warn('LEAD_WEBHOOK_URL mangler, kladde: leadet sendes ikke videre', JSON.stringify({ ...data, firma: undefined }));
+      return json({ ok: true, kladde: true });
+    }
     console.error('LEAD_WEBHOOK_URL mangler');
     return json({ ok: false, fejl: 'Serveren er ikke sat op endnu' }, 500);
   }

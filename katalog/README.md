@@ -1,12 +1,10 @@
 # Gulvkatalog · Silkeborg Epoxy
 
-En selvstændig side, ikke en del af hjemmesiden: en interaktiv brochure med de fem gulvtyper (industrigulv, Flake Floor, Color Quartz, PU-gulv og stentæppe). Hvert kort har et foto, en overflade, farveprøver, fire fordele og en grøn bjælke, der fører ned til kontakt. Et tryk på en farve skifter overfladen. Et tryk på overfladen viser gulvet i stort.
-
-Preview: https://claude.ai/artifact/Fc91USBv9WkGmsMjrk6sSx
+Bygges for sig selv, men ligger på `/katalog/` under hjemmesidens domæne: en interaktiv brochure med de fem gulvtyper (industrigulv, Flake Floor, Color Quartz, PU-gulv og stentæppe). Hvert kort har et foto, en overflade, farveprøver, fire fordele og en grøn bjælke, der fører ned til kontakt. Et tryk på en farve skifter overfladen. Et tryk på overfladen viser gulvet i stort.
 
 ## Online
 
-https://silkeborg-epoxy.fyldtordrebog.dk (Vercel-projektet `silkeborg-epoxy-lp` i teamet TFCX, samme mønster som de andre kunder på fyldtordrebog.dk). Vercel bygger fra GitHub med `node katalog/byg.mjs` og udgiver `katalog/dist`. DNS for fyldtordrebog.dk ligger hos Simply: subdomænet peger på Vercel med en A-record `silkeborg-epoxy` → `76.76.21.21`.
+https://silkeborg-epoxy.fyldtordrebog.dk/katalog/ (bygges sammen med hjemmesiden af `scripts/byg-vercel.mjs`, se hovedmappens README). Links til hjemmesiden går til `/`, `/pris/` osv. Sæt `KATALOG_SITE`, hvis kataloget skal ligge på et andet domæne end hjemmesiden.
 
 ## Byg
 
@@ -22,7 +20,7 @@ Giver `katalog/dist/index.html` og `katalog/dist/img/`. Mappen kan lægges op hv
 |---|---|
 | Gulvtyper, tekster, fordele, bjælketekst, farver og RAL-koder | `data.js` |
 | Telefon, mail, adresse, garanti og åbningstider | `../src/data/firma.js` (samme som hjemmesiden) |
-| Udseende | `side.css` (én palet øverst) |
+| Udseende | `side.css` (samme palet og skrift som hjemmesiden) |
 | Farveskift, stor visning, kopiér-knapper | `side.js` |
 | Ikoner | `ikoner.js` (Lucide) |
 
