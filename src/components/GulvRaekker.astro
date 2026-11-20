@@ -34,18 +34,19 @@ const pris = (y) => `fra ${fmt(cfg.overflader[y.overflade].prisPrM2 * (1 + cfg.m
     <div class="gv-valg" role="tablist" aria-label="Gulvtyper">
       {gulvtyper.map((y, i) => (
         <button type="button" role="tab" class="gv-knap" aria-selected={i === 0 ? 'true' : 'false'} data-gv-knap={i}>
-          <span class="gv-nr">{String(i + 1).padStart(2, '0')}</span>
-          <span class="gv-navn">{y.navn}</span>
+          <Foto navn={`overflade-${y.overflade}`} alt="" class="gv-proeve" sizes="72px" />
+          <span class="gv-navn">{y.navn}<span class="gv-desk">{ekstra[y.overflade].udtryk}</span></span>
           <span class="gv-pris" data-pladsholder>{pris(y)}</span>
+          <span class="gv-radio" aria-hidden="true"></span>
         </button>
       ))}
     </div>
     {gulvtyper.map((y, i) => (
       <div class="gv-info" role="tabpanel" data-gv-info={i} hidden={i !== 0}>
         <p>{y.kort}</p>
-        <dl class="gr-data">
-          <div><dt>Godt til</dt><dd>{ekstra[y.overflade].egnet}</dd></div>
-          <div><dt>Udtryk</dt><dd>{ekstra[y.overflade].udtryk}</dd></div>
+        <dl class="fakta-kort to">
+          <div><span class="flueben" aria-hidden="true"></span><dt>Godt til</dt><dd>{ekstra[y.overflade].egnet}</dd></div>
+          <div><span class="flueben" aria-hidden="true"></span><dt>Udtryk</dt><dd>{ekstra[y.overflade].udtryk}</dd></div>
         </dl>
         <div class="gr-knapper">
           <a class="knap knap-accent" href="#beregner">Beregn pris <span aria-hidden="true">→</span></a>

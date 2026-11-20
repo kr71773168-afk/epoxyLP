@@ -57,8 +57,12 @@ button { font: inherit; color: inherit; }
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--hvid); border-bottom: 1px solid #DCE2DF; }
 .top-indre { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4.25rem; }
 .logo { display: inline-flex; align-items: center; gap: .6rem; font-size: 1.22rem; font-weight: 500; letter-spacing: -.02em; text-decoration: none; }
-.logo b { font-weight: 600; }
-.logo-maerke { width: 2.1rem; height: 2.1rem; }
+.logo { padding-bottom: .35rem; }
+.logo-ord { position: relative; display: inline-flex; align-items: baseline; gap: .32em; font-size: 1.5rem; line-height: 1; letter-spacing: -.035em; font-stretch: 108%; }
+.logo-1 { font-weight: 600; }
+.logo-2 { position: relative; font-weight: 700; font-style: italic; letter-spacing: -.02em; color: #3E6B55; }
+.logo-2::before { content: ""; position: absolute; left: -.06em; right: -.1em; top: calc(100% - .04em); height: 1.5px; border-radius: 1px; background: currentColor; opacity: .55; }
+.logo-spejl { position: absolute; left: 0; top: calc(100% + .06em); transform: scaleY(-.62); transform-origin: top; opacity: .2; pointer-events: none; -webkit-mask-image: linear-gradient(transparent 35%, #000); mask-image: linear-gradient(transparent 35%, #000); }
 .top-knap { padding: .65rem 1.15rem; font-size: .95rem; }
 
 /* ---------- hero ---------- */
@@ -204,6 +208,6 @@ html:has(.stor[open]) { overflow: hidden; }
   /* på mobil glider den store visning op fra bunden */
   .stor { width: 100%; max-width: none; max-height: 100dvh; margin: auto 0 0; border-radius: 16px 16px 0 0; padding-bottom: env(safe-area-inset-bottom, 0px); }
   .stor-billede { aspect-ratio: 4 / 3; }
-  .logo { font-size: 1.08rem; }
+  .logo-ord { font-size: 1.28rem; }
   .hop a, .hop a:first-child { border-left: 0; padding: .2rem 1.1rem .2rem 0; }
 }

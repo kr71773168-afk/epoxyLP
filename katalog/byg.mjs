@@ -142,8 +142,7 @@ ${css}
 <header class="top">
   <div class="kol top-indre">
     <a class="logo" href="${SITE}" aria-label="${esc(firma.navn)}, til forsiden">
-      <svg class="logo-maerke" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1D2925"/><path d="M4.5 20 16 13.6 27.5 20 16 26.4z" fill="#6F9282"/><path d="M10.2 20.9 17.6 16.8" stroke="#fff" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/><path d="M16 4.2c2.7 3.1 4.1 5.1 4.1 7a4.1 4.1 0 0 1-8.2 0c0-1.9 1.4-3.9 4.1-7z" fill="#DCE7E1"/></svg>
-      <span>Silkeborg <b>Epoxy</b></span>
+      <span class="logo-ord" aria-hidden="true"><span class="logo-1">Silkeborg</span><span class="logo-2">Epoxy<span class="logo-spejl">Epoxy</span></span></span>
     </a>
     <nav class="top-knapper" aria-label="Genveje">
       <a class="knap knap-lys top-knap top-kontakt" href="#kontakt">Kontakt os</a>

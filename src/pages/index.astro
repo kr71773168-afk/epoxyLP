@@ -50,10 +50,10 @@ import { link } from '../lib/link.js';
         <h2 class="sektion-titel" id="loefter-titel">Du taler med den, <em>der lægger gulvet</em></h2>
         <p class="os-lede">Silkeborg Epoxy er et lille, lokalt firma. Ejeren kommer selv ud, måler op og står for gulvet fra første besøg til sidste lag.</p>
         <p class="os-mere">Du får prisen på et minut her på siden. Efter besigtigelsen står den på skrift, og den ændrer sig ikke.</p>
-        <dl class="gr-data os-data">
-          <div><dt>Ejeren</dt><dd>Kommer selv</dd></div>
-          <div><dt>Prisen</dt><dd>Fast på skrift</dd></div>
-          <div><dt>Garanti</dt><dd><span data-pladsholder>{firma.garanti.replace(/ garanti$/, '')}</span></dd></div>
+        <dl class="fakta-kort">
+          <div><span class="flueben" aria-hidden="true"></span><dt>Ejeren</dt><dd>Kommer selv</dd></div>
+          <div><span class="flueben" aria-hidden="true"></span><dt>Prisen</dt><dd>Fast på skrift</dd></div>
+          <div><span class="flueben" aria-hidden="true"></span><dt>Garanti</dt><dd><span data-pladsholder>{firma.garanti}</span></dd></div>
         </dl>
         <div class="gr-knapper">
           <a class="knap knap-accent" href="#beregner">Beregn din pris <span aria-hidden="true">→</span></a>
@@ -66,7 +66,7 @@ import { link } from '../lib/link.js';
   <Forloeb />
   <MedIPrisen alt />
 
-  <section class="sektion" aria-labelledby="ydelser-titel">
+  <section class="sektion sektion-alt" aria-labelledby="ydelser-titel">
     <div class="kolonne">
       <div class="sektion-hoved">
         <div>

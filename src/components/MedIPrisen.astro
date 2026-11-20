@@ -40,18 +40,19 @@ const kanKommeOveni = [
     </div>
     <div class="med-ark" data-vis aria-label="Eksempel på hvad prisen dækker">
       <div class="med-ark-top">
-        <span class="med-ark-firma">Silkeborg Epoxy</span>
-        <span>Fast pris · eksempel</span>
+        <span class="med-ark-firma">Silkeborg <b>Epoxy</b></span>
+        <span class="med-ark-meta">Prisoverslag<small>Eksempel</small></span>
       </div>
       <ul class="med-liste">
         {altidMed.map((m) => (
           <li>
+            <span class="flueben" aria-hidden="true"></span>
             <span class="med-linje"><b>{m.titel}</b><span>{m.tekst}</span></span>
-            <span class="med-tag">Med</span>
+            <span class="med-tag">Med i prisen</span>
           </li>
         ))}
       </ul>
-      <p class="med-sum"><span>Din faste pris</span><strong aria-hidden="true">00.000 kr</strong></p>
+      <p class="med-sum"><span>Din faste pris<small>inkl. moms</small></span><strong aria-hidden="true">00.000 kr</strong></p>
       <p class="med-ark-fod">Prisen står på skrift efter den gratis besigtigelse.</p>
     </div>
   </div>
